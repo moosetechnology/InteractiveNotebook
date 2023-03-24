@@ -13,10 +13,13 @@ INNotebookCodeCellModel >> presenterClass [
 { #category : #printing }
 INNotebookCodeCellModel >> printContentIn: aStream withContext: aContext [
 
-	aContext bindings at: 'stream' put: aStream.
-	aContext bindings at: 'printer' put: (INReportCollectionPrinter new
-			 stream: aStream;
-			 yourself).
+	aContext bindings add:
+		(AdditionalBinding key: 'stream' value: aStream).
+	aContext bindings add: (AdditionalBinding
+			 key: 'printer'
+			 value: (INReportCollectionPrinter new
+					  stream: aStream;
+					  yourself)).
 	self class compiler
 		compilationContext: aContext;
 		source: text;
