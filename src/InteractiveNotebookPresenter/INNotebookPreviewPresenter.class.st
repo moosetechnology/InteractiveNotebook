@@ -80,12 +80,14 @@ INNotebookPreviewPresenter >> initializePresenters [
 ]
 
 { #category : #actions }
-INNotebookPreviewPresenter >> newPreviewCellWith: aString [
-
-	^ (self instantiate: INNotebookCellPreviewPresenter)
-		  text: aString;
+INNotebookPreviewPresenter >> newPreviewCellWith: anObject [
+	| pCell |
+	pCell := (self instantiate: INNotebookCellPreviewPresenter)
+		  setContentPresenter: (anObject createContentPreviewPresenter);
 		  parent: self;
-		  yourself
+		  yourself.
+	anObject addContentToPreviewPresenter: pCell getContentPresenter.
+	^ pCell 
 ]
 
 { #category : #initialization }

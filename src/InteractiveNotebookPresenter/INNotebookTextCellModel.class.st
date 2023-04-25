@@ -4,6 +4,12 @@ Class {
 	#category : #InteractiveNotebookPresenter
 }
 
+{ #category : #printing }
+INNotebookTextCellModel >> getContentwithContext: aContext [
+
+	^ text
+]
+
 { #category : #helpers }
 INNotebookTextCellModel >> presenterClass [
 
@@ -13,5 +19,5 @@ INNotebookTextCellModel >> presenterClass [
 { #category : #printing }
 INNotebookTextCellModel >> printContentIn: aStream withContext: aContext [
 
-	aStream nextPutAll: text
+	^ text
 ]

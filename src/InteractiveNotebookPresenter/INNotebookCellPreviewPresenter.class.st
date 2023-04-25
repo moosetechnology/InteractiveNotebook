@@ -2,12 +2,18 @@ Class {
 	#name : #INNotebookCellPreviewPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
-		'textPresenter',
+		'presenter',
 		'cell',
 		'parent'
 	],
 	#category : #InteractiveNotebookPresenter
 }
+
+{ #category : #initialization }
+INNotebookCellPreviewPresenter class >> unselectedColor [
+
+	^ Smalltalk ui theme backgroundColor
+]
 
 { #category : #actions }
 INNotebookCellPreviewPresenter >> beSelected [
@@ -28,28 +34,17 @@ INNotebookCellPreviewPresenter >> cell: anObject [
 	cell := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+INNotebookCellPreviewPresenter >> getContentPresenter [
+	^ presenter
+]
+
 { #category : #initialization }
 INNotebookCellPreviewPresenter >> initializeLayout [
 
 	self layout: (SpBoxLayout newLeftToRight
-			 add: textPresenter;
+			 add: presenter;
 			 yourself)
-]
-
-{ #category : #initialization }
-INNotebookCellPreviewPresenter >> initializePresenters [
-
-	textPresenter := self newText
-		                 beNotEditable;
-		                 yourself.
-	self whenDisplayDo: [ 
-		self updateHeight.
-		textPresenter withAdapterDo: [ :a | 
-			UIManager default defer: [ 
-				a widget backgroundColor: self unselectedColor ] ] ].
-	self initializeLayout.
-	textPresenter eventHandler whenMouseDownDo: [ :anEvent | 
-		self selectMe ]
 ]
 
 { #category : #initialization }
@@ -75,8 +70,7 @@ INNotebookCellPreviewPresenter >> parent: anObject [
 { #category : #actions }
 INNotebookCellPreviewPresenter >> select [
 
-	textPresenter withAdapterDo: [ :a | 
-		a widget backgroundColor: (Color fromHexString: '77A8C8') ]
+	presenter selectNotebookPresenter 
 ]
 
 { #category : #actions }
@@ -92,31 +86,35 @@ INNotebookCellPreviewPresenter >> selectMe [
 	cell ifNotNil: [ :c | c selectAndScrollToMe ]
 ]
 
+{ #category : #initialization }
+INNotebookCellPreviewPresenter >> setContentPresenter: aPresenter [
+
+	presenter := aPresenter.
+	self whenDisplayDo: [ 
+		self updateHeight.
+		"presenter withAdapterDo: [ :a | 
+			UIManager default defer: [ 
+				a widget backgroundColor: self unselectedColor ] ]" ].
+	self initializeLayout.
+	presenter eventHandler whenMouseDownDo: [ :anEvent | 
+		self selectMe ]
+]
+
 { #category : #accessing }
 INNotebookCellPreviewPresenter >> text: aString [
 
-	textPresenter text: aString
+	presenter text: aString
 ]
 
 { #category : #actions }
 INNotebookCellPreviewPresenter >> unselected [
 	
-	textPresenter withAdapterDo: [ :a | a widget backgroundColor: self unselectedColor ]
-]
-
-{ #category : #initialization }
-INNotebookCellPreviewPresenter >> unselectedColor [
-
-	^ Smalltalk ui theme backgroundColor
+	presenter unselectedNotebookPresenter 
 ]
 
 { #category : #initialization }
 INNotebookCellPreviewPresenter >> updateHeight [
 
 	UIManager default defer: [ 
-		textPresenter withAdapterDo: [ :a | 
-			a widget defer: [ 
-				a widget scrollPane textArea withoutSelectionBar.
-				self withAdapterDo: [ :b | 
-					b widget height: a widget scrollPane textArea height ] ] ] ]
+		presenter updateNotebookPresenterHeight ]
 ]

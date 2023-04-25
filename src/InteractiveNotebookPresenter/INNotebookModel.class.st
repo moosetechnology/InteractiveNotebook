@@ -82,20 +82,12 @@ INNotebookModel >> executeAllCells [
 { #category : #actions }
 INNotebookModel >> executeAllCellsAsTextCollection [
 
-	| textCollection |
+	| collection |
 	self initializeContext.
 
-	generatedDocument := String streamContents: [ :p | 
-		              textCollection := cellList collect: [ :cell | 
-			                                | str |
-			                                str := String streamContents: [ :s | 
-				                                       cell
-					                                       printContentIn: s
-					                                       withContext: context ].
-			                                p nextPutAll: str.
-			                                p nextPut: Character cr.
-			                                str ] ].
-	^ textCollection
+	collection := cellList collect: [ :cell | 
+		              cell getContentwithContext: context ].
+	^ collection
 ]
 
 { #category : #export }

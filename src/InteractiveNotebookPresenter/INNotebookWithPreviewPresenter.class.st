@@ -244,6 +244,12 @@ INNotebookWithPreviewPresenter >> setModelBeforeInitialization: aModel [
 ]
 
 { #category : #initialization }
+INNotebookWithPreviewPresenter >> updateHeight [ 
+"je pense que ça ne devrait pas être appelé ici, au moins avec une méthode vide y'a pas de bug"
+	previewOpened ifTrue: [ notebookPreview updateHeight ]
+]
+
+{ #category : #initialization }
 INNotebookWithPreviewPresenter >> updateModelCells [
 
 	self model cellList: notebook allModelCells.
