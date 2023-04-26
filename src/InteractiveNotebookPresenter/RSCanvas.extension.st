@@ -2,7 +2,7 @@ Extension { #name : #RSCanvas }
 
 { #category : #'*InteractiveNotebookPresenter' }
 RSCanvas >> addContentToPreviewPresenter: aPresenter [
-	aPresenter canvas: self
+	aPresenter canvas: self canvas
 ]
 
 { #category : #'*InteractiveNotebookPresenter' }
