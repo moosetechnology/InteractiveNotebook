@@ -80,7 +80,7 @@ INNotebookModel >> executeAllCells [
 ]
 
 { #category : #actions }
-INNotebookModel >> executeAllCellsAsTextCollection [
+INNotebookModel >> executeAllCellsAsCollection [
 
 	| collection |
 	self initializeContext.

@@ -37,9 +37,8 @@ SpRoassalPresenter >> unselectedNotebookPresenter [
 SpRoassalPresenter >> updateNotebookPresenterHeight [
 
 	| rect |
-	self owner withAdapterDo: [ :a | 
-		a widget defer: [ a widget height: 350 ] ].
-	self canvas camera zoomToFit: self canvas extent * 0.9
+	self owner withAdapterDo: [ :a | a widget height: 350. self canvas camera zoomToFit: self canvas extent * 0.9. ].
+	
 		"self canvas camera scale: self calculateNewScale.
 		self canvas camera position: self calculateNewCenter."
 		

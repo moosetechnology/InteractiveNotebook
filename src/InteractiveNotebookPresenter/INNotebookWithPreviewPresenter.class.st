@@ -219,7 +219,7 @@ INNotebookWithPreviewPresenter >> preview [
 
 	notebookPreview
 		updateWithStringCollection:
-		self model executeAllCellsAsTextCollection
+		self model executeAllCellsAsCollection
 		andCells: notebook cellList
 ]
 
