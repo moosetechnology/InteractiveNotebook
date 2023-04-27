@@ -15,7 +15,8 @@ INNotebookTextCellPresenter >> asModelCell [
 { #category : #api }
 INNotebookTextCellPresenter >> beCode [
 
-	notebook transformToCodeCell: self
+	notebook transformToCodeCell: self.
+	self needToUpdateModel
 ]
 
 { #category : #api }
@@ -29,7 +30,7 @@ INNotebookTextCellPresenter >> initializePresenters [
 
 	super initializePresenters.
 	cell := self newText.
-	cell whenTextChangedDo: [ self updateHeight ].
+	cell whenTextChangedDo: [ self updateHeight. self needToUpdateModel ].
 	icon := self newButton
 		        label: 'Mic';
 		        action: [ notebook transformToCodeCell: self ];

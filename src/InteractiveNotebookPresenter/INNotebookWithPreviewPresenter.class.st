@@ -59,7 +59,8 @@ INNotebookWithPreviewPresenter class >> title [
 { #category : #actions }
 INNotebookWithPreviewPresenter >> addTextCell [
 	
-	notebook addTextCell
+	notebook addTextCell.
+	self announcingObject value needToUpdate: true.
 ]
 
 { #category : #actions }
@@ -215,6 +216,7 @@ INNotebookWithPreviewPresenter >> openPreview [
 INNotebookWithPreviewPresenter >> preview [
 
 	self openPreview.
+	self announcingObject value needToUpdate ifFalse: [ ^ self ].
 	self updateModelCells.
 
 	notebookPreview

@@ -8,7 +8,6 @@ Class {
 		'selectedCell',
 		'interactionModel',
 		'headerSep',
-		'mooseModel',
 		'cellLayout',
 		'browser',
 		'codeCellPlaceholder'

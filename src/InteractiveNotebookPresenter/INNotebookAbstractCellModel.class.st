@@ -15,6 +15,16 @@ INNotebookAbstractCellModel >> initialize [
 	text := String empty
 ]
 
+{ #category : #accessing }
+INNotebookAbstractCellModel >> model [
+	^ model
+]
+
+{ #category : #accessing }
+INNotebookAbstractCellModel >> model: aModel [
+	model := aModel
+]
+
 { #category : #helpers }
 INNotebookAbstractCellModel >> presenterClass [
 

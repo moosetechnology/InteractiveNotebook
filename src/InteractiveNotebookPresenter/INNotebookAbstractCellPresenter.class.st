@@ -180,6 +180,12 @@ INNotebookAbstractCellPresenter >> moveUp [
 ]
 
 { #category : #accessing }
+INNotebookAbstractCellPresenter >> needToUpdateModel [
+	notebook model needToUpdate: true.
+	
+]
+
+{ #category : #accessing }
 INNotebookAbstractCellPresenter >> notebook [
 
 	^ notebook

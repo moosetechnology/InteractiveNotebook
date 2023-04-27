@@ -32,6 +32,7 @@ INNotebookModel >> addCell: aCell [
 { #category : #initialization }
 INNotebookModel >> addTextCell [
 
+	needToUpdate := true.
 	^ self addCell: INNotebookTextCellModel new
 ]
 
@@ -87,6 +88,7 @@ INNotebookModel >> executeAllCellsAsCollection [
 
 	collection := cellList collect: [ :cell | 
 		              cell getContentwithContext: context ].
+	needToUpdate := false.
 	^ collection
 ]
 
@@ -176,4 +178,14 @@ INNotebookModel >> micDocument [
 INNotebookModel >> name [
 
 	^ fileName ifNil: [ 'new *' ]
+]
+
+{ #category : #accessing }
+INNotebookModel >> needToUpdate [
+	^ needToUpdate 
+]
+
+{ #category : #accessing }
+INNotebookModel >> needToUpdate: aBoolean [
+	needToUpdate := aBoolean 
 ]

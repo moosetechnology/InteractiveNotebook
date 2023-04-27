@@ -20,8 +20,9 @@ INNotebookCodeCellPresenter >> beCode [
 
 { #category : #api }
 INNotebookCodeCellPresenter >> beText [
-
-	notebook transformToTextCell: self
+	
+	notebook transformToTextCell: self.
+	self needToUpdateModel
 ]
 
 { #category : #initialization }
@@ -33,7 +34,7 @@ INNotebookCodeCellPresenter >> initializePresenters [
 		        beForScripting;
 		        placeholder: notebook codeCellPlaceholder;
 		        yourself.
-	cell whenTextChangedDo: [ self updateHeight ].
+	cell whenTextChangedDo: [ self updateHeight. self needToUpdateModel ].
 	self interactionModel: notebook interactionModel.
 
 	icon := self newButton
