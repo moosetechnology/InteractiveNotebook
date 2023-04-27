@@ -142,12 +142,16 @@ INNotebookPreviewPresenter >> updateWithStringCollection: aCollection andCells: 
 
 	| col |
 	col := OrderedCollection new.
-	aCollection withIndexDo: [ :e :i | 
+	aCollection withIndexDo: [ :obj :i | 
 		| cell pCell |
 		cell := cells at: i.
-		pCell := self newPreviewCellWith: (aCollection at: i).
-		pCell cell: cell.
-		cell previewCell: pCell.
+		cell model needToUpdate
+			ifTrue: [ 
+				pCell := self newPreviewCellWith: obj.
+				pCell cell: cell.
+				cell previewCell: pCell.
+				cell model needToUpdate: false ]
+			ifFalse: [ pCell := cell previewCell ].
 		col add: pCell ].
 	previewCells := col.
 	self relayout

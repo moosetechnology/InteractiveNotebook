@@ -216,7 +216,6 @@ INNotebookWithPreviewPresenter >> openPreview [
 INNotebookWithPreviewPresenter >> preview [
 
 	self openPreview.
-	self announcingObject value needToUpdate ifFalse: [ ^ self ].
 	self updateModelCells.
 
 	notebookPreview
@@ -254,7 +253,8 @@ INNotebookWithPreviewPresenter >> updateHeight [
 
 { #category : #initialization }
 INNotebookWithPreviewPresenter >> updateModelCells [
-
+	
+	notebook updateModelCells.
 	self model cellList: notebook allModelCells.
 ]
 

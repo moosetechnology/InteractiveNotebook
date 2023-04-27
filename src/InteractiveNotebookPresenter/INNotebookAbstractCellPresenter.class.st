@@ -1,6 +1,6 @@
 Class {
 	#name : #INNotebookAbstractCellPresenter,
-	#superclass : #SpPresenter,
+	#superclass : #SpPresenterWithModel,
 	#instVars : [
 		'cell',
 		'icon',
@@ -181,7 +181,7 @@ INNotebookAbstractCellPresenter >> moveUp [
 
 { #category : #accessing }
 INNotebookAbstractCellPresenter >> needToUpdateModel [
-	notebook model needToUpdate: true.
+	self model needToUpdate: true.
 	
 ]
 

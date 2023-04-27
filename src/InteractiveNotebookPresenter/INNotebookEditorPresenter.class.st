@@ -62,7 +62,7 @@ INNotebookEditorPresenter >> addTextCellBefore: aCell [
 { #category : #accessing }
 INNotebookEditorPresenter >> allModelCells [
 
-	^ cellList asOrderedCollection collect: [ :cell | cell asModelCell ]
+	^ cellList asOrderedCollection collect: [ :cell | cell model ]
 ]
 
 { #category : #accessing }
@@ -196,13 +196,17 @@ INNotebookEditorPresenter >> newCodeCell [
 
 	^ (self instantiate: INNotebookCodeCellPresenter on: self)
 		  notebook: self;
+		  model: INNotebookCodeCellModel new;
 		  yourself
 ]
 
 { #category : #initialization }
 INNotebookEditorPresenter >> newTextCell [
 
-	^ (self instantiate: INNotebookTextCellPresenter) notebook: self
+	^ (self instantiate: INNotebookTextCellPresenter)
+		  notebook: self;
+		  model: INNotebookTextCellModel new;
+		  yourself
 ]
 
 { #category : #adding }
@@ -285,6 +289,7 @@ INNotebookEditorPresenter >> updateAll [
 	cellList := LinkedList new.
 	self model cellList do: [ :c | 
 		cellList add: ((self instantiate: c presenterClass)
+				 model: c;
 				 notebook: self;
 				 text: c text;
 				 yourself) ].
@@ -298,6 +303,11 @@ INNotebookEditorPresenter >> updateAll [
 INNotebookEditorPresenter >> updateHeight [
 
 	cellList do: [ :c | c updateHeight ]
+]
+
+{ #category : #removing }
+INNotebookEditorPresenter >> updateModelCells [ 
+	cellList do: [ :cell | cell model text: cell text ]
 ]
 
 { #category : #initialization }

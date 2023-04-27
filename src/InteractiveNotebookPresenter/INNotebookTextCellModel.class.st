@@ -4,6 +4,17 @@ Class {
 	#category : #InteractiveNotebookPresenter
 }
 
+{ #category : #'as yet unclassified' }
+INNotebookTextCellModel >> beCodeModel [ 
+	"no need to add the text in the current model, it will be compiled anyway in the next preview"
+	^ INNotebookCodeCellModel new 
+]
+
+{ #category : #'as yet unclassified' }
+INNotebookTextCellModel >> beTextModel [ 
+	^ self
+]
+
 { #category : #printing }
 INNotebookTextCellModel >> getContentwithContext: aContext [
 

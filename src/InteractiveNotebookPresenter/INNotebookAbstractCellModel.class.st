@@ -3,15 +3,33 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'text',
-		'model'
+		'model',
+		'needToUpdate'
 	],
 	#category : #InteractiveNotebookPresenter
 }
+
+{ #category : #'as yet unclassified' }
+INNotebookAbstractCellModel >> beCodeModel [
+	^ self subclassResponsibility 
+]
+
+{ #category : #'as yet unclassified' }
+INNotebookAbstractCellModel >> beTextModel [
+	^ self subclassResponsibility 
+]
+
+{ #category : #printing }
+INNotebookAbstractCellModel >> getContentwithContext: aContext [
+
+	^ self subclassResponsibility 
+]
 
 { #category : #initialization }
 INNotebookAbstractCellModel >> initialize [
 
 	super initialize.
+	needToUpdate := true.
 	text := String empty
 ]
 
@@ -23,6 +41,16 @@ INNotebookAbstractCellModel >> model [
 { #category : #accessing }
 INNotebookAbstractCellModel >> model: aModel [
 	model := aModel
+]
+
+{ #category : #accessing }
+INNotebookAbstractCellModel >> needToUpdate [ 
+	^ needToUpdate 
+]
+
+{ #category : #accessing }
+INNotebookAbstractCellModel >> needToUpdate: aBoolean [ 
+	needToUpdate := aBoolean
 ]
 
 { #category : #helpers }
@@ -46,5 +74,6 @@ INNotebookAbstractCellModel >> text [
 { #category : #accessing }
 INNotebookAbstractCellModel >> text: anObject [
 
+	(text equalsTo: anObject) ifFalse: [ self needToUpdate: true ].
 	text := anObject
 ]

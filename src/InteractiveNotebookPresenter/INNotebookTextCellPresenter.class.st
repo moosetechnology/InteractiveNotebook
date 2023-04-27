@@ -30,7 +30,7 @@ INNotebookTextCellPresenter >> initializePresenters [
 
 	super initializePresenters.
 	cell := self newText.
-	cell whenTextChangedDo: [ self updateHeight. self needToUpdateModel ].
+	cell whenTextChangedDo: [ self updateHeight ].
 	icon := self newButton
 		        label: 'Mic';
 		        action: [ notebook transformToCodeCell: self ];

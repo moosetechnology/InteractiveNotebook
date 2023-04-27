@@ -87,7 +87,9 @@ INNotebookModel >> executeAllCellsAsCollection [
 	self initializeContext.
 
 	collection := cellList collect: [ :cell | 
-		              cell getContentwithContext: context ].
+		              cell needToUpdate
+			              ifTrue: [ cell getContentwithContext: context ]
+			              ifFalse: [ nil ] ].
 	needToUpdate := false.
 	^ collection
 ]

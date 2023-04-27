@@ -34,7 +34,7 @@ INNotebookCodeCellPresenter >> initializePresenters [
 		        beForScripting;
 		        placeholder: notebook codeCellPlaceholder;
 		        yourself.
-	cell whenTextChangedDo: [ self updateHeight. self needToUpdateModel ].
+	cell whenTextChangedDo: [ self updateHeight ].
 	self interactionModel: notebook interactionModel.
 
 	icon := self newButton
