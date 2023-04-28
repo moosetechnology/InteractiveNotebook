@@ -74,6 +74,6 @@ INNotebookAbstractCellModel >> text [
 { #category : #accessing }
 INNotebookAbstractCellModel >> text: anObject [
 
-	(text equalsTo: anObject) ifFalse: [ self needToUpdate: true ].
+	(text = anObject) ifFalse: [ self needToUpdate: true ].
 	text := anObject
 ]
