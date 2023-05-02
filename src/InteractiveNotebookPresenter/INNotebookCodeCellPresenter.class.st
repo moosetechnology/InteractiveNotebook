@@ -8,7 +8,7 @@ Class {
 INNotebookCodeCellPresenter >> asModelCell [
 
 	^ INNotebookCodeCellModel new
-		  text: cell text;
+		  text: cellTextInput text;
 		  yourself
 ]
 
@@ -21,20 +21,19 @@ INNotebookCodeCellPresenter >> beCode [
 { #category : #api }
 INNotebookCodeCellPresenter >> beText [
 	
-	notebook transformToTextCell: self.
-	self needToUpdateModel
+	notebook transformToTextCell: self
 ]
 
 { #category : #initialization }
 INNotebookCodeCellPresenter >> initializePresenters [
 
 	super initializePresenters.
-	cell := self newCode
+	cellTextInput := self newCode
 		        withoutLineNumbers;
 		        beForScripting;
 		        placeholder: notebook codeCellPlaceholder;
 		        yourself.
-	cell whenTextChangedDo: [ self updateHeight ].
+	cellTextInput whenTextChangedDo: [ self updateHeight ].
 	self interactionModel: notebook interactionModel.
 
 	icon := self newButton
@@ -54,7 +53,7 @@ INNotebookCodeCellPresenter >> initializePresenters [
 { #category : #api }
 INNotebookCodeCellPresenter >> interactionModel: anEnvironment [
 
-	cell interactionModel: anEnvironment
+	cellTextInput interactionModel: anEnvironment
 ]
 
 { #category : #accessing }

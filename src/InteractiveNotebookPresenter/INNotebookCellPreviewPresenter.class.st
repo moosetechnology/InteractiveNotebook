@@ -31,15 +31,15 @@ INNotebookCellPreviewPresenter >> beSelected [
 ]
 
 { #category : #accessing }
-INNotebookCellPreviewPresenter >> cell [
-
-	^ cell
-]
-
-{ #category : #accessing }
 INNotebookCellPreviewPresenter >> cell: anObject [
 
 	cell := anObject
+]
+
+{ #category : #accessing }
+INNotebookCellPreviewPresenter >> cellTextInput [
+
+	^ cell
 ]
 
 { #category : #'as yet unclassified' }

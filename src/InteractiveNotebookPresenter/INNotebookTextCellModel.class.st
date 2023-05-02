@@ -4,13 +4,13 @@ Class {
 	#category : #InteractiveNotebookPresenter
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 INNotebookTextCellModel >> beCodeModel [ 
 	"no need to add the text in the current model, it will be compiled anyway in the next preview"
 	^ INNotebookCodeCellModel new 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 INNotebookTextCellModel >> beTextModel [ 
 	^ self
 ]

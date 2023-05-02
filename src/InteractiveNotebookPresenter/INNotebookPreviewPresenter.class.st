@@ -1,3 +1,6 @@
+"
+I am the preview side of a notebook page. I create preview cells to display the result of the compilation of each cell.
+"
 Class {
 	#name : #INNotebookPreviewPresenter,
 	#superclass : #SpPresenter,

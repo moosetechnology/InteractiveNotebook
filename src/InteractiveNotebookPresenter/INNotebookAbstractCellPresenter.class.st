@@ -1,8 +1,18 @@
+"
+I am an abstract editing cell presenter. 
+
+I have a presenter providing a text input (`cellTextInput`) in which the user can type Microdown text or code, depending on the cell type.
+
+I give to my children buttons allowing to transform themselves from code cell to text cell and vice versa, to add a new text cell before or after the current cell, to move the cell up or down in the notebook, and one to delete the current cell.
+
+
+
+
+"
 Class {
 	#name : #INNotebookAbstractCellPresenter,
 	#superclass : #SpPresenterWithModel,
 	#instVars : [
-		'cell',
 		'icon',
 		'notebook',
 		'removeButton',
@@ -13,7 +23,8 @@ Class {
 		'addCellAboveButton',
 		'moveCellUp',
 		'moveCellDown',
-		'previewCell'
+		'previewCell',
+		'cellTextInput'
 	],
 	#category : #InteractiveNotebookPresenter
 }
@@ -53,9 +64,9 @@ INNotebookAbstractCellPresenter >> beUnselected [
 ]
 
 { #category : #accessing }
-INNotebookAbstractCellPresenter >> cell [
+INNotebookAbstractCellPresenter >> cellTextInput [
 
-	^ cell
+	^ cellTextInput
 ]
 
 { #category : #initialization }
@@ -84,7 +95,7 @@ INNotebookAbstractCellPresenter >> initializeLayout [
 
 	self layout: (SpBoxLayout newLeftToRight
 			 add: leftMenuCanvas width: 30;
-			 add: cell;
+			 add: cellTextInput;
 			 add: rightMenuCanvas width: 100;
 			 yourself)
 ]
@@ -180,12 +191,6 @@ INNotebookAbstractCellPresenter >> moveUp [
 ]
 
 { #category : #accessing }
-INNotebookAbstractCellPresenter >> needToUpdateModel [
-	self model needToUpdate: true.
-	
-]
-
-{ #category : #accessing }
 INNotebookAbstractCellPresenter >> notebook [
 
 	^ notebook
@@ -247,19 +252,19 @@ INNotebookAbstractCellPresenter >> selectedColor [
 { #category : #protocol }
 INNotebookAbstractCellPresenter >> takeKeyboardFocus [
 
-	cell takeKeyboardFocus
+	cellTextInput takeKeyboardFocus
 ]
 
 { #category : #initialization }
 INNotebookAbstractCellPresenter >> text [
 
-	^ cell text
+	^ cellTextInput text
 ]
 
 { #category : #initialization }
 INNotebookAbstractCellPresenter >> text: aText [
 
-	cell text: aText
+	cellTextInput text: aText
 ]
 
 { #category : #accessing }
@@ -285,7 +290,7 @@ INNotebookAbstractCellPresenter >> unselectedColor [
 INNotebookAbstractCellPresenter >> updateHeight [
 	UIManager default defer: [ 
 		notebook headerSep withAdapterDo: [ :a | 
-			cell withAdapterDo: [ :b | 
+			cellTextInput withAdapterDo: [ :b | 
 				| textMorph height width |
 				textMorph := b widget.
 				textMorph
@@ -300,12 +305,12 @@ INNotebookAbstractCellPresenter >> updateHeight [
 					           font: textMorph font;
 					           width: width - 182;
 					           beWrapped;
-					           updateTextWith: cell text) height.
+					           updateTextWith: cellTextInput text) height.
 				self withAdapterDo: [ :c | c widget height: height + 2 ] ] ] ]
 ]
 
 { #category : #enumerating }
 INNotebookAbstractCellPresenter >> whenTextChangedDo: aBlock [
 
-	cell whenTextChangedDo: aBlock
+	cellTextInput whenTextChangedDo: aBlock
 ]
