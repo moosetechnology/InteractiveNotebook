@@ -1,3 +1,11 @@
+"
+I am a preview cell of a notebook page. 
+I display the compiled content of a cell, either in Microdown if I represent a text cell, or using different types of presenters for a code cell, depending on the class of the final compiled result of the cell.
+
+Using class extensions, the object resulting of the compilation of a cell provides me an appropriate presenter to display itself (using the extension method `createContentPreviewPresenter`). I can add this object to the created presenter (using the extension method `addContentToPreviewPresenter: anObject`).
+
+Those presenters also use extension methods : `selectNotebookPresenter`, `unselectedNotebookPresenter` and `updateNotebookPresenterHeight`.
+"
 Class {
 	#name : #INNotebookCellPreviewPresenter,
 	#superclass : #SpPresenter,

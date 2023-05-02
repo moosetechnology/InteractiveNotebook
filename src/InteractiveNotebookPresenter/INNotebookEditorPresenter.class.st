@@ -1,3 +1,8 @@
+"
+I am the editor panel for a notebook page. 
+
+I allow the user to add cells before or after a cell, to transform a text cell into a code cell and vice versa, or to move up or down a cell.
+"
 Class {
 	#name : #INNotebookEditorPresenter,
 	#superclass : #SpPresenter,
@@ -135,12 +140,6 @@ INNotebookEditorPresenter >> layoutSpacing [
 INNotebookEditorPresenter >> model [
 
 	^ self owner model
-]
-
-{ #category : #accessing }
-INNotebookEditorPresenter >> mooseModel [
-
-	^ self owner mooseModel
 ]
 
 { #category : #removing }

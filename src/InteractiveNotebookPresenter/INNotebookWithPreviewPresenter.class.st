@@ -1,3 +1,10 @@
+"
+I am a notebook page (a tab of the main notebook window), containing an editor page and a preview page. 
+
+I own an instance of INNotebookModel that I use to produce a document to export or to execute the cells to create the preview of the notebook.
+
+
+"
 Class {
 	#name : #INNotebookWithPreviewPresenter,
 	#superclass : #SpPresenterWithModel,

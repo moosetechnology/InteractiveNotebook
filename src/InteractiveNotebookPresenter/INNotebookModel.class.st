@@ -1,3 +1,10 @@
+"
+I am the model of a notebook page (each notebook tab owns a different model).
+
+I am responsible of the execution of each text and code cell when building a preview.
+I also manage the context of the cells (the bindings allowing the user to use previously defined variables in the following cells).
+Finally, I am responsible of the generation of the document to export (in Markdown, HTML, or STON).
+"
 Class {
 	#name : #INNotebookModel,
 	#superclass : #Object,

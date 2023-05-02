@@ -1,3 +1,8 @@
+"
+I am the main presenter window for the Notebook.
+
+I am able to create new notebook tabs (each tab is an editable notebook with its own cells), and I can also import or export a notebook to various file formats.
+"
 Class {
 	#name : #INNotebookPresenter,
 	#superclass : #SpPresenter,
