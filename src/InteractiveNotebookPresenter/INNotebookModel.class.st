@@ -3,7 +3,6 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'textEditedSource',
-		'needToUpdate',
 		'micDocument',
 		'cellList',
 		'context',
@@ -31,8 +30,6 @@ INNotebookModel >> addCell: aCell [
 
 { #category : #initialization }
 INNotebookModel >> addTextCell [
-
-	needToUpdate := true.
 	^ self addCell: INNotebookTextCellModel new
 ]
 
@@ -57,7 +54,6 @@ INNotebookModel >> cellList [
 { #category : #accessing }
 INNotebookModel >> cellList: anOrderedCollection [
 
-	needToUpdate := true.
 	cellList := anOrderedCollection
 ]
 
@@ -70,13 +66,11 @@ INNotebookModel >> context [
 { #category : #actions }
 INNotebookModel >> executeAllCells [
 
-	needToUpdate ifFalse: [ ^ generatedDocument ].
 	generatedDocument := String streamContents: [ :s | 
 		              self initializeContextWithStream: s.
 		              cellList do: [ :cell | 
 			              cell printContentIn: s withContext: context.
 			              s nextPut: Character cr ] ].
-	needToUpdate := false.
 	^ generatedDocument
 ]
 
@@ -90,7 +84,6 @@ INNotebookModel >> executeAllCellsAsCollection [
 		              cell needToUpdate
 			              ifTrue: [ cell getContentwithContext: context ]
 			              ifFalse: [ nil ] ].
-	needToUpdate := false.
 	^ collection
 ]
 
@@ -149,7 +142,6 @@ INNotebookModel >> importCellsFrom: aFileReference [
 INNotebookModel >> initialize [
 
 	super initialize.
-	needToUpdate := true.
 	cellList := OrderedCollection new.
 	additionalBindings := Dictionary new
 ]
@@ -180,14 +172,4 @@ INNotebookModel >> micDocument [
 INNotebookModel >> name [
 
 	^ fileName ifNil: [ 'new *' ]
-]
-
-{ #category : #accessing }
-INNotebookModel >> needToUpdate [
-	^ needToUpdate 
-]
-
-{ #category : #accessing }
-INNotebookModel >> needToUpdate: aBoolean [
-	needToUpdate := aBoolean 
 ]

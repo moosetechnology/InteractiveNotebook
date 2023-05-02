@@ -15,32 +15,6 @@ Class {
 	#category : #InteractiveNotebookPresenter
 }
 
-{ #category : #adding }
-INNotebookEditorPresenter >> add: aCell [
-
-	self layout add: aCell expand: false.
-	aCell announceDisplayed.
-	lastCellAdded takeKeyboardFocus
-]
-
-{ #category : #adding }
-INNotebookEditorPresenter >> addCodeCell [
-
-	lastCellAdded := self newCodeCell.
-	cellList addLast: lastCellAdded.
-	selectedCell := lastCellAdded.
-	self relayout
-]
-
-{ #category : #adding }
-INNotebookEditorPresenter >> addTextCell [
-
-	lastCellAdded := self newTextCell.
-	cellList addLast: lastCellAdded.
-	selectedCell := lastCellAdded.
-	self relayout
-]
-
 { #category : #initialization }
 INNotebookEditorPresenter >> addTextCellAfter: aCell [
 

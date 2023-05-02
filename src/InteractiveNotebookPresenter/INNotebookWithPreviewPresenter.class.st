@@ -57,13 +57,6 @@ INNotebookWithPreviewPresenter class >> title [
 ]
 
 { #category : #actions }
-INNotebookWithPreviewPresenter >> addTextCell [
-	
-	notebook addTextCell.
-	self announcingObject value needToUpdate: true.
-]
-
-{ #category : #actions }
 INNotebookWithPreviewPresenter >> chooseTextFile: messageString extensions: stringCollection path: defaultName [
 	^UIManager default
 		chooseForSaveFileReference: messageString 

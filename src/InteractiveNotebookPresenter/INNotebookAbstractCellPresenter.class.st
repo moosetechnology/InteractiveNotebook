@@ -283,7 +283,6 @@ INNotebookAbstractCellPresenter >> unselectedColor [
 
 { #category : #initialization }
 INNotebookAbstractCellPresenter >> updateHeight [
-
 	UIManager default defer: [ 
 		notebook headerSep withAdapterDo: [ :a | 
 			cell withAdapterDo: [ :b | 
