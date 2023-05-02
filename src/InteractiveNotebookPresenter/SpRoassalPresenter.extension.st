@@ -22,6 +22,18 @@ SpRoassalPresenter >> calculateNewScale [
 ]
 
 { #category : #'*InteractiveNotebookPresenter' }
+SpRoassalPresenter >> defaultHeight [
+
+	^ 350
+]
+
+{ #category : #'*InteractiveNotebookPresenter' }
+SpRoassalPresenter >> defaultZoom [
+
+	^ 0.9
+]
+
+{ #category : #'*InteractiveNotebookPresenter' }
 SpRoassalPresenter >> selectNotebookPresenter [
 
 	"todo"
@@ -36,17 +48,12 @@ SpRoassalPresenter >> unselectedNotebookPresenter [
 { #category : #'*InteractiveNotebookPresenter' }
 SpRoassalPresenter >> updateNotebookPresenterHeight [
 
-	| rect |
-	self owner withAdapterDo: [ :a | a widget height: 350. self canvas camera zoomToFit: self canvas extent * 0.9. ].
-	
-		"self canvas camera scale: self calculateNewScale.
-		self canvas camera position: self calculateNewCenter."
-		
-		"rect := RSCoordinates new visibleRectangleFor: self canvas camera.
-		""rect := Rectangle
-			        origin: 0 - a widget height @ 0 - a widget width
-			        corner: a widget height @ a widget width.""
-		self canvas camera
-			zoomToFit: (a widget height @ a widget width) * 1.3
-			rectangle: rect."
+	self owner withAdapterDo: [ :a |
+		| canvas |
+		canvas := self currentCanvas.
+		a widget height: self defaultHeight.
+		canvas camera
+			zoomToFit: a widget extent * self defaultZoom
+			rectangle: canvas encompassingRectangle.
+		canvas signalUpdate ]
 ]
