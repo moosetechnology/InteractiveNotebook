@@ -10,44 +10,10 @@ Class {
 	#category : #InteractiveNotebookPresenter
 }
 
-{ #category : #help }
-INNotebookWithPreviewPresenter class >> helpMessage [
-	
-	^ 'Open the interactive notebook'
-]
-
-{ #category : #'world menu' }
-INNotebookWithPreviewPresenter class >> menuCommandOn: aBuilder [
-
-	<worldMenu>
-	<miBrowsers>
-	(aBuilder item: #Reporter)
-		parent: #Moose;
-		label: self title;
-		icon: (self iconNamed: #smallExport);
-		order: 6;
-		help: self helpMessage;
-		action: [ self open ]
-]
-
-{ #category : #'world menu' }
-INNotebookWithPreviewPresenter class >> menuItem [
-
-	^ #reporteBuilder
-]
-
 { #category : #'instance creation' }
 INNotebookWithPreviewPresenter class >> newModel [
 
 	^ INNotebookModel new
-]
-
-{ #category : #'instance creation' }
-INNotebookWithPreviewPresenter class >> open [
-
-	^ (self on: self newModel)
-		  open;
-		  yourself
 ]
 
 { #category : #specs }

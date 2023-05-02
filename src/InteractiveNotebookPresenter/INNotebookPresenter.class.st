@@ -38,7 +38,6 @@ INNotebookPresenter class >> menuItem [
 
 { #category : #'instance creation' }
 INNotebookPresenter class >> open [
-
 	^ self new
 		  open;
 		  yourself
