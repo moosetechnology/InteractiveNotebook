@@ -133,14 +133,6 @@ INNotebookPreviewPresenter >> updateHeight [
 ]
 
 { #category : #actions }
-INNotebookPreviewPresenter >> updateWithStringCollection: aCollection [
-
-	previewCells := aCollection collect: [ :s | 
-		                self newPreviewCellWith: s ].
-	self relayout
-]
-
-{ #category : #actions }
 INNotebookPreviewPresenter >> updateWithStringCollection: aCollection andCells: cells [
 
 	| col |

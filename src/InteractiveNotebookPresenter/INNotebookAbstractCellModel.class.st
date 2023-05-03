@@ -12,8 +12,7 @@ Class {
 	#instVars : [
 		'text',
 		'model',
-		'needToUpdate',
-		'previewCell'
+		'needToUpdate'
 	],
 	#category : #InteractiveNotebookPresenter
 }

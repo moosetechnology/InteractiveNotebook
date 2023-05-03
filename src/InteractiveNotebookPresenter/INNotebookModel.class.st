@@ -89,8 +89,8 @@ INNotebookModel >> executeAllCellsAsCollection [
 	collection := cellList collect: [ :cell | 
 		              cell needToUpdate
 			              ifTrue: [ cell getContentwithContext: context ]
-			              ifFalse: [ nil ] ].
-	^ collection
+			              ifFalse: [ nil ] ].  	"has to be nil, so the list has the right size"
+	^ collection 										"while still compiling only when necessary"
 ]
 
 { #category : #export }
