@@ -62,7 +62,7 @@ INNotebookWithPreviewPresenter >> codeCellPlaceholder: anObject [
 INNotebookWithPreviewPresenter >> exportDocument [
 
 	| aFile |
-	self updateModelCells.
+	self preview.
 	self model cellList ifEmpty: [ 
 		self inform: 'Nothing to export'.
 		^ self ].
@@ -77,7 +77,7 @@ INNotebookWithPreviewPresenter >> exportDocument [
 INNotebookWithPreviewPresenter >> exportToHTML [
 
 	| aFile |
-	self updateModelCells.
+	self preview.
 	self model cellList ifEmpty: [ 
 		self inform: 'Nothing to export'.
 		^ self ].
@@ -94,7 +94,7 @@ INNotebookWithPreviewPresenter >> exportToHTML [
 INNotebookWithPreviewPresenter >> exportToText [
 
 	| aFile |
-	self updateModelCells.
+	self preview.
 	self model cellList ifEmpty: [ 
 		self inform: 'Nothing to export'.
 		^ self ].

@@ -11,8 +11,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'text',
-		'model',
-		'needToUpdate'
+		'needToUpdate',
+		'previewCell'
 	],
 	#category : #InteractiveNotebookPresenter
 }
@@ -55,6 +55,18 @@ INNotebookAbstractCellModel >> needToUpdate: aBoolean [
 INNotebookAbstractCellModel >> presenterClass [
 
 	self subclassResponsibility
+]
+
+{ #category : #accessing }
+INNotebookAbstractCellModel >> previewCell [
+
+	^ previewCell
+]
+
+{ #category : #accessing }
+INNotebookAbstractCellModel >> previewCell: anObject [
+
+	previewCell := anObject
 ]
 
 { #category : #printing }

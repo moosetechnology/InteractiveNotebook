@@ -145,6 +145,7 @@ INNotebookPreviewPresenter >> updateWithStringCollection: aCollection andCells: 
 				pCell := self newPreviewCellWith: obj.
 				pCell cell: cell.
 				cell previewCell: pCell.
+				cell model previewCell: pCell.
 				cell model needToUpdate: false ]
 			ifFalse: [ pCell := cell previewCell ].
 		col add: pCell ].
