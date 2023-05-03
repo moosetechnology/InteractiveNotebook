@@ -34,6 +34,11 @@ SpRoassalPresenter >> defaultZoom [
 ]
 
 { #category : #'*InteractiveNotebookPresenter' }
+SpRoassalPresenter >> getContent [
+	^ self canvas
+]
+
+{ #category : #'*InteractiveNotebookPresenter' }
 SpRoassalPresenter >> selectNotebookPresenter [
 
 	"todo"

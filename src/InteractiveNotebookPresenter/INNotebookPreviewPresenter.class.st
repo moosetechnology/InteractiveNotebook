@@ -86,10 +86,10 @@ INNotebookPreviewPresenter >> initializePresenters [
 INNotebookPreviewPresenter >> newPreviewCellWith: anObject [
 	| pCell |
 	pCell := (self instantiate: INNotebookCellPreviewPresenter)
-		  setContentPresenter: (anObject createContentPreviewPresenter);
+		  contentPresenter: (anObject createContentPreviewPresenter);
 		  parent: self;
 		  yourself.
-	anObject addContentToPreviewPresenter: pCell getContentPresenter.
+	anObject addContentToPreviewPresenter: pCell contentPresenter.
 	^ pCell 
 ]
 

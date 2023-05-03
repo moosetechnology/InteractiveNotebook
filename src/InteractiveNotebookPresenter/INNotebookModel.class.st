@@ -12,7 +12,6 @@ Class {
 		'micDocument',
 		'cellList',
 		'context',
-		'generatedDocument',
 		'additionalBindings',
 		'fileName'
 	],
@@ -69,14 +68,19 @@ INNotebookModel >> context [
 	^ context
 ]
 
-{ #category : #actions }
-INNotebookModel >> executeAllCells [
+{ #category : #'as yet unclassified' }
+INNotebookModel >> createGeneratedDocumentAt: aFileReference [
 
-	generatedDocument := String streamContents: [ :s | 
-		              self initializeContextWithStream: s.
-		              cellList do: [ :cell | 
-			              cell printContentIn: s withContext: context.
-			              s nextPut: Character cr ] ].
+	| generatedDocument parentReference |
+	parentReference := aFileReference parent.
+	generatedDocument := String streamContents: [ :stream | 
+		                     cellList doWithIndex: [ :cell :index | 
+			                     stream nextPutAll:
+				                     (cell previewCell getContent
+					                      generateMicrodownAt: parentReference
+					                      withIndex: index).
+			                     stream nextPutAll: '  '.
+			                     stream nextPut: Character cr ] ].
 	^ generatedDocument
 ]
 
@@ -108,9 +112,11 @@ INNotebookModel >> exportDocumentAt: aFileReference [
 INNotebookModel >> exportToHTMLAt: aFileReference [
 
 	"This will use the microdown HTML visitor to export the document to HTML. So your document should respect Microdown specs."
+
 	aFileReference ifNil: [ ^ self ].
 	aFileReference writeStreamDo: [ :stream | 
-		stream nextPutAll: (MicHTMLVisitor asHTMLString: self generatedDocument) ]
+		stream nextPutAll: (MicHTMLVisitor asHTMLString:
+				 (self createGeneratedDocumentAt: aFileReference)) ]
 ]
 
 { #category : #export }
@@ -121,19 +127,8 @@ INNotebookModel >> exportToTextAt: aFileReference [
 	aFileReference ifNil: [ ^ self ].
 	aFileReference ensureDelete.
 	aFileReference ifNotNil: [ 
-		aFileReference writeStreamDo: [ :s | s << generatedDocument ] ]
-]
-
-{ #category : #accessing }
-INNotebookModel >> generatedDocument [
-
-	^ generatedDocument
-]
-
-{ #category : #accessing }
-INNotebookModel >> generatedDocument: anObject [
-
-	generatedDocument := anObject.
+		aFileReference writeStreamDo: [ :s | 
+			s << (self createGeneratedDocumentAt: aFileReference) ] ]
 ]
 
 { #category : #actions }

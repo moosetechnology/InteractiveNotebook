@@ -43,8 +43,27 @@ INNotebookCellPreviewPresenter >> cellTextInput [
 ]
 
 { #category : #accessing }
-INNotebookCellPreviewPresenter >> getContentPresenter [
+INNotebookCellPreviewPresenter >> contentPresenter [
 	^ contentPresenter
+]
+
+{ #category : #initialization }
+INNotebookCellPreviewPresenter >> contentPresenter: aPresenter [
+
+	contentPresenter := aPresenter.
+	self whenDisplayDo: [ 
+		self updateHeight.
+		"presenter withAdapterDo: [ :a | 
+			UIManager default defer: [ 
+				a widget backgroundColor: self unselectedColor ] ]" ].
+	self initializeLayout.
+	contentPresenter eventHandler whenMouseDownDo: [ :anEvent | 
+		self selectMe ]
+]
+
+{ #category : #accessing }
+INNotebookCellPreviewPresenter >> getContent [
+	^ contentPresenter getContent
 ]
 
 { #category : #initialization }
@@ -92,20 +111,6 @@ INNotebookCellPreviewPresenter >> selectMe [
 	
 	self parent select: self.
 	cell ifNotNil: [ :c | c selectAndScrollToMe ]
-]
-
-{ #category : #initialization }
-INNotebookCellPreviewPresenter >> setContentPresenter: aPresenter [
-
-	contentPresenter := aPresenter.
-	self whenDisplayDo: [ 
-		self updateHeight.
-		"presenter withAdapterDo: [ :a | 
-			UIManager default defer: [ 
-				a widget backgroundColor: self unselectedColor ] ]" ].
-	self initializeLayout.
-	contentPresenter eventHandler whenMouseDownDo: [ :anEvent | 
-		self selectMe ]
 ]
 
 { #category : #accessing }

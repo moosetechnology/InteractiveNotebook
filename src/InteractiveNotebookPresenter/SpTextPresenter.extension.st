@@ -1,6 +1,11 @@
 Extension { #name : #SpTextPresenter }
 
 { #category : #'*InteractiveNotebookPresenter' }
+SpTextPresenter >> getContent [ 
+	^ self text
+]
+
+{ #category : #'*InteractiveNotebookPresenter' }
 SpTextPresenter >> selectNotebookPresenter [ 
 
 	self withAdapterDo: [ :a | 
