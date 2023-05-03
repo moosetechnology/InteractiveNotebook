@@ -12,7 +12,8 @@ Class {
 	#instVars : [
 		'text',
 		'model',
-		'needToUpdate'
+		'needToUpdate',
+		'previewCell'
 	],
 	#category : #InteractiveNotebookPresenter
 }
@@ -39,16 +40,6 @@ INNotebookAbstractCellModel >> initialize [
 	super initialize.
 	needToUpdate := true.
 	text := String empty
-]
-
-{ #category : #accessing }
-INNotebookAbstractCellModel >> model [
-	^ model
-]
-
-{ #category : #accessing }
-INNotebookAbstractCellModel >> model: aModel [
-	model := aModel
 ]
 
 { #category : #accessing }

@@ -10,9 +10,9 @@ Class {
 	#name : #INNotebookCellPreviewPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
-		'presenter',
 		'cell',
-		'parent'
+		'parent',
+		'contentPresenter'
 	],
 	#category : #InteractiveNotebookPresenter
 }
@@ -42,16 +42,16 @@ INNotebookCellPreviewPresenter >> cellTextInput [
 	^ cell
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 INNotebookCellPreviewPresenter >> getContentPresenter [
-	^ presenter
+	^ contentPresenter
 ]
 
 { #category : #initialization }
 INNotebookCellPreviewPresenter >> initializeLayout [
 
 	self layout: (SpBoxLayout newLeftToRight
-			 add: presenter;
+			 add: contentPresenter;
 			 yourself)
 ]
 
@@ -78,7 +78,7 @@ INNotebookCellPreviewPresenter >> parent: anObject [
 { #category : #actions }
 INNotebookCellPreviewPresenter >> select [
 
-	presenter selectNotebookPresenter 
+	contentPresenter selectNotebookPresenter 
 ]
 
 { #category : #actions }
@@ -97,32 +97,32 @@ INNotebookCellPreviewPresenter >> selectMe [
 { #category : #initialization }
 INNotebookCellPreviewPresenter >> setContentPresenter: aPresenter [
 
-	presenter := aPresenter.
+	contentPresenter := aPresenter.
 	self whenDisplayDo: [ 
 		self updateHeight.
 		"presenter withAdapterDo: [ :a | 
 			UIManager default defer: [ 
 				a widget backgroundColor: self unselectedColor ] ]" ].
 	self initializeLayout.
-	presenter eventHandler whenMouseDownDo: [ :anEvent | 
+	contentPresenter eventHandler whenMouseDownDo: [ :anEvent | 
 		self selectMe ]
 ]
 
 { #category : #accessing }
 INNotebookCellPreviewPresenter >> text: aString [
 
-	presenter text: aString
+	contentPresenter text: aString
 ]
 
 { #category : #actions }
 INNotebookCellPreviewPresenter >> unselected [
 	
-	presenter unselectedNotebookPresenter 
+	contentPresenter unselectedNotebookPresenter 
 ]
 
 { #category : #initialization }
 INNotebookCellPreviewPresenter >> updateHeight [
 
 	UIManager default defer: [ 
-		presenter updateNotebookPresenterHeight ]
+		contentPresenter updateNotebookPresenterHeight ]
 ]

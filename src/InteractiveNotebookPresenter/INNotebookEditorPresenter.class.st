@@ -7,7 +7,6 @@ Class {
 	#name : #INNotebookEditorPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
-		'menu',
 		'cellList',
 		'lastCellAdded',
 		'selectedCell',
