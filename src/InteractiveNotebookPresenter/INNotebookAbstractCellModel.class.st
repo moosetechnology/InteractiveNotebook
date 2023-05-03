@@ -17,6 +17,11 @@ Class {
 	#category : #InteractiveNotebookPresenter
 }
 
+{ #category : #ston }
+INNotebookAbstractCellModel class >> stonAllInstVarNames [ 
+	^ super stonAllInstVarNames \ {#needToUpdate. #previewCell }
+]
+
 { #category : #converting }
 INNotebookAbstractCellModel >> beCodeModel [
 	^ self subclassResponsibility 

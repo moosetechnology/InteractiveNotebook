@@ -249,6 +249,12 @@ INNotebookAbstractCellPresenter >> selectedColor [
 	^ Color fromHexString: '77A8C8'
 ]
 
+{ #category : #api }
+INNotebookAbstractCellPresenter >> setModelBeforeInitialization: aModel [
+
+	self notebook: aModel
+]
+
 { #category : #protocol }
 INNotebookAbstractCellPresenter >> takeKeyboardFocus [
 

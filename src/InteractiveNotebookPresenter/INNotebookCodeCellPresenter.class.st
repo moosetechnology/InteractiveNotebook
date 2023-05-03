@@ -61,9 +61,3 @@ INNotebookCodeCellPresenter >> notebook: aNoteBook [
 
 	notebook := aNoteBook.
 ]
-
-{ #category : #api }
-INNotebookCodeCellPresenter >> setModelBeforeInitialization: aModel [
-
-	self notebook: aModel
-]

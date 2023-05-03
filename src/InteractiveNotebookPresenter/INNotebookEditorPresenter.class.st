@@ -260,9 +260,8 @@ INNotebookEditorPresenter >> updateAll [
 
 	cellList := LinkedList new.
 	self model cellList do: [ :c | 
-		cellList add: ((self instantiate: c presenterClass)
+		cellList add: ((self instantiate: c presenterClass on: self)
 				 model: c;
-				 notebook: self;
 				 text: c text;
 				 yourself) ].
 

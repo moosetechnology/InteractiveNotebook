@@ -68,7 +68,7 @@ INNotebookModel >> context [
 	^ context
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #export }
 INNotebookModel >> createGeneratedDocumentAt: aFileReference [
 
 	| generatedDocument parentReference |
