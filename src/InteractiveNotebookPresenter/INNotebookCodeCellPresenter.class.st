@@ -29,10 +29,11 @@ INNotebookCodeCellPresenter >> initializePresenters [
 
 	super initializePresenters.
 	cellTextInput := self newCode
-		        withoutLineNumbers;
-		        beForScripting;
-		        placeholder: notebook codeCellPlaceholder;
-		        yourself.
+		                 withoutLineNumbers;
+		                 withoutScrollBars;
+		                 beForScripting;
+		                 placeholder: notebook codeCellPlaceholder;
+		                 yourself.
 	cellTextInput whenTextChangedDo: [ self updateHeight ].
 	self interactionModel: notebook interactionModel.
 

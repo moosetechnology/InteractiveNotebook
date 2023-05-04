@@ -24,7 +24,7 @@ SpRoassalPresenter >> calculateNewScale [
 { #category : #'*InteractiveNotebookPresenter' }
 SpRoassalPresenter >> defaultHeight [
 
-	^ 350
+	^ 500
 ]
 
 { #category : #'*InteractiveNotebookPresenter' }
