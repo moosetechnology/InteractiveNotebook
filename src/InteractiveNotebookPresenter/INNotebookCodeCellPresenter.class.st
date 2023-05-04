@@ -30,7 +30,6 @@ INNotebookCodeCellPresenter >> initializePresenters [
 	super initializePresenters.
 	cellTextInput := self newCode
 		                 withoutLineNumbers;
-		                 withoutScrollBars;
 		                 beForScripting;
 		                 placeholder: notebook codeCellPlaceholder;
 		                 yourself.

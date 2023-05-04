@@ -28,10 +28,7 @@ INNotebookTextCellPresenter >> beText [
 INNotebookTextCellPresenter >> initializePresenters [
 
 	super initializePresenters.
-	cellTextInput := self
-		                 newText
-		                 withoutScrollBars;
-		                 yourself.
+	cellTextInput := self newText.
 	cellTextInput whenTextChangedDo: [ self updateHeight ].
 	icon := self newButton
 		        label: 'Mic';
