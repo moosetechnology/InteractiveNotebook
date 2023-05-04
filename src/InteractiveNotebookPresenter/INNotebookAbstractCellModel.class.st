@@ -19,7 +19,7 @@ Class {
 
 { #category : #ston }
 INNotebookAbstractCellModel class >> stonAllInstVarNames [ 
-	^ super stonAllInstVarNames \ {#needToUpdate. #previewCell }
+	^ super stonAllInstVarNames \ { #needToUpdate. #previewCell }
 ]
 
 { #category : #converting }
