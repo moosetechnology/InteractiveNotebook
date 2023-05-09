@@ -34,6 +34,18 @@ INNotebookPreviewPresenter >> close [
 	browser closePreview
 ]
 
+{ #category : #'as yet unclassified' }
+INNotebookPreviewPresenter >> createInspectorViewFor: anObject [
+
+	| ctxs presenter |
+	ctxs := anObject inspectionContexts.
+	presenter := self newNotebook.
+	ctxs do: [ :ctx | 
+		ctx evaluator: false.
+		presenter addPage: (self newPageForContext: ctx andObject: anObject) ].
+	^ presenter
+]
+
 { #category : #initialization }
 INNotebookPreviewPresenter >> initialize [
 
@@ -83,14 +95,38 @@ INNotebookPreviewPresenter >> initializePresenters [
 ]
 
 { #category : #actions }
+INNotebookPreviewPresenter >> newInspectionForContext: aContext andObject: anObject [
+	
+	^ StObjectContextPresenter on: (StObjectContextModel new 
+		inspection: self;
+		inspectedObject: anObject;
+		context: aContext; 
+		yourself)
+]
+
+{ #category : #actions }
+INNotebookPreviewPresenter >> newPageForContext: aContext andObject: anObject [
+
+	^ SpNotebookPage new
+		title: aContext title;
+		presenterProvider: [ self newInspectionForContext: aContext andObject: anObject ];
+		"whenRetrievedDo: [ :presenter | 
+			self keepPresenter: presenter.
+			self addActivationTo: presenter ];"
+		yourself
+]
+
+{ #category : #actions }
 INNotebookPreviewPresenter >> newPreviewCellWith: anObject [
+
 	| pCell |
 	pCell := (self instantiate: INNotebookCellPreviewPresenter)
-		  contentPresenter: (anObject createContentPreviewPresenter);
-		  parent: self;
-		  yourself.
-	anObject addContentToPreviewPresenter: pCell contentPresenter.
-	^ pCell 
+		         contentPresenter: (self createInspectorViewFor: anObject);
+		         parent: self;
+		         yourself.
+	"contentPresenter: (anObject createContentPreviewPresenter);"
+	"anObject addContentToPreviewPresenter: pCell contentPresenter."
+	^ pCell
 ]
 
 { #category : #initialization }

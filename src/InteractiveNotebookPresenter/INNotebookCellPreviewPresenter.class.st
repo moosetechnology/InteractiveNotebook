@@ -97,7 +97,7 @@ INNotebookCellPreviewPresenter >> parent: anObject [
 { #category : #actions }
 INNotebookCellPreviewPresenter >> select [
 
-	contentPresenter selectNotebookPresenter 
+	"contentPresenter selectNotebookPresenter "
 ]
 
 { #category : #actions }
@@ -122,12 +122,13 @@ INNotebookCellPreviewPresenter >> text: aString [
 { #category : #actions }
 INNotebookCellPreviewPresenter >> unselected [
 	
-	contentPresenter unselectedNotebookPresenter 
+	"contentPresenter unselectedNotebookPresenter "
 ]
 
 { #category : #initialization }
 INNotebookCellPreviewPresenter >> updateHeight [
 
-	UIManager default defer: [ 
-		contentPresenter updateNotebookPresenterHeight ]
+	self withAdapterDo: [ :a | "UIManager default defer: [ 
+		contentPresenter updateNotebookPresenterHeight ]" 
+		a widget height: 350 ]
 ]
