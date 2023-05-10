@@ -144,7 +144,8 @@ INNotebookModel >> initialize [
 
 	super initialize.
 	cellList := OrderedCollection new.
-	additionalBindings := Dictionary new
+	additionalBindings := Dictionary new.
+	self initializeContext
 ]
 
 { #category : #initialization }

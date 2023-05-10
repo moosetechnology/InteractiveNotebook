@@ -24,3 +24,10 @@ INNotebookCodeScriptingInteractionModel >> receiver: anObject [
 
 	receiver := anObject
 ]
+
+{ #category : #initialization }
+INNotebookCodeScriptingInteractionModel >> setBindings: aASTTree [
+
+	aASTTree allChildren do: [ :l | 
+		l class = RBAssignmentNode ifTrue: [ self bindingOf: l variable name ] ]
+]

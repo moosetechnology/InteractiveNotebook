@@ -24,6 +24,12 @@ INNotebookCodeCellModel >> getContentwithContext: aContext [
 		  evaluate
 ]
 
+{ #category : #compiling }
+INNotebookCodeCellModel >> parseContent [
+
+	^ RBParser parseExpression: text
+]
+
 { #category : #helpers }
 INNotebookCodeCellModel >> presenterClass [
 
