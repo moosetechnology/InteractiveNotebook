@@ -175,3 +175,8 @@ INNotebookModel >> name [
 
 	^ fileName ifNil: [ 'new *' ]
 ]
+
+{ #category : #'as yet unclassified' }
+INNotebookModel >> needToUpdateAllCells [
+	cellList do: [ :c | c needToUpdate: true ]
+]
