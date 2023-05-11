@@ -17,6 +17,12 @@ Class {
 	#category : #InteractiveNotebookPresenter
 }
 
+{ #category : #specs }
+INNotebookWithPreviewPresenter class >> defaultNotebookExportName [
+
+	^ 'notebook'
+]
+
 { #category : #'instance creation' }
 INNotebookWithPreviewPresenter class >> newModel [
 
@@ -69,8 +75,16 @@ INNotebookWithPreviewPresenter >> exportDocument [
 	aFile := self
 		         chooseTextFile: 'Chose export destination'
 		         extensions: #( 'ston' )
-		         path: 'notebook.ston'.
+		         path: self exportFilename , '.ston'.
 	aFile ifNotNil: [ self model exportDocumentAt: aFile ]
+]
+
+{ #category : #'as yet unclassified' }
+INNotebookWithPreviewPresenter >> exportFilename [
+
+	^ self model name = self model class defaultName
+		  ifTrue: [ self class defaultNotebookExportName ]
+		  ifFalse: [ self model name ]
 ]
 
 { #category : #actions }
@@ -84,7 +98,7 @@ INNotebookWithPreviewPresenter >> exportToHTML [
 	aFile := self
 		         chooseTextFile: 'Chose export destination'
 		         extensions: #( 'html' )
-		         path: 'notebook.html'.
+		         path: self exportFilename , '.html'.
 	aFile ifNil: [ ^ self ].
 	self model exportToHTMLAt: aFile.
 	self reportExported: aFile
@@ -101,7 +115,7 @@ INNotebookWithPreviewPresenter >> exportToText [
 	aFile := self
 		         chooseTextFile: 'Chose export destination'
 		         extensions: #( 'md' )
-		         path: 'mooseNotebook.md'.
+		         path: self exportFilename , '.md'.
 	aFile ifNotNil: [ self model exportToTextAt: aFile ]
 ]
 

@@ -18,6 +18,12 @@ Class {
 	#category : #InteractiveNotebookPresenter
 }
 
+{ #category : #accessing }
+INNotebookModel class >> defaultName [
+
+	^ 'new *'
+]
+
 { #category : #initialization }
 INNotebookModel class >> initializeWith: aFileReference on: aMooseModel [
 
@@ -135,7 +141,7 @@ INNotebookModel >> exportToTextAt: aFileReference [
 INNotebookModel >> importCellsFrom: aFileReference [
 
 	aFileReference ifNil: [ ^ self ].
-	fileName := aFileReference basename.
+	fileName := aFileReference basenameWithoutExtension.
 	cellList := STON fromString: aFileReference contents
 ]
 
@@ -173,7 +179,7 @@ INNotebookModel >> micDocument [
 { #category : #accessing }
 INNotebookModel >> name [
 
-	^ fileName ifNil: [ 'new *' ]
+	^ fileName ifNil: [ self class defaultName ]
 ]
 
 { #category : #'as yet unclassified' }
