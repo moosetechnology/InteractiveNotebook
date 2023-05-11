@@ -1,27 +1,6 @@
 Extension { #name : #SpRoassalPresenter }
 
 { #category : #'*InteractiveNotebookPresenter' }
-SpRoassalPresenter >> calculateNewCenter [
-	| x y |
-	x := self canvas extent x.
-	y := self canvas extent y.
-	^ x / 2 @ y / 2
-]
-
-{ #category : #'*InteractiveNotebookPresenter' }
-SpRoassalPresenter >> calculateNewScale [
-
-	| xw yw xc yc |
-	xw := self owner withAdapterDo: [ :a | a widget height ].
-	xc := self canvas extent x.
-	yw := self owner withAdapterDo: [ :a | a widget width ].
-	yc := self canvas extent y.
-	^ xc - xw > (yc - yw)
-		  ifTrue: [ xw / xc ]
-		  ifFalse: [ yw / yc ]
-]
-
-{ #category : #'*InteractiveNotebookPresenter' }
 SpRoassalPresenter >> defaultHeight [
 
 	^ 500
