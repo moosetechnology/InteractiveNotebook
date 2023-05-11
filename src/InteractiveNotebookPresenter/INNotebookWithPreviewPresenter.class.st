@@ -68,7 +68,7 @@ INNotebookWithPreviewPresenter >> codeCellPlaceholder: anObject [
 INNotebookWithPreviewPresenter >> exportDocument [
 
 	| aFile |
-	self preview.
+	self previewReloaded.
 	self model cellList ifEmpty: [ 
 		self inform: 'Nothing to export'.
 		^ self ].
@@ -91,7 +91,7 @@ INNotebookWithPreviewPresenter >> exportFilename [
 INNotebookWithPreviewPresenter >> exportToHTML [
 
 	| aFile |
-	self preview.
+	self previewReloaded.
 	self model cellList ifEmpty: [ 
 		self inform: 'Nothing to export'.
 		^ self ].
@@ -108,7 +108,7 @@ INNotebookWithPreviewPresenter >> exportToHTML [
 INNotebookWithPreviewPresenter >> exportToText [
 
 	| aFile |
-	self preview.
+	self previewReloaded.
 	self model cellList ifEmpty: [ 
 		self inform: 'Nothing to export'.
 		^ self ].
@@ -202,6 +202,12 @@ INNotebookWithPreviewPresenter >> preview [
 		updateWithStringCollection:
 		self model executeAllCellsAsCollection
 		andCells: notebook cellList
+]
+
+{ #category : #'as yet unclassified' }
+INNotebookWithPreviewPresenter >> previewReloaded [ 
+	self model needToUpdateAllCells.
+	self preview
 ]
 
 { #category : #actions }

@@ -221,8 +221,7 @@ INNotebookPresenter >> preview [
 
 { #category : #'as yet unclassified' }
 INNotebookPresenter >> previewReloaded [
-	self currentNotebook model needToUpdateAllCells.
-	self preview
+	self currentNotebook previewReloaded
 ]
 
 { #category : #actions }
