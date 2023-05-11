@@ -167,7 +167,7 @@ INNotebookPresenter >> initializeToolbar [
 				            icon: (self iconNamed: #smallLoadProject);
 				            action: [ self importMicrodownFile ];
 				            yourself);
-				addItem: (self newToolbarButton
+		           addItem: (self newToolbarButton
 				            label: 'Save...';
 				            icon: (self iconNamed: #smallExport);
 				            action: [ self exportDocument ];
@@ -176,6 +176,11 @@ INNotebookPresenter >> initializeToolbar [
 				            label: 'Preview';
 				            icon: (self iconNamed: #smallExport);
 				            action: [ self preview ];
+				            yourself);
+		           addItem: (self newToolbarButton
+				            label: 'Preview (recalculated)';
+				            icon: (self iconNamed: #smallExport);
+				            action: [ self previewReloaded ];
 				            yourself);
 		           addItem: (self newToolbarButton
 				            label: 'Export to text';
@@ -212,6 +217,11 @@ INNotebookPresenter >> openPreview [
 INNotebookPresenter >> preview [
 
 	self currentNotebook preview
+]
+
+{ #category : #'as yet unclassified' }
+INNotebookPresenter >> previewReloaded [
+	self currentNotebook previewReloaded
 ]
 
 { #category : #actions }

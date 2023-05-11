@@ -17,6 +17,12 @@ Class {
 	#category : #InteractiveNotebookPresenter
 }
 
+{ #category : #specs }
+INNotebookWithPreviewPresenter class >> defaultNotebookExportName [
+
+	^ 'notebook'
+]
+
 { #category : #'instance creation' }
 INNotebookWithPreviewPresenter class >> newModel [
 
@@ -62,29 +68,37 @@ INNotebookWithPreviewPresenter >> codeCellPlaceholder: anObject [
 INNotebookWithPreviewPresenter >> exportDocument [
 
 	| aFile |
-	self preview.
+	self previewReloaded.
 	self model cellList ifEmpty: [ 
 		self inform: 'Nothing to export'.
 		^ self ].
 	aFile := self
 		         chooseTextFile: 'Chose export destination'
 		         extensions: #( 'ston' )
-		         path: 'notebook.ston'.
+		         path: self exportFilename , '.ston'.
 	aFile ifNotNil: [ self model exportDocumentAt: aFile ]
+]
+
+{ #category : #'as yet unclassified' }
+INNotebookWithPreviewPresenter >> exportFilename [
+
+	^ self model name = self model class defaultName
+		  ifTrue: [ self class defaultNotebookExportName ]
+		  ifFalse: [ self model name ]
 ]
 
 { #category : #actions }
 INNotebookWithPreviewPresenter >> exportToHTML [
 
 	| aFile |
-	self preview.
+	self previewReloaded.
 	self model cellList ifEmpty: [ 
 		self inform: 'Nothing to export'.
 		^ self ].
 	aFile := self
 		         chooseTextFile: 'Chose export destination'
 		         extensions: #( 'html' )
-		         path: 'notebook.html'.
+		         path: self exportFilename , '.html'.
 	aFile ifNil: [ ^ self ].
 	self model exportToHTMLAt: aFile.
 	self reportExported: aFile
@@ -94,14 +108,14 @@ INNotebookWithPreviewPresenter >> exportToHTML [
 INNotebookWithPreviewPresenter >> exportToText [
 
 	| aFile |
-	self preview.
+	self previewReloaded.
 	self model cellList ifEmpty: [ 
 		self inform: 'Nothing to export'.
 		^ self ].
 	aFile := self
 		         chooseTextFile: 'Chose export destination'
 		         extensions: #( 'md' )
-		         path: 'mooseNotebook.md'.
+		         path: self exportFilename , '.md'.
 	aFile ifNotNil: [ self model exportToTextAt: aFile ]
 ]
 
@@ -188,6 +202,12 @@ INNotebookWithPreviewPresenter >> preview [
 		updateWithStringCollection:
 		self model executeAllCellsAsCollection
 		andCells: notebook cellList
+]
+
+{ #category : #'as yet unclassified' }
+INNotebookWithPreviewPresenter >> previewReloaded [ 
+	self model needToUpdateAllCells.
+	self preview
 ]
 
 { #category : #actions }
