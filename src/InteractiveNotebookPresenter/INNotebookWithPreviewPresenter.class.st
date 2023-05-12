@@ -68,7 +68,6 @@ INNotebookWithPreviewPresenter >> codeCellPlaceholder: anObject [
 INNotebookWithPreviewPresenter >> exportDocument [
 
 	| aFile |
-	self previewReloaded.
 	self model cellList ifEmpty: [ 
 		self inform: 'Nothing to export'.
 		^ self ].
