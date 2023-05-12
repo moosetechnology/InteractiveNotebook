@@ -40,10 +40,27 @@ INNotebookPreviewPresenter >> createInspectorViewFor: anObject [
 	| ctxs presenter |
 	ctxs := anObject inspectionContexts.
 	presenter := self newNotebook.
-	ctxs do: [ :ctx | 
-		ctx evaluator: false.
+	ctxs do: [ :ctx |
+		ctx withoutEvaluator.
 		presenter addPage: (self newPageForContext: ctx andObject: anObject) ].
-	^ presenter
+	^ presenter 
+]
+
+{ #category : #'as yet unclassified' }
+INNotebookPreviewPresenter >> createSinglePageViewFor: anObject [
+
+	| ctx |
+	ctx := anObject inspectionContexts first.
+	ctx withoutEvaluator.
+	^ (self newPageForContext: ctx andObject: anObject) presenterProvider value
+]
+
+{ #category : #'as yet unclassified' }
+INNotebookPreviewPresenter >> createViewFor: anObject [
+
+	^ self mustDisplayInspectorView
+		  ifTrue: [ self createInspectorViewFor: anObject ]
+		  ifFalse: [ self createSinglePageViewFor: anObject ]
 ]
 
 { #category : #initialization }
@@ -94,6 +111,12 @@ INNotebookPreviewPresenter >> initializePresenters [
 	self initializeLayout
 ]
 
+{ #category : #'as yet unclassified' }
+INNotebookPreviewPresenter >> mustDisplayInspectorView [
+
+	^ browser owner owner displayInspectorView 
+]
+
 { #category : #actions }
 INNotebookPreviewPresenter >> newInspectionForContext: aContext andObject: anObject [
 	
@@ -110,9 +133,6 @@ INNotebookPreviewPresenter >> newPageForContext: aContext andObject: anObject [
 	^ SpNotebookPage new
 		title: aContext title;
 		presenterProvider: [ self newInspectionForContext: aContext andObject: anObject ];
-		"whenRetrievedDo: [ :presenter | 
-			self keepPresenter: presenter.
-			self addActivationTo: presenter ];"
 		yourself
 ]
 
@@ -121,11 +141,9 @@ INNotebookPreviewPresenter >> newPreviewCellWith: anObject [
 
 	| pCell |
 	pCell := (self instantiate: INNotebookCellPreviewPresenter)
-		         contentPresenter: (self createInspectorViewFor: anObject);
+		         contentPresenter: (self createViewFor: anObject);
 		         parent: self;
 		         yourself.
-	"contentPresenter: (anObject createContentPreviewPresenter);"
-	"anObject addContentToPreviewPresenter: pCell contentPresenter."
 	^ pCell
 ]
 
