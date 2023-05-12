@@ -10,7 +10,8 @@ Class {
 		'toolbar',
 		'mainLayout',
 		'sep',
-		'tabbedPresenter'
+		'tabbedPresenter',
+		'displayInspectorView'
 	],
 	#category : #InteractiveNotebookPresenter
 }
@@ -79,6 +80,11 @@ INNotebookPresenter >> addNewTabWithModel: aModel [
 ]
 
 { #category : #actions }
+INNotebookPresenter >> allNotebookPages [
+	^ tabbedPresenter pages collect: [ :p | p activePresenter ]
+]
+
+{ #category : #actions }
 INNotebookPresenter >> chooseTextFile: messageString extensions: stringCollection path: defaultName [
 	^UIManager default
 		chooseForSaveFileReference: messageString 
@@ -96,6 +102,18 @@ INNotebookPresenter >> closePreview [
 INNotebookPresenter >> currentNotebook [
 
 	^ tabbedPresenter selectedPage activePresenter
+]
+
+{ #category : #accessing }
+INNotebookPresenter >> displayInspectorView [
+
+	^ displayInspectorView
+]
+
+{ #category : #accessing }
+INNotebookPresenter >> displayInspectorView: aBoolean [
+
+	displayInspectorView := aBoolean
 ]
 
 { #category : #initialization }
@@ -126,6 +144,12 @@ INNotebookPresenter >> importMicrodownFile [
 		path: '.'.
 
 	file ifNotNil: [ self updateWithFile: file ]
+]
+
+{ #category : #initialization }
+INNotebookPresenter >> initialize [
+	displayInspectorView := false.
+	super initialize 
 ]
 
 { #category : #initialization }
@@ -197,6 +221,11 @@ INNotebookPresenter >> initializeToolbar [
 				            icon: (self iconNamed: #add);
 				            action: [ self addNewTab ];
 				            yourself);
+		           addItemRight: (self newToolbarButton
+				            label: 'Settings';
+				            icon: (self iconNamed: #smallConfiguration);
+				            action: [ self openSettings ];
+				            yourself);
 		           yourself
 ]
 
@@ -211,6 +240,12 @@ INNotebookPresenter >> initializeWindow: aMiWindowPresenter [
 INNotebookPresenter >> openPreview [
 
 	self currentNotebook openPreview
+]
+
+{ #category : #actions }
+INNotebookPresenter >> openSettings [
+	self allNotebookPages do: [ :n | n model needToUpdateAllCells ].
+	INNotebookSettingsPresenter openFor: self
 ]
 
 { #category : #initialization }
