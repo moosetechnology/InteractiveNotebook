@@ -105,12 +105,12 @@ INNotebookModel >> executeAllCellsAsCollection [
 
 { #category : #export }
 INNotebookModel >> exportDocumentAt: aFileReference [
-
 	"Export the cell list in a ston file."
 
 	aFileReference ifNil: [ ^ self ].
 	aFileReference ensureDelete.
-	aFileReference ifNotNil: [ 
+	aFileReference ifNotNil: [
+		fileName := aFileReference basenameWithoutExtension.
 		aFileReference writeStreamDo: [ :s | STON put: cellList onStream: s ] ]
 ]
 
