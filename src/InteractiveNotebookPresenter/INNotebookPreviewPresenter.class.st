@@ -34,7 +34,7 @@ INNotebookPreviewPresenter >> close [
 	browser closePreview
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #creating }
 INNotebookPreviewPresenter >> createInspectorViewFor: anObject [
 
 	| ctxs presenter |
@@ -46,16 +46,16 @@ INNotebookPreviewPresenter >> createInspectorViewFor: anObject [
 	^ presenter 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #creating }
 INNotebookPreviewPresenter >> createSinglePageViewFor: anObject [
 
 	| ctx |
 	ctx := anObject inspectionContexts first.
 	ctx withoutEvaluator.
-	^ (self newPageForContext: ctx andObject: anObject) presenterProvider value
+	^ (self newInspectionForContext: ctx andObject: anObject) 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #creating }
 INNotebookPreviewPresenter >> createViewFor: anObject [
 
 	^ self mustDisplayInspectorView
@@ -111,7 +111,7 @@ INNotebookPreviewPresenter >> initializePresenters [
 	self initializeLayout
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - attributes' }
 INNotebookPreviewPresenter >> mustDisplayInspectorView [
 
 	^ browser owner owner displayInspectorView 

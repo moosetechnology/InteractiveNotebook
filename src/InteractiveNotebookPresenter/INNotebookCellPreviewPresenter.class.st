@@ -51,13 +51,9 @@ INNotebookCellPreviewPresenter >> contentPresenter [
 INNotebookCellPreviewPresenter >> contentPresenter: aPresenter [
 
 	contentPresenter := aPresenter.
-	self whenDisplayDo: [ 
-		self updateHeight.
-		"presenter withAdapterDo: [ :a | 
-			UIManager default defer: [ 
-				a widget backgroundColor: self unselectedColor ] ]" ].
+	self whenDisplayDo: [ self updateHeight ].
 	self initializeLayout.
-	contentPresenter eventHandler whenMouseDownDo: [ :anEvent | 
+	contentPresenter eventHandler whenMouseDownDo: [ :anEvent |
 		self selectMe ]
 ]
 
@@ -97,7 +93,7 @@ INNotebookCellPreviewPresenter >> parent: anObject [
 { #category : #actions }
 INNotebookCellPreviewPresenter >> select [
 
-	"contentPresenter selectNotebookPresenter "
+	"contentPresenter selectNotebookPresenter"
 ]
 
 { #category : #actions }
@@ -122,7 +118,7 @@ INNotebookCellPreviewPresenter >> text: aString [
 { #category : #actions }
 INNotebookCellPreviewPresenter >> unselected [
 	
-	"contentPresenter unselectedNotebookPresenter "
+	"contentPresenter unselectedNotebookPresenter"
 ]
 
 { #category : #initialization }
@@ -130,5 +126,5 @@ INNotebookCellPreviewPresenter >> updateHeight [
 
 	self withAdapterDo: [ :a | "UIManager default defer: [ 
 		contentPresenter updateNotebookPresenterHeight ]" 
-		a widget height: 350 ]
+		a widget height: 150 ]
 ]

@@ -1,3 +1,7 @@
+"
+I am a presenter opened in a window when pressing the ""Settings"" button.
+I allow the user to choose between a inspector-like view of the cells, or the default view, which is the first page displayed in a inspector when inspecting the object returned by the cell. 
+"
 Class {
 	#name : #INNotebookSettingsPresenter,
 	#superclass : #SpPresenter,

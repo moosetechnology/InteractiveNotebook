@@ -254,7 +254,7 @@ INNotebookPresenter >> preview [
 	self currentNotebook preview
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 INNotebookPresenter >> previewReloaded [
 	self currentNotebook previewReloaded
 ]
@@ -280,8 +280,6 @@ INNotebookPresenter >> separator [
 { #category : #initialization }
 INNotebookPresenter >> updateWithFile: aFileReference [
 
-	| newModel |
-	newModel := INNotebookModel new.
-	newModel importCellsFrom: aFileReference.
-	self addNewTabWithModel: newModel
+	self addNewTabWithModel: (INNotebookModel initializeWith: aFileReference).
+	self currentNotebook fixUIAfterImport
 ]

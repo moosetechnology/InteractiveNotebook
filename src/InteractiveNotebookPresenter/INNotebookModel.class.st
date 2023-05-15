@@ -25,11 +25,10 @@ INNotebookModel class >> defaultName [
 ]
 
 { #category : #initialization }
-INNotebookModel class >> initializeWith: aFileReference on: aMooseModel [
+INNotebookModel class >> initializeWith: aFileReference [
 
 	^ self new
 		  importCellsFrom: aFileReference;
-		  followEntity: aMooseModel;
 		  yourself
 ]
 
@@ -182,7 +181,7 @@ INNotebookModel >> name [
 	^ fileName ifNil: [ self class defaultName ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #updating }
 INNotebookModel >> needToUpdateAllCells [
 	cellList do: [ :c | c needToUpdate: true ]
 ]

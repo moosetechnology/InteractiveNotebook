@@ -216,6 +216,7 @@ INNotebookEditorPresenter >> scrollTo: aMiNoteBookCell [
 
 { #category : #removing }
 INNotebookEditorPresenter >> select: aCell [
+	
 
 	selectedCell := aCell.
 	cellList do: [ :c | c unselect ].
@@ -258,15 +259,14 @@ INNotebookEditorPresenter >> transformToTextCell: aCell [
 { #category : #removing }
 INNotebookEditorPresenter >> updateAll [
 
-	cellList := LinkedList new.
-	self model cellList do: [ :c | 
-		cellList add: ((self instantiate: c presenterClass on: self)
-				 model: c;
-				 text: c text;
-				 yourself) ].
+	cellList := self model cellList collect: [ :c |
+		            (self instantiate: c presenterClass on: self)
+			            model: c;
+			            text: c text;
+			            yourself ].
 
 	cellList ifEmpty: [ ^ self ].
-	selectedCell := cellList last.
+	self select: cellList last.
 	self relayout
 ]
 
