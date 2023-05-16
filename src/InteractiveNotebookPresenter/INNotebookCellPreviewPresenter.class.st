@@ -17,10 +17,16 @@ Class {
 	#category : #InteractiveNotebookPresenter
 }
 
+{ #category : #actions }
+INNotebookCellPreviewPresenter class >> selectedColor [
+
+	^ Color fromHexString: '77A8C8'
+]
+
 { #category : #initialization }
 INNotebookCellPreviewPresenter class >> unselectedColor [
 
-	^ Smalltalk ui theme backgroundColor
+	^ Color transparent
 ]
 
 { #category : #actions }
@@ -71,6 +77,14 @@ INNotebookCellPreviewPresenter >> initializeLayout [
 ]
 
 { #category : #initialization }
+INNotebookCellPreviewPresenter >> initializePresenters [
+
+	self whenDisplayDo: [
+		self withAdapterDo: [ :a |
+			a widget announcer when: MorphGotFocus do: [ self selectMe ] ] ]
+]
+
+{ #category : #initialization }
 INNotebookCellPreviewPresenter >> morphFor: aPresenter from: aMorph [
 
 	aMorph presenter = aPresenter ifTrue: [ ^ aMorph ].
@@ -92,8 +106,8 @@ INNotebookCellPreviewPresenter >> parent: anObject [
 
 { #category : #actions }
 INNotebookCellPreviewPresenter >> select [
-
-	"contentPresenter selectNotebookPresenter"
+	
+	self withAdapterDo: [ :a | a widget color: self class selectedColor ]
 ]
 
 { #category : #actions }
@@ -118,13 +132,19 @@ INNotebookCellPreviewPresenter >> text: aString [
 { #category : #actions }
 INNotebookCellPreviewPresenter >> unselected [
 	
-	"contentPresenter unselectedNotebookPresenter"
+	self withAdapterDo: [ :a |
+		a widget color: self class unselectedColor ]
 ]
 
 { #category : #initialization }
 INNotebookCellPreviewPresenter >> updateHeight [
 
-	self withAdapterDo: [ :a | "UIManager default defer: [ 
-		contentPresenter updateNotebookPresenterHeight ]" 
-		a widget height: 150 ]
+	parent mustDisplayInspectorView
+		ifFalse: [ contentPresenter specPresenter updatePresenterHeight ]
+		ifTrue: [ self updateInspectorViewHeight ]
+]
+
+{ #category : #'as yet unclassified' }
+INNotebookCellPreviewPresenter >> updateInspectorViewHeight [
+	self withAdapterDo: [ :a | a widget height: 350 ].
 ]

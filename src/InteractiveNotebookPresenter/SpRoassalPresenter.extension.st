@@ -35,7 +35,8 @@ SpRoassalPresenter >> updateNotebookPresenterHeight [
 	self owner withAdapterDo: [ :a |
 		| canvas |
 		canvas := self currentCanvas.
-		a widget height: self defaultHeight.
+		self previewCellOwner withAdapterDo: [ :b |
+			b widget height: self defaultHeight ].
 		canvas camera
 			zoomToFit: a widget extent * self defaultZoom
 			rectangle: canvas encompassingRectangle.

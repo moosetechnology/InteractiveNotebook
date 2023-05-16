@@ -19,10 +19,11 @@ SpTextPresenter >> unselectedNotebookPresenter [
 ]
 
 { #category : #'*InteractiveNotebookPresenter' }
-SpTextPresenter >> updateNotebookPresenterHeight [
-	self withAdapterDo: [ :a | 
-			a widget defer: [ 
-				a widget scrollPane textArea withoutSelectionBar.
-				self owner withAdapterDo: [ :b | 
-					b widget height: a widget scrollPane textArea height ] ] ]
+SpTextPresenter >> updatePresenterHeight [
+
+	self withAdapterDo: [ :a |
+		a widget scrollPane textArea withoutSelectionBar.
+		a widget vScrollbarShowNever.
+		self previewCellOwner withAdapterDo: [ :b |
+			b widget height: a widget scrollPane textArea height ] ]
 ]
