@@ -30,13 +30,12 @@ SpRoassalPresenter >> unselectedNotebookPresenter [
 ]
 
 { #category : #'*InteractiveNotebookPresenter' }
-SpRoassalPresenter >> updateNotebookPresenterHeight [
+SpRoassalPresenter >> updatePresenterHeight [
 
-	self owner withAdapterDo: [ :a |
+	self previewCellOwner withAdapterDo: [ :a |
 		| canvas |
 		canvas := self currentCanvas.
-		self previewCellOwner withAdapterDo: [ :b |
-			b widget height: self defaultHeight ].
+		a widget height: self defaultHeight.
 		canvas camera
 			zoomToFit: a widget extent * self defaultZoom
 			rectangle: canvas encompassingRectangle.

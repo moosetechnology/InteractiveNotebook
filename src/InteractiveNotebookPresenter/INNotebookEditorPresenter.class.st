@@ -8,13 +8,13 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'cellList',
-		'lastCellAdded',
 		'selectedCell',
 		'interactionModel',
 		'headerSep',
 		'cellLayout',
 		'browser',
-		'codeCellPlaceholder'
+		'codeCellPlaceholder',
+		'firstCodeCell'
 	],
 	#category : #InteractiveNotebookPresenter
 }
@@ -22,6 +22,7 @@ Class {
 { #category : #initialization }
 INNotebookEditorPresenter >> addTextCellAfter: aCell [
 
+	| lastCellAdded |
 	lastCellAdded := self newTextCell.
 	cellList add: lastCellAdded after: aCell.
 	selectedCell := lastCellAdded.
@@ -31,6 +32,7 @@ INNotebookEditorPresenter >> addTextCellAfter: aCell [
 { #category : #initialization }
 INNotebookEditorPresenter >> addTextCellBefore: aCell [
 
+	| lastCellAdded |
 	lastCellAdded := self newTextCell.
 	cellList add: lastCellAdded before: aCell.
 	selectedCell := lastCellAdded.
@@ -233,7 +235,7 @@ INNotebookEditorPresenter >> selectAndScrollTo: aMiNoteBookCell [
 { #category : #adding }
 INNotebookEditorPresenter >> transformToCodeCell: aCell [
 
-	| width |
+	| width lastCellAdded |
 	lastCellAdded := self newCodeCell
 		                 text: aCell text;
 		                 yourself.
@@ -246,7 +248,7 @@ INNotebookEditorPresenter >> transformToCodeCell: aCell [
 { #category : #adding }
 INNotebookEditorPresenter >> transformToTextCell: aCell [
 
-	| width |
+	| width lastCellAdded |
 	lastCellAdded := self newTextCell
 		                 text: aCell text;
 		                 yourself.
