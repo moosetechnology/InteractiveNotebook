@@ -13,8 +13,7 @@ Class {
 		'headerSep',
 		'cellLayout',
 		'browser',
-		'codeCellPlaceholder',
-		'firstCodeCell'
+		'codeCellPlaceholder'
 	],
 	#category : #InteractiveNotebookPresenter
 }
@@ -259,20 +258,6 @@ INNotebookEditorPresenter >> transformToTextCell: aCell [
 ]
 
 { #category : #removing }
-INNotebookEditorPresenter >> updateAll [
-
-	cellList := self model cellList collect: [ :c |
-		            (self instantiate: c presenterClass on: self)
-			            model: c;
-			            text: c text;
-			            yourself ].
-
-	cellList ifEmpty: [ ^ self ].
-	self select: cellList last.
-	self relayout
-]
-
-{ #category : #removing }
 INNotebookEditorPresenter >> updateHeight [
 
 	cellList do: [ :c | c updateHeight ]
@@ -281,10 +266,4 @@ INNotebookEditorPresenter >> updateHeight [
 { #category : #removing }
 INNotebookEditorPresenter >> updateModelCells [ 
 	cellList do: [ :cell | cell model text: cell text ]
-]
-
-{ #category : #initialization }
-INNotebookEditorPresenter >> updatePresenter [
-
-	self updateAll
 ]
