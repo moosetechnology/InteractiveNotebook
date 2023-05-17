@@ -13,23 +13,6 @@ SpRoassalPresenter >> defaultZoom [
 ]
 
 { #category : #'*InteractiveNotebookPresenter' }
-SpRoassalPresenter >> getContent [
-	^ self canvas
-]
-
-{ #category : #'*InteractiveNotebookPresenter' }
-SpRoassalPresenter >> selectNotebookPresenter [
-
-	"todo"
-]
-
-{ #category : #'*InteractiveNotebookPresenter' }
-SpRoassalPresenter >> unselectedNotebookPresenter [
-
-	"todo"
-]
-
-{ #category : #'*InteractiveNotebookPresenter' }
 SpRoassalPresenter >> updatePresenterHeight [
 
 	self previewCellOwner withAdapterDo: [ :a |

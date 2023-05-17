@@ -1,16 +1,15 @@
 Extension { #name : #Object }
 
 { #category : #'*InteractiveNotebookPresenter' }
-Object >> addContentToPreviewPresenter: aPresenter [
-	aPresenter text: self asString
+Object >> checkForResourcesDirectoryFor: aFileReference [
+	"checks whether or not the notebook resources file is already created"
+	^ (aFileReference / 'notebook_resources') exists
 ]
 
 { #category : #'*InteractiveNotebookPresenter' }
-Object >> createContentPreviewPresenter [
-	| textPresenter |
-	textPresenter := SpTextPresenter new.
-	textPresenter beNotEditable.
-	^ textPresenter
+Object >> createResourcesDirectoryFor: aFileReference [
+	"create a resource directory, to store additional files necessary to the notebook export document, like images"
+	(aFileReference / 'notebook_resources') createDirectory 
 ]
 
 { #category : #'*InteractiveNotebookPresenter' }
