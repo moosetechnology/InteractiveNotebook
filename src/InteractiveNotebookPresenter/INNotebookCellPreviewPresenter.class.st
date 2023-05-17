@@ -65,7 +65,12 @@ INNotebookCellPreviewPresenter >> contentPresenter: aPresenter [
 
 { #category : #accessing }
 INNotebookCellPreviewPresenter >> getContent [
-	^ contentPresenter getContent
+
+	^ parent mustDisplayInspectorView
+		  ifTrue: [
+			  contentPresenter selectedPage activePresenter view context
+				  inspectedObject ]
+		  ifFalse: [ contentPresenter view context inspectedObject ]
 ]
 
 { #category : #initialization }
