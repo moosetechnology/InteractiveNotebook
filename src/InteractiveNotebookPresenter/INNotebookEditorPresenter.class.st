@@ -257,6 +257,20 @@ INNotebookEditorPresenter >> transformToTextCell: aCell [
 	self relayout
 ]
 
+{ #category : #'updating screen' }
+INNotebookEditorPresenter >> updateAll [
+
+	cellList := self model cellList collect: [ :c |
+		            (self instantiate: c presenterClass on: self)
+			            model: c;
+			            text: c text;
+			            yourself ].
+
+	cellList ifEmpty: [ ^ self ].
+	self select: cellList last.
+	self relayout
+]
+
 { #category : #removing }
 INNotebookEditorPresenter >> updateHeight [
 
@@ -266,4 +280,10 @@ INNotebookEditorPresenter >> updateHeight [
 { #category : #removing }
 INNotebookEditorPresenter >> updateModelCells [ 
 	cellList do: [ :cell | cell model text: cell text ]
+]
+
+{ #category : #initialization }
+INNotebookEditorPresenter >> updatePresenter [
+
+	self updateAll
 ]
