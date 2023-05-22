@@ -1,14 +1,17 @@
 Extension { #name : #RSCanvas }
 
 { #category : #'*InteractiveNotebookPresenter' }
-RSCanvas >> generateMicrodownAt: aFileReference withIndex: anIndex [
+RSCanvas >> generateMicrodownUsingHelper: aGenerationHelper [
 
-	(self checkForResourcesDirectoryFor: aFileReference) ifFalse: [ 
-		self createResourcesDirectoryFor: aFileReference ].
+	| index |
+	index := aGenerationHelper index asString.
+	
+	(aGenerationHelper checkForResourcesDirectory) ifFalse: [ 
+		aGenerationHelper createResourcesDirectory ].
 
 	self zoomToFit.
 
-	RSPNGExporter new canvas: self; exportToFile: aFileReference / 'notebook_resources' / ('img' , (anIndex asString) , '.png').
+	RSPNGExporter new canvas: self; exportToFile: aGenerationHelper fileReferenceParent / 'notebook_resources' / ('img' , index , '.png').
 	
-	^ '![cell n°', anIndex asString ,'](notebook_resources/img', anIndex asString ,'.png)'.
+	^ '![cell n°', index ,'](notebook_resources/img', index ,'.png)'.
 ]

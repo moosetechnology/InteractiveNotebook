@@ -76,14 +76,15 @@ INNotebookModel >> context [
 { #category : #export }
 INNotebookModel >> createGeneratedDocumentAt: aFileReference [
 
-	| generatedDocument parentReference |
+	| generatedDocument parentReference generationHelper |
 	parentReference := aFileReference parent.
-	generatedDocument := String streamContents: [ :stream | 
-		                     cellList doWithIndex: [ :cell :index | 
+	generationHelper := INNotebookGenerationHelper newFor:
+		                    parentReference.
+	generatedDocument := String streamContents: [ :stream |
+		                     cellList doWithIndex: [ :cell :index |
 			                     stream nextPutAll:
-				                     (cell previewCell getContent
-					                      generateMicrodownAt: parentReference
-					                      withIndex: index).
+				                     (generationHelper generateObject:
+					                      cell previewCell getContent).
 			                     stream nextPutAll: '  '.
 			                     stream nextPut: Character cr ] ].
 	^ generatedDocument

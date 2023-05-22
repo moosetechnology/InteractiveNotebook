@@ -1,7 +1,7 @@
 Extension { #name : #String }
 
 { #category : #'*InteractiveNotebookPresenter' }
-String >> generateMicrodownAt: aFileReference withIndex: anIndex [
+String >> generateMicrodownUsingHelper: aGenerationHelper [
 
 	^ self 
 ]
