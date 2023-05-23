@@ -76,18 +76,12 @@ INNotebookModel >> context [
 { #category : #export }
 INNotebookModel >> createGeneratedDocumentAt: aFileReference [
 
-	| generatedDocument parentReference generationHelper |
+	| parentReference generationHelper |
 	parentReference := aFileReference parent.
 	generationHelper := INNotebookGenerationHelper newFor:
 		                    parentReference.
-	generatedDocument := String streamContents: [ :stream |
-		                     cellList doWithIndex: [ :cell :index |
-			                     stream nextPutAll:
-				                     (generationHelper generateObject:
-					                      cell previewCell getContent).
-			                     stream nextPutAll: '  '.
-			                     stream nextPut: Character cr ] ].
-	^ generatedDocument
+
+	^ generationHelper generateDocument: cellList
 ]
 
 { #category : #actions }

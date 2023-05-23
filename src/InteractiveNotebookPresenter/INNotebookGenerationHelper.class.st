@@ -46,6 +46,17 @@ INNotebookGenerationHelper >> fileReferenceParent: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+INNotebookGenerationHelper >> generateDocument: aCellList [
+
+	^ String streamContents: [ :stream |
+		  aCellList do: [ :cell |
+			  stream nextPutAll:
+				  (self generateObject: cell previewCell getContent).
+			  stream nextPutAll: '  '.
+			  stream nextPut: Character cr ] ]
+]
+
+{ #category : #'as yet unclassified' }
 INNotebookGenerationHelper >> generateObject: anObject [
 
 	self incrementIndex.
