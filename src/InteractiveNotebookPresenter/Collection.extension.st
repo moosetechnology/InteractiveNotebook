@@ -1,28 +1,29 @@
 Extension { #name : #Collection }
 
 { #category : #'*InteractiveNotebookPresenter' }
-Collection >> addContentToPreviewPresenter: aPresenter [
+Collection >> generateMicrodownListOn: aStream using: aGenerationHelper [
 
-	| text |
-	text := self
-		        ifNotEmpty: [ 
-			        String streamContents: [ :s | 
-				        self do: [ :el | 
-					        s nextPutAll: '- '.
-					        s nextPutAll: el asString.
-					        s nextPut: Character cr ] ] ]
-		        ifEmpty: [ 'Empty collection.' ].
-	aPresenter text: text
+	self do: [ :el |
+		(el isKindOf: self class)
+			ifTrue: [
+				aGenerationHelper listLevelIncrement.
+				el generateMicrodownListOn: aStream using: aGenerationHelper.
+				aGenerationHelper listLevelDecrement ]
+			ifFalse: [
+				0 to: aGenerationHelper listLevel do: [ :i |
+				aStream nextPut: Character tab ].
+				aStream nextPutAll: '- '.
+				aStream nextPutAll:
+					(el generateMicrodownUsingHelper: aGenerationHelper).
+				aStream nextPut: Character cr ] ]
 ]
 
 { #category : #'*InteractiveNotebookPresenter' }
-Collection >> generateMicrodownAt: aFileReference  withIndex: anIndex [
+Collection >> generateMicrodownUsingHelper: aGenerationHelper [
 
 	| text |
-	text := String streamContents: [ :s | 
-		        self do: [ :el | 
-			        s nextPutAll: '- '.
-			        s nextPutAll: el asString.
-			        s nextPut: Character cr ] ].
-	 ^ text
+	aGenerationHelper listLevel: 0.
+	text := String streamContents: [ :s |
+		        self generateMicrodownListOn: s using: aGenerationHelper ].
+	^ text
 ]

@@ -1,23 +1,20 @@
-Extension { #name : #SpRoassalPresenter }
+Extension { #name : #SpRoassal3InspectorPresenter }
 
 { #category : #'*InteractiveNotebookPresenter' }
-SpRoassalPresenter >> defaultHeight [
+SpRoassal3InspectorPresenter >> defaultHeight [
 
 	^ 500
 ]
 
 { #category : #'*InteractiveNotebookPresenter' }
-SpRoassalPresenter >> defaultZoom [
+SpRoassal3InspectorPresenter >> defaultZoom [
 
 	^ 0.9
 ]
 
 { #category : #'*InteractiveNotebookPresenter' }
-SpRoassalPresenter >> updatePresenterHeight [
-
+SpRoassal3InspectorPresenter >> updatePresenterHeight [ 
 	self previewCellOwner withAdapterDo: [ :a |
-		| canvas |
-		canvas := self currentCanvas.
 		a widget height: self defaultHeight.
 		canvas camera
 			zoomToFit: a widget extent * self defaultZoom

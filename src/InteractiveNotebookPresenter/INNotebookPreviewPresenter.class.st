@@ -34,6 +34,35 @@ INNotebookPreviewPresenter >> close [
 	browser closePreview
 ]
 
+{ #category : #creating }
+INNotebookPreviewPresenter >> createInspectorViewFor: anObject [
+
+	| ctxs presenter |
+	ctxs := anObject inspectionContexts.
+	presenter := self newNotebook.
+	ctxs do: [ :ctx |
+		ctx withoutEvaluator.
+		presenter addPage: (self newPageForContext: ctx andObject: anObject) ].
+	^ presenter 
+]
+
+{ #category : #creating }
+INNotebookPreviewPresenter >> createSinglePageViewFor: anObject [
+
+	| ctx |
+	ctx := anObject inspectionContexts first.
+	ctx withoutEvaluator.
+	^ (self newInspectionForContext: ctx andObject: anObject) 
+]
+
+{ #category : #creating }
+INNotebookPreviewPresenter >> createViewFor: anObject [
+
+	^ self mustDisplayInspectorView
+		  ifTrue: [ self createInspectorViewFor: anObject ]
+		  ifFalse: [ self createSinglePageViewFor: anObject ]
+]
+
 { #category : #initialization }
 INNotebookPreviewPresenter >> initialize [
 
@@ -82,15 +111,40 @@ INNotebookPreviewPresenter >> initializePresenters [
 	self initializeLayout
 ]
 
+{ #category : #'accessing - attributes' }
+INNotebookPreviewPresenter >> mustDisplayInspectorView [
+
+	^ browser owner owner displayInspectorView 
+]
+
+{ #category : #actions }
+INNotebookPreviewPresenter >> newInspectionForContext: aContext andObject: anObject [
+	
+	^ StObjectContextPresenter on: (StObjectContextModel new 
+		inspection: self;
+		inspectedObject: anObject;
+		context: aContext; 
+		yourself)
+]
+
+{ #category : #actions }
+INNotebookPreviewPresenter >> newPageForContext: aContext andObject: anObject [
+
+	^ SpNotebookPage new
+		title: aContext title;
+		presenterProvider: [ self newInspectionForContext: aContext andObject: anObject ];
+		yourself
+]
+
 { #category : #actions }
 INNotebookPreviewPresenter >> newPreviewCellWith: anObject [
+
 	| pCell |
 	pCell := (self instantiate: INNotebookCellPreviewPresenter)
-		  contentPresenter: (anObject createContentPreviewPresenter);
-		  parent: self;
-		  yourself.
-	anObject addContentToPreviewPresenter: pCell contentPresenter.
-	^ pCell 
+		         contentPresenter: (self createViewFor: anObject);
+		         parent: self;
+		         yourself.
+	^ pCell
 ]
 
 { #category : #initialization }

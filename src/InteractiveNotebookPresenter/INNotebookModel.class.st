@@ -25,11 +25,10 @@ INNotebookModel class >> defaultName [
 ]
 
 { #category : #initialization }
-INNotebookModel class >> initializeWith: aFileReference on: aMooseModel [
+INNotebookModel class >> initializeWith: aFileReference [
 
 	^ self new
 		  importCellsFrom: aFileReference;
-		  followEntity: aMooseModel;
 		  yourself
 ]
 
@@ -77,17 +76,12 @@ INNotebookModel >> context [
 { #category : #export }
 INNotebookModel >> createGeneratedDocumentAt: aFileReference [
 
-	| generatedDocument parentReference |
+	| parentReference generationHelper |
 	parentReference := aFileReference parent.
-	generatedDocument := String streamContents: [ :stream | 
-		                     cellList doWithIndex: [ :cell :index | 
-			                     stream nextPutAll:
-				                     (cell previewCell getContent
-					                      generateMicrodownAt: parentReference
-					                      withIndex: index).
-			                     stream nextPutAll: '  '.
-			                     stream nextPut: Character cr ] ].
-	^ generatedDocument
+	generationHelper := INNotebookGenerationHelper newFor:
+		                    parentReference.
+
+	^ generationHelper generateDocument: cellList
 ]
 
 { #category : #actions }
@@ -182,7 +176,7 @@ INNotebookModel >> name [
 	^ fileName ifNil: [ self class defaultName ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #updating }
 INNotebookModel >> needToUpdateAllCells [
 	cellList do: [ :c | c needToUpdate: true ]
 ]

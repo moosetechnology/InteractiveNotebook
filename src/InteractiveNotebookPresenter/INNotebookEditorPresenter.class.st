@@ -8,7 +8,6 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'cellList',
-		'lastCellAdded',
 		'selectedCell',
 		'interactionModel',
 		'headerSep',
@@ -22,6 +21,7 @@ Class {
 { #category : #initialization }
 INNotebookEditorPresenter >> addTextCellAfter: aCell [
 
+	| lastCellAdded |
 	lastCellAdded := self newTextCell.
 	cellList add: lastCellAdded after: aCell.
 	selectedCell := lastCellAdded.
@@ -31,6 +31,7 @@ INNotebookEditorPresenter >> addTextCellAfter: aCell [
 { #category : #initialization }
 INNotebookEditorPresenter >> addTextCellBefore: aCell [
 
+	| lastCellAdded |
 	lastCellAdded := self newTextCell.
 	cellList add: lastCellAdded before: aCell.
 	selectedCell := lastCellAdded.
@@ -216,6 +217,7 @@ INNotebookEditorPresenter >> scrollTo: aMiNoteBookCell [
 
 { #category : #removing }
 INNotebookEditorPresenter >> select: aCell [
+	
 
 	selectedCell := aCell.
 	cellList do: [ :c | c unselect ].
@@ -232,7 +234,7 @@ INNotebookEditorPresenter >> selectAndScrollTo: aMiNoteBookCell [
 { #category : #adding }
 INNotebookEditorPresenter >> transformToCodeCell: aCell [
 
-	| width |
+	| width lastCellAdded |
 	lastCellAdded := self newCodeCell
 		                 text: aCell text;
 		                 yourself.
@@ -245,7 +247,7 @@ INNotebookEditorPresenter >> transformToCodeCell: aCell [
 { #category : #adding }
 INNotebookEditorPresenter >> transformToTextCell: aCell [
 
-	| width |
+	| width lastCellAdded |
 	lastCellAdded := self newTextCell
 		                 text: aCell text;
 		                 yourself.
@@ -255,18 +257,17 @@ INNotebookEditorPresenter >> transformToTextCell: aCell [
 	self relayout
 ]
 
-{ #category : #removing }
+{ #category : #'updating screen' }
 INNotebookEditorPresenter >> updateAll [
 
-	cellList := LinkedList new.
-	self model cellList do: [ :c | 
-		cellList add: ((self instantiate: c presenterClass on: self)
-				 model: c;
-				 text: c text;
-				 yourself) ].
+	cellList := self model cellList collect: [ :c |
+		            (self instantiate: c presenterClass on: self)
+			            model: c;
+			            text: c text;
+			            yourself ].
 
 	cellList ifEmpty: [ ^ self ].
-	selectedCell := cellList last.
+	self select: cellList last.
 	self relayout
 ]
 

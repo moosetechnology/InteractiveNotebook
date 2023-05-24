@@ -1,34 +1,17 @@
 Extension { #name : #RSCanvas }
 
 { #category : #'*InteractiveNotebookPresenter' }
-RSCanvas >> addContentToPreviewPresenter: aPresenter [
-	aPresenter canvas: self canvas
-]
+RSCanvas >> generateMicrodownUsingHelper: aGenerationHelper [
 
-{ #category : #'*InteractiveNotebookPresenter' }
-RSCanvas >> checkForResourcesDirectoryAt: aFileReference [
-	^ (aFileReference / 'notebook_resources') exists
-]
-
-{ #category : #'*InteractiveNotebookPresenter' }
-RSCanvas >> createContentPreviewPresenter [ 
-	| rPresenter |
-	rPresenter := SpRoassalPresenter new.
-	^ rPresenter
-]
-
-{ #category : #'*InteractiveNotebookPresenter' }
-RSCanvas >> createResourcesDirectoryAt: aFileReference [
-	(aFileReference / 'notebook_resources') createDirectory 
-]
-
-{ #category : #'*InteractiveNotebookPresenter' }
-RSCanvas >> generateMicrodownAt: aFileReference withIndex: anIndex [
-
-	(self checkForResourcesDirectoryAt: aFileReference) ifFalse: [ 
-		self createResourcesDirectoryAt: aFileReference ].
-
-	RSPNGExporter new canvas: self; exportToFile: aFileReference / 'notebook_resources' / ('img' , (anIndex asString) , '.png').
+	| index |
+	index := aGenerationHelper index asString.
 	
-	^ '![cell n°', anIndex asString ,'](notebook_resources/img', anIndex asString ,'.png)'.
+	(aGenerationHelper checkForResourcesDirectory) ifFalse: [ 
+		aGenerationHelper createResourcesDirectory ].
+
+	self zoomToFit.
+
+	RSPNGExporter new canvas: self; exportToFile: aGenerationHelper fileReferenceParent / 'notebook_resources' / ('img' , index , '.png').
+	
+	^ '![cell n°', index ,'](notebook_resources/img', index ,'.png)'.
 ]

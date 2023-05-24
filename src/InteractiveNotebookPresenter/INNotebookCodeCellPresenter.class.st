@@ -62,7 +62,7 @@ INNotebookCodeCellPresenter >> notebook: aNoteBook [
 	notebook := aNoteBook.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #updating }
 INNotebookCodeCellPresenter >> updateBindings [
 
 	| parsedContent |

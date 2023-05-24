@@ -78,7 +78,7 @@ INNotebookWithPreviewPresenter >> exportDocument [
 	aFile ifNotNil: [ self model exportDocumentAt: aFile ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #naming }
 INNotebookWithPreviewPresenter >> exportFilename [
 
 	^ self model name = self model class defaultName
@@ -118,23 +118,20 @@ INNotebookWithPreviewPresenter >> exportToText [
 	aFile ifNotNil: [ self model exportToTextAt: aFile ]
 ]
 
+{ #category : #initialization }
+INNotebookWithPreviewPresenter >> fixUIAfterImport [
+	"ugly method to fix the ui of an imported page
+	After importing selecting cells doesn't work properly, the height of the editing cell is also 	slightly too big. Something must not set up right, I believe the deferred calls might be responsible 	somehow (at the very least, they make it hard figuring out what's going on).
+	Will do a clean fix if I find what's wrong"
+	notebook addTextCellAfter: notebook cellList last.
+	notebook removeCell: notebook cellList last.
+]
+
 { #category : #actions }
 INNotebookWithPreviewPresenter >> followEntity: anEntity [
 
 	self model followEntity: anEntity mooseModel.
 	notebook mooseModel: anEntity mooseModel
-]
-
-{ #category : #initialization }
-INNotebookWithPreviewPresenter >> importMicrodownFile [
-
-	| file |
-	file := UIManager default
-		chooseExistingFileReference: 'Select your notebook file.'
-		extensions: { 'ston' }
-		path: '.'.
-
-	file ifNotNil: [ self updateWithFile: file ]
 ]
 
 { #category : #initialization }
@@ -203,7 +200,7 @@ INNotebookWithPreviewPresenter >> preview [
 		andCells: notebook cellList
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 INNotebookWithPreviewPresenter >> previewReloaded [ 
 	self model needToUpdateAllCells.
 	self preview
@@ -241,12 +238,4 @@ INNotebookWithPreviewPresenter >> updateModelCells [
 	
 	notebook updateModelCells.
 	self model cellList: notebook allModelCells.
-]
-
-{ #category : #initialization }
-INNotebookWithPreviewPresenter >> updateWithFile: aFileReference [
-
-	self model importCellsFrom: aFileReference.
-	self closePreview.
-	notebook updateAll
 ]
