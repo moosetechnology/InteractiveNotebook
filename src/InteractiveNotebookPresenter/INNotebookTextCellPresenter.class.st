@@ -8,7 +8,7 @@ Class {
 INNotebookTextCellPresenter >> asModelCell [
 
 	^ INNotebookTextCellModel new
-		  text: cell text;
+		  text: cellTextInput text;
 		  yourself
 ]
 
@@ -28,8 +28,8 @@ INNotebookTextCellPresenter >> beText [
 INNotebookTextCellPresenter >> initializePresenters [
 
 	super initializePresenters.
-	cell := self newText.
-	cell whenTextChangedDo: [ self updateHeight ].
+	cellTextInput := self newText.
+	cellTextInput whenTextChangedDo: [ self updateHeight ].
 	icon := self newButton
 		        label: 'Mic';
 		        action: [ notebook transformToCodeCell: self ];

@@ -8,7 +8,7 @@ Class {
 INNotebookCodeCellPresenter >> asModelCell [
 
 	^ INNotebookCodeCellModel new
-		  text: cell text;
+		  text: cellTextInput text;
 		  yourself
 ]
 
@@ -20,7 +20,7 @@ INNotebookCodeCellPresenter >> beCode [
 
 { #category : #api }
 INNotebookCodeCellPresenter >> beText [
-
+	
 	notebook transformToTextCell: self
 ]
 
@@ -28,12 +28,12 @@ INNotebookCodeCellPresenter >> beText [
 INNotebookCodeCellPresenter >> initializePresenters [
 
 	super initializePresenters.
-	cell := self newCode
-		        withoutLineNumbers;
-		        beForScripting;
-		        placeholder: notebook codeCellPlaceholder;
-		        yourself.
-	cell whenTextChangedDo: [ self updateHeight ].
+	cellTextInput := self newCode
+		                 withoutLineNumbers;
+		                 beForScripting;
+		                 placeholder: notebook codeCellPlaceholder;
+		                 yourself.
+	cellTextInput whenTextChangedDo: [ self updateHeight. self updateBindings. ].
 	self interactionModel: notebook interactionModel.
 
 	icon := self newButton
@@ -53,7 +53,7 @@ INNotebookCodeCellPresenter >> initializePresenters [
 { #category : #api }
 INNotebookCodeCellPresenter >> interactionModel: anEnvironment [
 
-	cell interactionModel: anEnvironment
+	cellTextInput interactionModel: anEnvironment
 ]
 
 { #category : #accessing }
@@ -62,8 +62,11 @@ INNotebookCodeCellPresenter >> notebook: aNoteBook [
 	notebook := aNoteBook.
 ]
 
-{ #category : #api }
-INNotebookCodeCellPresenter >> setModelBeforeInitialization: aModel [
+{ #category : #updating }
+INNotebookCodeCellPresenter >> updateBindings [
 
-	self notebook: aModel
+	| parsedContent |
+	self model text: cellTextInput text.
+	parsedContent := [ self model parseContent ] on: Exception do: [ ^ self ].
+	notebook interactionModel setBindings: parsedContent
 ]

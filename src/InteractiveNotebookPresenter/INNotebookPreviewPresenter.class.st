@@ -1,3 +1,6 @@
+"
+I am the preview side of a notebook page. I create preview cells to display the result of the compilation of each cell.
+"
 Class {
 	#name : #INNotebookPreviewPresenter,
 	#superclass : #SpPresenter,
@@ -29,6 +32,35 @@ INNotebookPreviewPresenter >> browser: anObject [
 INNotebookPreviewPresenter >> close [
 
 	browser closePreview
+]
+
+{ #category : #creating }
+INNotebookPreviewPresenter >> createInspectorViewFor: anObject [
+
+	| ctxs presenter |
+	ctxs := anObject inspectionContexts.
+	presenter := self newNotebook.
+	ctxs do: [ :ctx |
+		ctx withoutEvaluator.
+		presenter addPage: (self newPageForContext: ctx andObject: anObject) ].
+	^ presenter 
+]
+
+{ #category : #creating }
+INNotebookPreviewPresenter >> createSinglePageViewFor: anObject [
+
+	| ctx |
+	ctx := anObject inspectionContexts first.
+	ctx withoutEvaluator.
+	^ (self newInspectionForContext: ctx andObject: anObject) 
+]
+
+{ #category : #creating }
+INNotebookPreviewPresenter >> createViewFor: anObject [
+
+	^ self mustDisplayInspectorView
+		  ifTrue: [ self createInspectorViewFor: anObject ]
+		  ifFalse: [ self createSinglePageViewFor: anObject ]
 ]
 
 { #category : #initialization }
@@ -79,13 +111,40 @@ INNotebookPreviewPresenter >> initializePresenters [
 	self initializeLayout
 ]
 
-{ #category : #actions }
-INNotebookPreviewPresenter >> newPreviewCellWith: aString [
+{ #category : #'accessing - attributes' }
+INNotebookPreviewPresenter >> mustDisplayInspectorView [
 
-	^ (self instantiate: INNotebookCellPreviewPresenter)
-		  text: aString;
-		  parent: self;
-		  yourself
+	^ browser owner owner displayInspectorView 
+]
+
+{ #category : #actions }
+INNotebookPreviewPresenter >> newInspectionForContext: aContext andObject: anObject [
+	
+	^ StObjectContextPresenter on: (StObjectContextModel new 
+		inspection: self;
+		inspectedObject: anObject;
+		context: aContext; 
+		yourself)
+]
+
+{ #category : #actions }
+INNotebookPreviewPresenter >> newPageForContext: aContext andObject: anObject [
+
+	^ SpNotebookPage new
+		title: aContext title;
+		presenterProvider: [ self newInspectionForContext: aContext andObject: anObject ];
+		yourself
+]
+
+{ #category : #actions }
+INNotebookPreviewPresenter >> newPreviewCellWith: anObject [
+
+	| pCell |
+	pCell := (self instantiate: INNotebookCellPreviewPresenter)
+		         contentPresenter: (self createViewFor: anObject);
+		         parent: self;
+		         yourself.
+	^ pCell
 ]
 
 { #category : #initialization }
@@ -128,24 +187,21 @@ INNotebookPreviewPresenter >> updateHeight [
 ]
 
 { #category : #actions }
-INNotebookPreviewPresenter >> updateWithStringCollection: aCollection [
-
-	previewCells := aCollection collect: [ :s | 
-		                self newPreviewCellWith: s ].
-	self relayout
-]
-
-{ #category : #actions }
 INNotebookPreviewPresenter >> updateWithStringCollection: aCollection andCells: cells [
 
 	| col |
 	col := OrderedCollection new.
-	aCollection withIndexDo: [ :e :i | 
+	aCollection withIndexDo: [ :obj :i | 
 		| cell pCell |
 		cell := cells at: i.
-		pCell := self newPreviewCellWith: (aCollection at: i).
-		pCell cell: cell.
-		cell previewCell: pCell.
+		cell model needToUpdate
+			ifTrue: [ 
+				pCell := self newPreviewCellWith: obj.
+				pCell cell: cell.
+				cell previewCell: pCell.
+				cell model previewCell: pCell.
+				cell model needToUpdate: false ]
+			ifFalse: [ pCell := cell previewCell ].
 		col add: pCell ].
 	previewCells := col.
 	self relayout

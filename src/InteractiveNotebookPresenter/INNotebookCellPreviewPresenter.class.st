@@ -1,13 +1,33 @@
+"
+I am a preview cell of a notebook page. 
+I display the compiled content of a cell, either in Microdown if I represent a text cell, or using different types of presenters for a code cell, depending on the class of the final compiled result of the cell.
+
+Using class extensions, the object resulting of the compilation of a cell provides me an appropriate presenter to display itself (using the extension method `createContentPreviewPresenter`). I can add this object to the created presenter (using the extension method `addContentToPreviewPresenter: anObject`).
+
+Those presenters also use extension methods : `selectNotebookPresenter`, `unselectedNotebookPresenter` and `updateNotebookPresenterHeight`.
+"
 Class {
 	#name : #INNotebookCellPreviewPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
-		'textPresenter',
 		'cell',
-		'parent'
+		'parent',
+		'contentPresenter'
 	],
 	#category : #InteractiveNotebookPresenter
 }
+
+{ #category : #actions }
+INNotebookCellPreviewPresenter class >> selectedColor [
+
+	^ Color fromHexString: '77A8C8'
+]
+
+{ #category : #initialization }
+INNotebookCellPreviewPresenter class >> unselectedColor [
+
+	^ Color transparent
+]
 
 { #category : #actions }
 INNotebookCellPreviewPresenter >> beSelected [
@@ -17,39 +37,54 @@ INNotebookCellPreviewPresenter >> beSelected [
 ]
 
 { #category : #accessing }
-INNotebookCellPreviewPresenter >> cell [
+INNotebookCellPreviewPresenter >> cell: anObject [
+
+	cell := anObject
+]
+
+{ #category : #accessing }
+INNotebookCellPreviewPresenter >> cellTextInput [
 
 	^ cell
 ]
 
 { #category : #accessing }
-INNotebookCellPreviewPresenter >> cell: anObject [
+INNotebookCellPreviewPresenter >> contentPresenter [
+	^ contentPresenter
+]
 
-	cell := anObject
+{ #category : #initialization }
+INNotebookCellPreviewPresenter >> contentPresenter: aPresenter [
+
+	contentPresenter := aPresenter.
+	self whenDisplayDo: [ self updateHeight ].
+	self initializeLayout
+]
+
+{ #category : #accessing }
+INNotebookCellPreviewPresenter >> getContent [
+
+	^ parent mustDisplayInspectorView
+		  ifTrue: [
+			  contentPresenter selectedPage activePresenter view context
+				  inspectedObject ]
+		  ifFalse: [ contentPresenter view context inspectedObject ]
 ]
 
 { #category : #initialization }
 INNotebookCellPreviewPresenter >> initializeLayout [
 
 	self layout: (SpBoxLayout newLeftToRight
-			 add: textPresenter;
+			 add: contentPresenter;
 			 yourself)
 ]
 
 { #category : #initialization }
 INNotebookCellPreviewPresenter >> initializePresenters [
 
-	textPresenter := self newText
-		                 beNotEditable;
-		                 yourself.
-	self whenDisplayDo: [ 
-		self updateHeight.
-		textPresenter withAdapterDo: [ :a | 
-			UIManager default defer: [ 
-				a widget backgroundColor: self unselectedColor ] ] ].
-	self initializeLayout.
-	textPresenter eventHandler whenMouseDownDo: [ :anEvent | 
-		self selectMe ]
+	self whenDisplayDo: [
+		self withAdapterDo: [ :a |
+			a widget announcer when: MorphGotFocus do: [ self selectMe ] ] ]
 ]
 
 { #category : #initialization }
@@ -74,9 +109,8 @@ INNotebookCellPreviewPresenter >> parent: anObject [
 
 { #category : #actions }
 INNotebookCellPreviewPresenter >> select [
-
-	textPresenter withAdapterDo: [ :a | 
-		a widget backgroundColor: (Color fromHexString: '77A8C8') ]
+	
+	self withAdapterDo: [ :a | a widget color: self class selectedColor ]
 ]
 
 { #category : #actions }
@@ -95,28 +129,25 @@ INNotebookCellPreviewPresenter >> selectMe [
 { #category : #accessing }
 INNotebookCellPreviewPresenter >> text: aString [
 
-	textPresenter text: aString
+	contentPresenter text: aString
 ]
 
 { #category : #actions }
 INNotebookCellPreviewPresenter >> unselected [
 	
-	textPresenter withAdapterDo: [ :a | a widget backgroundColor: self unselectedColor ]
-]
-
-{ #category : #initialization }
-INNotebookCellPreviewPresenter >> unselectedColor [
-
-	^ Smalltalk ui theme backgroundColor
+	self withAdapterDo: [ :a |
+		a widget color: self class unselectedColor ]
 ]
 
 { #category : #initialization }
 INNotebookCellPreviewPresenter >> updateHeight [
 
-	UIManager default defer: [ 
-		textPresenter withAdapterDo: [ :a | 
-			a widget defer: [ 
-				a widget scrollPane textArea withoutSelectionBar.
-				self withAdapterDo: [ :b | 
-					b widget height: a widget scrollPane textArea height ] ] ] ]
+	parent mustDisplayInspectorView
+		ifFalse: [ contentPresenter specPresenter updatePresenterHeight ]
+		ifTrue: [ self updateInspectorViewHeight ]
+]
+
+{ #category : #'as yet unclassified' }
+INNotebookCellPreviewPresenter >> updateInspectorViewHeight [
+	self withAdapterDo: [ :a | a widget height: 350 ].
 ]

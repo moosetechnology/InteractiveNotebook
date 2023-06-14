@@ -1,3 +1,10 @@
+"
+I am a notebook page (a tab of the main notebook window), containing an editor page and a preview page. 
+
+I own an instance of INNotebookModel that I use to produce a document to export or to execute the cells to create the preview of the notebook.
+
+
+"
 Class {
 	#name : #INNotebookWithPreviewPresenter,
 	#superclass : #SpPresenterWithModel,
@@ -10,30 +17,10 @@ Class {
 	#category : #InteractiveNotebookPresenter
 }
 
-{ #category : #help }
-INNotebookWithPreviewPresenter class >> helpMessage [
-	
-	^ 'Open the interactive notebook'
-]
+{ #category : #specs }
+INNotebookWithPreviewPresenter class >> defaultNotebookExportName [
 
-{ #category : #'world menu' }
-INNotebookWithPreviewPresenter class >> menuCommandOn: aBuilder [
-
-	<worldMenu>
-	<miBrowsers>
-	(aBuilder item: #Reporter)
-		parent: #Moose;
-		label: self title;
-		icon: (self iconNamed: #smallExport);
-		order: 6;
-		help: self helpMessage;
-		action: [ self open ]
-]
-
-{ #category : #'world menu' }
-INNotebookWithPreviewPresenter class >> menuItem [
-
-	^ #reporteBuilder
+	^ 'notebook'
 ]
 
 { #category : #'instance creation' }
@@ -42,24 +29,10 @@ INNotebookWithPreviewPresenter class >> newModel [
 	^ INNotebookModel new
 ]
 
-{ #category : #'instance creation' }
-INNotebookWithPreviewPresenter class >> open [
-
-	^ (self on: self newModel)
-		  open;
-		  yourself
-]
-
 { #category : #specs }
 INNotebookWithPreviewPresenter class >> title [
 
 	^ 'Notebook'
-]
-
-{ #category : #actions }
-INNotebookWithPreviewPresenter >> addTextCell [
-	
-	notebook addTextCell
 ]
 
 { #category : #actions }
@@ -95,29 +68,36 @@ INNotebookWithPreviewPresenter >> codeCellPlaceholder: anObject [
 INNotebookWithPreviewPresenter >> exportDocument [
 
 	| aFile |
-	self updateModelCells.
 	self model cellList ifEmpty: [ 
 		self inform: 'Nothing to export'.
 		^ self ].
 	aFile := self
 		         chooseTextFile: 'Chose export destination'
 		         extensions: #( 'ston' )
-		         path: 'notebook.ston'.
+		         path: self exportFilename , '.ston'.
 	aFile ifNotNil: [ self model exportDocumentAt: aFile ]
+]
+
+{ #category : #naming }
+INNotebookWithPreviewPresenter >> exportFilename [
+
+	^ self model name = self model class defaultName
+		  ifTrue: [ self class defaultNotebookExportName ]
+		  ifFalse: [ self model name ]
 ]
 
 { #category : #actions }
 INNotebookWithPreviewPresenter >> exportToHTML [
 
 	| aFile |
-	self updateModelCells.
+	self previewReloaded.
 	self model cellList ifEmpty: [ 
 		self inform: 'Nothing to export'.
 		^ self ].
 	aFile := self
 		         chooseTextFile: 'Chose export destination'
 		         extensions: #( 'html' )
-		         path: 'notebook.html'.
+		         path: self exportFilename , '.html'.
 	aFile ifNil: [ ^ self ].
 	self model exportToHTMLAt: aFile.
 	self reportExported: aFile
@@ -127,15 +107,24 @@ INNotebookWithPreviewPresenter >> exportToHTML [
 INNotebookWithPreviewPresenter >> exportToText [
 
 	| aFile |
-	self updateModelCells.
+	self previewReloaded.
 	self model cellList ifEmpty: [ 
 		self inform: 'Nothing to export'.
 		^ self ].
 	aFile := self
 		         chooseTextFile: 'Chose export destination'
 		         extensions: #( 'md' )
-		         path: 'mooseNotebook.md'.
+		         path: self exportFilename , '.md'.
 	aFile ifNotNil: [ self model exportToTextAt: aFile ]
+]
+
+{ #category : #initialization }
+INNotebookWithPreviewPresenter >> fixUIAfterImport [
+	"ugly method to fix the ui of an imported page
+	After importing selecting cells doesn't work properly, the height of the editing cell is also 	slightly too big. Something must not set up right, I believe the deferred calls might be responsible 	somehow (at the very least, they make it hard figuring out what's going on).
+	Will do a clean fix if I find what's wrong"
+	notebook addTextCellAfter: notebook cellList last.
+	notebook removeCell: notebook cellList last.
 ]
 
 { #category : #actions }
@@ -143,18 +132,6 @@ INNotebookWithPreviewPresenter >> followEntity: anEntity [
 
 	self model followEntity: anEntity mooseModel.
 	notebook mooseModel: anEntity mooseModel
-]
-
-{ #category : #initialization }
-INNotebookWithPreviewPresenter >> importMicrodownFile [
-
-	| file |
-	file := UIManager default
-		chooseExistingFileReference: 'Select your notebook file.'
-		extensions: { 'ston' }
-		path: '.'.
-
-	file ifNotNil: [ self updateWithFile: file ]
 ]
 
 { #category : #initialization }
@@ -219,8 +196,14 @@ INNotebookWithPreviewPresenter >> preview [
 
 	notebookPreview
 		updateWithStringCollection:
-		self model executeAllCellsAsTextCollection
+		self model executeAllCellsAsCollection
 		andCells: notebook cellList
+]
+
+{ #category : #initialization }
+INNotebookWithPreviewPresenter >> previewReloaded [ 
+	self model needToUpdateAllCells.
+	self preview
 ]
 
 { #category : #actions }
@@ -244,15 +227,15 @@ INNotebookWithPreviewPresenter >> setModelBeforeInitialization: aModel [
 ]
 
 { #category : #initialization }
-INNotebookWithPreviewPresenter >> updateModelCells [
-
-	self model cellList: notebook allModelCells.
+INNotebookWithPreviewPresenter >> updateHeight [ 
+"je ne sais pas si ça devrait être appelé ici, au moins avec une méthode y'a pas de bug"
+	notebook updateHeight.
+	previewOpened ifTrue: [ notebookPreview updateHeight ]
 ]
 
 { #category : #initialization }
-INNotebookWithPreviewPresenter >> updateWithFile: aFileReference [
-
-	self model importCellsFrom: aFileReference.
-	self closePreview.
-	notebook updateAll
+INNotebookWithPreviewPresenter >> updateModelCells [
+	
+	notebook updateModelCells.
+	self model cellList: notebook allModelCells.
 ]

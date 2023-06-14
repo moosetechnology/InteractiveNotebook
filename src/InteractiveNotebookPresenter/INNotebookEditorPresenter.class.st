@@ -1,14 +1,16 @@
+"
+I am the editor panel for a notebook page. 
+
+I allow the user to add cells before or after a cell, to transform a text cell into a code cell and vice versa, or to move up or down a cell.
+"
 Class {
 	#name : #INNotebookEditorPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
-		'menu',
 		'cellList',
-		'lastCellAdded',
 		'selectedCell',
 		'interactionModel',
 		'headerSep',
-		'mooseModel',
 		'cellLayout',
 		'browser',
 		'codeCellPlaceholder'
@@ -16,35 +18,10 @@ Class {
 	#category : #InteractiveNotebookPresenter
 }
 
-{ #category : #adding }
-INNotebookEditorPresenter >> add: aCell [
-
-	self layout add: aCell expand: false.
-	aCell announceDisplayed.
-	lastCellAdded takeKeyboardFocus
-]
-
-{ #category : #adding }
-INNotebookEditorPresenter >> addCodeCell [
-
-	lastCellAdded := self newCodeCell.
-	cellList addLast: lastCellAdded.
-	selectedCell := lastCellAdded.
-	self relayout
-]
-
-{ #category : #adding }
-INNotebookEditorPresenter >> addTextCell [
-
-	lastCellAdded := self newTextCell.
-	cellList addLast: lastCellAdded.
-	selectedCell := lastCellAdded.
-	self relayout
-]
-
 { #category : #initialization }
 INNotebookEditorPresenter >> addTextCellAfter: aCell [
 
+	| lastCellAdded |
 	lastCellAdded := self newTextCell.
 	cellList add: lastCellAdded after: aCell.
 	selectedCell := lastCellAdded.
@@ -54,6 +31,7 @@ INNotebookEditorPresenter >> addTextCellAfter: aCell [
 { #category : #initialization }
 INNotebookEditorPresenter >> addTextCellBefore: aCell [
 
+	| lastCellAdded |
 	lastCellAdded := self newTextCell.
 	cellList add: lastCellAdded before: aCell.
 	selectedCell := lastCellAdded.
@@ -63,7 +41,7 @@ INNotebookEditorPresenter >> addTextCellBefore: aCell [
 { #category : #accessing }
 INNotebookEditorPresenter >> allModelCells [
 
-	^ cellList asOrderedCollection collect: [ :cell | cell asModelCell ]
+	^ cellList asOrderedCollection collect: [ :cell | cell model ]
 ]
 
 { #category : #accessing }
@@ -164,12 +142,6 @@ INNotebookEditorPresenter >> model [
 	^ self owner model
 ]
 
-{ #category : #accessing }
-INNotebookEditorPresenter >> mooseModel [
-
-	^ self owner mooseModel
-]
-
 { #category : #removing }
 INNotebookEditorPresenter >> moveDown: aCell [
 
@@ -197,13 +169,17 @@ INNotebookEditorPresenter >> newCodeCell [
 
 	^ (self instantiate: INNotebookCodeCellPresenter on: self)
 		  notebook: self;
+		  model: INNotebookCodeCellModel new;
 		  yourself
 ]
 
 { #category : #initialization }
 INNotebookEditorPresenter >> newTextCell [
 
-	^ (self instantiate: INNotebookTextCellPresenter) notebook: self
+	^ (self instantiate: INNotebookTextCellPresenter)
+		  notebook: self;
+		  model: INNotebookTextCellModel new;
+		  yourself
 ]
 
 { #category : #adding }
@@ -241,6 +217,7 @@ INNotebookEditorPresenter >> scrollTo: aMiNoteBookCell [
 
 { #category : #removing }
 INNotebookEditorPresenter >> select: aCell [
+	
 
 	selectedCell := aCell.
 	cellList do: [ :c | c unselect ].
@@ -257,7 +234,7 @@ INNotebookEditorPresenter >> selectAndScrollTo: aMiNoteBookCell [
 { #category : #adding }
 INNotebookEditorPresenter >> transformToCodeCell: aCell [
 
-	| width |
+	| width lastCellAdded |
 	lastCellAdded := self newCodeCell
 		                 text: aCell text;
 		                 yourself.
@@ -270,7 +247,7 @@ INNotebookEditorPresenter >> transformToCodeCell: aCell [
 { #category : #adding }
 INNotebookEditorPresenter >> transformToTextCell: aCell [
 
-	| width |
+	| width lastCellAdded |
 	lastCellAdded := self newTextCell
 		                 text: aCell text;
 		                 yourself.
@@ -280,18 +257,17 @@ INNotebookEditorPresenter >> transformToTextCell: aCell [
 	self relayout
 ]
 
-{ #category : #removing }
+{ #category : #'updating screen' }
 INNotebookEditorPresenter >> updateAll [
 
-	cellList := LinkedList new.
-	self model cellList do: [ :c | 
-		cellList add: ((self instantiate: c presenterClass)
-				 notebook: self;
-				 text: c text;
-				 yourself) ].
+	cellList := self model cellList collect: [ :c |
+		            (self instantiate: c presenterClass on: self)
+			            model: c;
+			            text: c text;
+			            yourself ].
 
 	cellList ifEmpty: [ ^ self ].
-	selectedCell := cellList last.
+	self select: cellList last.
 	self relayout
 ]
 
@@ -299,6 +275,11 @@ INNotebookEditorPresenter >> updateAll [
 INNotebookEditorPresenter >> updateHeight [
 
 	cellList do: [ :c | c updateHeight ]
+]
+
+{ #category : #removing }
+INNotebookEditorPresenter >> updateModelCells [ 
+	cellList do: [ :cell | cell model text: cell text ]
 ]
 
 { #category : #initialization }

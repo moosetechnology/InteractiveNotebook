@@ -1,3 +1,8 @@
+"
+I am the main presenter window for the Notebook.
+
+I am able to create new notebook tabs (each tab is an editable notebook with its own cells), and I can also import or export a notebook to various file formats.
+"
 Class {
 	#name : #INNotebookPresenter,
 	#superclass : #SpPresenter,
@@ -5,7 +10,8 @@ Class {
 		'toolbar',
 		'mainLayout',
 		'sep',
-		'tabbedPresenter'
+		'tabbedPresenter',
+		'displayInspectorView'
 	],
 	#category : #InteractiveNotebookPresenter
 }
@@ -38,7 +44,6 @@ INNotebookPresenter class >> menuItem [
 
 { #category : #'instance creation' }
 INNotebookPresenter class >> open [
-
 	^ self new
 		  open;
 		  yourself
@@ -75,6 +80,11 @@ INNotebookPresenter >> addNewTabWithModel: aModel [
 ]
 
 { #category : #actions }
+INNotebookPresenter >> allNotebookPages [
+	^ tabbedPresenter pages collect: [ :p | p activePresenter ]
+]
+
+{ #category : #actions }
 INNotebookPresenter >> chooseTextFile: messageString extensions: stringCollection path: defaultName [
 	^UIManager default
 		chooseForSaveFileReference: messageString 
@@ -92,6 +102,18 @@ INNotebookPresenter >> closePreview [
 INNotebookPresenter >> currentNotebook [
 
 	^ tabbedPresenter selectedPage activePresenter
+]
+
+{ #category : #accessing }
+INNotebookPresenter >> displayInspectorView [
+
+	^ displayInspectorView
+]
+
+{ #category : #accessing }
+INNotebookPresenter >> displayInspectorView: aBoolean [
+
+	displayInspectorView := aBoolean
 ]
 
 { #category : #initialization }
@@ -122,6 +144,12 @@ INNotebookPresenter >> importMicrodownFile [
 		path: '.'.
 
 	file ifNotNil: [ self updateWithFile: file ]
+]
+
+{ #category : #initialization }
+INNotebookPresenter >> initialize [
+	displayInspectorView := false.
+	super initialize 
 ]
 
 { #category : #initialization }
@@ -163,7 +191,7 @@ INNotebookPresenter >> initializeToolbar [
 				            icon: (self iconNamed: #smallLoadProject);
 				            action: [ self importMicrodownFile ];
 				            yourself);
-				addItem: (self newToolbarButton
+		           addItem: (self newToolbarButton
 				            label: 'Save...';
 				            icon: (self iconNamed: #smallExport);
 				            action: [ self exportDocument ];
@@ -172,6 +200,11 @@ INNotebookPresenter >> initializeToolbar [
 				            label: 'Preview';
 				            icon: (self iconNamed: #smallExport);
 				            action: [ self preview ];
+				            yourself);
+		           addItem: (self newToolbarButton
+				            label: 'Preview (recalculated)';
+				            icon: (self iconNamed: #smallExport);
+				            action: [ self previewReloaded ];
 				            yourself);
 		           addItem: (self newToolbarButton
 				            label: 'Export to text';
@@ -187,6 +220,11 @@ INNotebookPresenter >> initializeToolbar [
 				            label: 'New Tab';
 				            icon: (self iconNamed: #add);
 				            action: [ self addNewTab ];
+				            yourself);
+		           addItemRight: (self newToolbarButton
+				            label: 'Settings';
+				            icon: (self iconNamed: #smallConfiguration);
+				            action: [ self openSettings ];
 				            yourself);
 		           yourself
 ]
@@ -204,10 +242,21 @@ INNotebookPresenter >> openPreview [
 	self currentNotebook openPreview
 ]
 
+{ #category : #actions }
+INNotebookPresenter >> openSettings [
+	self allNotebookPages do: [ :n | n model needToUpdateAllCells ].
+	INNotebookSettingsPresenter openFor: self
+]
+
 { #category : #initialization }
 INNotebookPresenter >> preview [
 
 	self currentNotebook preview
+]
+
+{ #category : #initialization }
+INNotebookPresenter >> previewReloaded [
+	self currentNotebook previewReloaded
 ]
 
 { #category : #actions }
@@ -231,8 +280,6 @@ INNotebookPresenter >> separator [
 { #category : #initialization }
 INNotebookPresenter >> updateWithFile: aFileReference [
 
-	| newModel |
-	newModel := INNotebookModel new.
-	newModel importCellsFrom: aFileReference.
-	self addNewTabWithModel: newModel
+	self addNewTabWithModel: (INNotebookModel initializeWith: aFileReference).
+	self currentNotebook fixUIAfterImport
 ]

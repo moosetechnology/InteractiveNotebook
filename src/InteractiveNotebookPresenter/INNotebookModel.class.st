@@ -1,25 +1,34 @@
+"
+I am the model of a notebook page (each notebook tab owns a different model).
+
+I am responsible of the execution of each text and code cell when building a preview.
+I also manage the context of the cells (the bindings allowing the user to use previously defined variables in the following cells).
+Finally, I am responsible of the generation of the document to export (in Markdown, HTML, or STON).
+"
 Class {
 	#name : #INNotebookModel,
 	#superclass : #Object,
 	#instVars : [
-		'textEditedSource',
-		'needToUpdate',
 		'micDocument',
 		'cellList',
 		'context',
-		'generatedDocument',
 		'additionalBindings',
 		'fileName'
 	],
 	#category : #InteractiveNotebookPresenter
 }
 
+{ #category : #accessing }
+INNotebookModel class >> defaultName [
+
+	^ 'new *'
+]
+
 { #category : #initialization }
-INNotebookModel class >> initializeWith: aFileReference on: aMooseModel [
+INNotebookModel class >> initializeWith: aFileReference [
 
 	^ self new
 		  importCellsFrom: aFileReference;
-		  followEntity: aMooseModel;
 		  yourself
 ]
 
@@ -31,7 +40,6 @@ INNotebookModel >> addCell: aCell [
 
 { #category : #initialization }
 INNotebookModel >> addTextCell [
-
 	^ self addCell: INNotebookTextCellModel new
 ]
 
@@ -56,7 +64,6 @@ INNotebookModel >> cellList [
 { #category : #accessing }
 INNotebookModel >> cellList: anOrderedCollection [
 
-	needToUpdate := true.
 	cellList := anOrderedCollection
 ]
 
@@ -66,46 +73,38 @@ INNotebookModel >> context [
 	^ context
 ]
 
-{ #category : #actions }
-INNotebookModel >> executeAllCells [
+{ #category : #export }
+INNotebookModel >> createGeneratedDocumentAt: aFileReference [
 
-	needToUpdate ifFalse: [ ^ generatedDocument ].
-	generatedDocument := String streamContents: [ :s | 
-		              self initializeContextWithStream: s.
-		              cellList do: [ :cell | 
-			              cell printContentIn: s withContext: context.
-			              s nextPut: Character cr ] ].
-	needToUpdate := false.
-	^ generatedDocument
+	| parentReference generationHelper |
+	parentReference := aFileReference parent.
+	generationHelper := INNotebookGenerationHelper newFor:
+		                    parentReference.
+
+	^ generationHelper generateDocument: cellList
 ]
 
 { #category : #actions }
-INNotebookModel >> executeAllCellsAsTextCollection [
+INNotebookModel >> executeAllCellsAsCollection [
 
-	| textCollection |
+	| collection |
 	self initializeContext.
 
-	generatedDocument := String streamContents: [ :p | 
-		              textCollection := cellList collect: [ :cell | 
-			                                | str |
-			                                str := String streamContents: [ :s | 
-				                                       cell
-					                                       printContentIn: s
-					                                       withContext: context ].
-			                                p nextPutAll: str.
-			                                p nextPut: Character cr.
-			                                str ] ].
-	^ textCollection
+	collection := cellList collect: [ :cell | 
+		              cell needToUpdate
+			              ifTrue: [ cell getContentwithContext: context ]
+			              ifFalse: [ nil ] ].  	"has to be nil, so the list has the right size"
+	^ collection 										"while still compiling only when necessary"
 ]
 
 { #category : #export }
 INNotebookModel >> exportDocumentAt: aFileReference [
-
 	"Export the cell list in a ston file."
 
 	aFileReference ifNil: [ ^ self ].
 	aFileReference ensureDelete.
-	aFileReference ifNotNil: [ 
+	aFileReference ifNotNil: [
+		fileName := aFileReference basenameWithoutExtension.
 		aFileReference writeStreamDo: [ :s | STON put: cellList onStream: s ] ]
 ]
 
@@ -113,9 +112,11 @@ INNotebookModel >> exportDocumentAt: aFileReference [
 INNotebookModel >> exportToHTMLAt: aFileReference [
 
 	"This will use the microdown HTML visitor to export the document to HTML. So your document should respect Microdown specs."
+
 	aFileReference ifNil: [ ^ self ].
 	aFileReference writeStreamDo: [ :stream | 
-		stream nextPutAll: (MicHTMLVisitor asHTMLString: self generatedDocument) ]
+		stream nextPutAll: (MicHTMLVisitor asHTMLString:
+				 (self createGeneratedDocumentAt: aFileReference)) ]
 ]
 
 { #category : #export }
@@ -126,26 +127,15 @@ INNotebookModel >> exportToTextAt: aFileReference [
 	aFileReference ifNil: [ ^ self ].
 	aFileReference ensureDelete.
 	aFileReference ifNotNil: [ 
-		aFileReference writeStreamDo: [ :s | s << generatedDocument ] ]
-]
-
-{ #category : #accessing }
-INNotebookModel >> generatedDocument [
-
-	^ generatedDocument
-]
-
-{ #category : #accessing }
-INNotebookModel >> generatedDocument: anObject [
-
-	generatedDocument := anObject.
+		aFileReference writeStreamDo: [ :s | 
+			s << (self createGeneratedDocumentAt: aFileReference) ] ]
 ]
 
 { #category : #actions }
 INNotebookModel >> importCellsFrom: aFileReference [
 
 	aFileReference ifNil: [ ^ self ].
-	fileName := aFileReference basename.
+	fileName := aFileReference basenameWithoutExtension.
 	cellList := STON fromString: aFileReference contents
 ]
 
@@ -153,9 +143,9 @@ INNotebookModel >> importCellsFrom: aFileReference [
 INNotebookModel >> initialize [
 
 	super initialize.
-	needToUpdate := true.
 	cellList := OrderedCollection new.
-	additionalBindings := Dictionary new
+	additionalBindings := Dictionary new.
+	self initializeContext
 ]
 
 { #category : #initialization }
@@ -183,5 +173,10 @@ INNotebookModel >> micDocument [
 { #category : #accessing }
 INNotebookModel >> name [
 
-	^ fileName ifNil: [ 'new *' ]
+	^ fileName ifNil: [ self class defaultName ]
+]
+
+{ #category : #updating }
+INNotebookModel >> needToUpdateAllCells [
+	cellList do: [ :c | c needToUpdate: true ]
 ]
