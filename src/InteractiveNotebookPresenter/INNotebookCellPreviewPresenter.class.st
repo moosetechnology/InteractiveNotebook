@@ -58,9 +58,7 @@ INNotebookCellPreviewPresenter >> contentPresenter: aPresenter [
 
 	contentPresenter := aPresenter.
 	self whenDisplayDo: [ self updateHeight ].
-	self initializeLayout.
-	contentPresenter eventHandler whenMouseDownDo: [ :anEvent |
-		self selectMe ]
+	self initializeLayout
 ]
 
 { #category : #accessing }
