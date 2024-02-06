@@ -7,7 +7,8 @@ Class {
 { #category : #baselines }
 BaselineOfInteractiveNotebook >> baseline: spec [
 
-	spec for: #common do: [
+	<baseline>
+	spec for: #common do: [ 
 		"Dependency"
 		self microdown: spec.
 
