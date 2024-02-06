@@ -8,12 +8,13 @@ Class {
 BaselineOfInteractiveNotebook >> baseline: spec [
 
 	<baseline>
-	spec for: #common do: [ 
-		"Dependency"
+	spec for: #common do: [
 		self microdown: spec.
+		spec package: 'InteractiveNotebookPresenter' ].
 
-		"Package"
-		spec package: 'InteractiveNotebookPresenter' ]
+	spec
+		for: #'pharo11.x'
+		do: [ spec package: 'InteractiveNotebook-Pharo11Compatibility' ]
 ]
 
 { #category : #baselines }
