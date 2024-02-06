@@ -17,20 +17,6 @@ INNotebookWithPreviewPresenter class >> helpMessage [
 ]
 
 { #category : #'world menu' }
-INNotebookWithPreviewPresenter class >> menuCommandOn: aBuilder [
-
-	<worldMenu>
-	<miBrowsers>
-	(aBuilder item: #Reporter)
-		parent: #Moose;
-		label: self title;
-		icon: (self iconNamed: #smallExport);
-		order: 6;
-		help: self helpMessage;
-		action: [ self open ]
-]
-
-{ #category : #'world menu' }
 INNotebookWithPreviewPresenter class >> menuItem [
 
 	^ #reporteBuilder
@@ -45,6 +31,7 @@ INNotebookWithPreviewPresenter class >> newModel [
 { #category : #'instance creation' }
 INNotebookWithPreviewPresenter class >> open [
 
+	<script>
 	^ (self on: self newModel)
 		  open;
 		  yourself
@@ -136,13 +123,6 @@ INNotebookWithPreviewPresenter >> exportToText [
 		         extensions: #( 'md' )
 		         path: 'mooseNotebook.md'.
 	aFile ifNotNil: [ self model exportToTextAt: aFile ]
-]
-
-{ #category : #actions }
-INNotebookWithPreviewPresenter >> followEntity: anEntity [
-
-	self model followEntity: anEntity mooseModel.
-	notebook mooseModel: anEntity mooseModel
 ]
 
 { #category : #initialization }
@@ -241,6 +221,12 @@ INNotebookWithPreviewPresenter >> setModelBeforeInitialization: aModel [
 	aModel ifNil: [ ^ self ].
 
 	super setModelBeforeInitialization: aModel
+]
+
+{ #category : #initialization }
+INNotebookWithPreviewPresenter >> updateHeight [
+
+	notebook updateHeight
 ]
 
 { #category : #initialization }

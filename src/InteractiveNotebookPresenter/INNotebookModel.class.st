@@ -15,12 +15,18 @@ Class {
 }
 
 { #category : #initialization }
-INNotebookModel class >> initializeWith: aFileReference on: aMooseModel [
+INNotebookModel >> addBinding: anAssociation [
 
-	^ self new
-		  importCellsFrom: aFileReference;
-		  followEntity: aMooseModel;
-		  yourself
+	self context bindings add:
+		(AdditionalBinding key: anAssociation key value: anAssociation value)
+]
+
+{ #category : #initialization }
+INNotebookModel >> addBindings: aDictionary [
+
+	self context bindings addAll:
+		(aDictionary keysAndValuesDo: [ :key :value |
+			 AdditionalBinding key: key value: value ])
 ]
 
 { #category : #initialization }
@@ -67,23 +73,9 @@ INNotebookModel >> context [
 ]
 
 { #category : #actions }
-INNotebookModel >> executeAllCells [
-
-	needToUpdate ifFalse: [ ^ generatedDocument ].
-	generatedDocument := String streamContents: [ :s | 
-		              self initializeContextWithStream: s.
-		              cellList do: [ :cell | 
-			              cell printContentIn: s withContext: context.
-			              s nextPut: Character cr ] ].
-	needToUpdate := false.
-	^ generatedDocument
-]
-
-{ #category : #actions }
 INNotebookModel >> executeAllCellsAsTextCollection [
 
 	| textCollection |
-	self initializeContext.
 
 	generatedDocument := String streamContents: [ :p | 
 		              textCollection := cellList collect: [ :cell | 
@@ -155,7 +147,16 @@ INNotebookModel >> initialize [
 	super initialize.
 	needToUpdate := true.
 	cellList := OrderedCollection new.
-	additionalBindings := Dictionary new
+	self initializeBindings.
+	self initializeContext
+]
+
+{ #category : #initialization }
+INNotebookModel >> initializeBindings [
+
+	additionalBindings := {
+		                      (AdditionalBinding key: 'stream' value: nil).
+		                      (AdditionalBinding key: 'printer' value: nil) }
 ]
 
 { #category : #initialization }
@@ -163,14 +164,6 @@ INNotebookModel >> initializeContext [
 
 	context := CompilationContext new
 		           bindings: self additionalBindings;
-		           yourself
-]
-
-{ #category : #initialization }
-INNotebookModel >> initializeContextWithStream: aStream [
-
-	context := CompilationContext new
-		           bindings: (self additionalBindingsWithStream: aStream);
 		           yourself
 ]
 

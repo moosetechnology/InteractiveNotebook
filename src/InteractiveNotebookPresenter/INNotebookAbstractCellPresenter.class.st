@@ -93,8 +93,9 @@ INNotebookAbstractCellPresenter >> initializeLayout [
 INNotebookAbstractCellPresenter >> initializePresenters [
 
 	| buttons menu |
-	self whenDisplayDo: [ 
-		self withAdapterDo: [ 
+
+	self whenDisplayDo: [
+		self withAdapterDo: [
 			self adapter children second textArea announcer
 				when: MorphGotFocus
 				do: [ self selectMe ] ].
@@ -111,7 +112,7 @@ INNotebookAbstractCellPresenter >> initializePresenters [
 		                model: 'Delete';
 		                size: 16;
 		                yourself.
-	deleteButton when: RSMouseClick do: [ self remove ].
+	deleteButton when: RSMouseClick do: [ self remove ] for: self.
 
 	addCellBellowButton := RSBitmap new
 		                       form: (self iconNamed: #addBelow);
@@ -133,7 +134,7 @@ INNotebookAbstractCellPresenter >> initializePresenters [
 		                model: 'Move down cell';
 		                size: 16;
 		                yourself.
-	buttons := RSGroup withAll: { 
+	buttons := RSGroup withAll: {
 			           moveCellUp.
 			           moveCellDown.
 			           addCellBellowButton.
@@ -157,14 +158,16 @@ INNotebookAbstractCellPresenter >> initializePresenters [
 	rightMenuCanvas canvas add: menu.
 	menu adjustToChildren.
 	menu padding: 10.
-	moveCellUp when: RSMouseClick do: [ self moveUp ].
-	moveCellDown when: RSMouseClick do: [ self moveDown ].
+	moveCellUp when: RSMouseClick do: [ self moveUp ] for: self.
+	moveCellDown when: RSMouseClick do: [ self moveDown ] for: self.
 	addCellBellowButton
 		when: RSMouseClick
-		do: [ notebook addTextCellAfter: self ].
+		do: [ notebook addTextCellAfter: self ]
+		for: self.
 	addCellAboveButton
 		when: RSMouseClick
 		do: [ notebook addTextCellBefore: self ]
+		for: self
 ]
 
 { #category : #initialization }

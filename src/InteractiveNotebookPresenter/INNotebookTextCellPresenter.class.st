@@ -41,6 +41,8 @@ INNotebookTextCellPresenter >> initializePresenters [
 				 fontSize: 16;
 				 color: Color black;
 				 yourself);
-		when: RSMouseClick do: [ notebook transformToCodeCell: self ].
+		when: RSMouseClick
+		do: [ notebook transformToCodeCell: self ]
+		for: self.
 	self initializeLayout
 ]

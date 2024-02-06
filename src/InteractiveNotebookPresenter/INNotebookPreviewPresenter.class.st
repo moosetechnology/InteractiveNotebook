@@ -62,7 +62,10 @@ INNotebookPreviewPresenter >> initializePresenters [
 
 	sep := self newRoassal.
 	sep canvas color: Color gray translucent.
-	sep canvas when: RSExtentChangedEvent do: [ self updateHeight ].
+	sep canvas
+		when: RSExtentChangedEvent
+		do: [ self updateHeight ]
+		for: self.
 	topMenu := self newRoassal.
 	topMenu canvas color: Color transparent.
 	closeButton := RSBitmap new
@@ -74,7 +77,7 @@ INNotebookPreviewPresenter >> initializePresenters [
 	closeButton
 		setAsFixed;
 		translateBy: 8 @ 8.
-	closeButton when: RSMouseClick do: [ self close ].
+	closeButton when: RSMouseClick do: [ self close ] for: self.
 	self whenDisplayDo: [ self relayout ].
 	self initializeLayout
 ]

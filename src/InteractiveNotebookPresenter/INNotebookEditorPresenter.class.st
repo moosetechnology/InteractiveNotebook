@@ -141,7 +141,10 @@ INNotebookEditorPresenter >> initializeLayout [
 INNotebookEditorPresenter >> initializePresenters [
 
 	(headerSep := self newRoassal) canvas color: Color transparent.
-	headerSep canvas when: RSExtentChangedEvent do: [ self updateHeight ].
+	headerSep canvas
+		when: RSExtentChangedEvent
+		do: [ self updateHeight ]
+		for: self.
 	self whenDisplayDo: [ self updateHeight ].
 	self initializeLayout
 ]
@@ -162,12 +165,6 @@ INNotebookEditorPresenter >> layoutSpacing [
 INNotebookEditorPresenter >> model [
 
 	^ self owner model
-]
-
-{ #category : #accessing }
-INNotebookEditorPresenter >> mooseModel [
-
-	^ self owner mooseModel
 ]
 
 { #category : #removing }

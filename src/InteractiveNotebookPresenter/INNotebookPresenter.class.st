@@ -17,20 +17,6 @@ INNotebookPresenter class >> helpMessage [
 ]
 
 { #category : #'world menu' }
-INNotebookPresenter class >> menuCommandOn: aBuilder [
-
-	<worldMenu>
-	<miBrowsers>
-	(aBuilder item: #Reporter)
-		parent: #Moose;
-		label: self title;
-		icon: (self iconNamed: #smallExport);
-		order: 6;
-		help: self helpMessage;
-		action: [ self open ]
-]
-
-{ #category : #'world menu' }
 INNotebookPresenter class >> menuItem [
 
 	^ #reporteBuilder
@@ -39,6 +25,7 @@ INNotebookPresenter class >> menuItem [
 { #category : #'instance creation' }
 INNotebookPresenter class >> open [
 
+	<script>
 	^ self new
 		  open;
 		  yourself
@@ -48,6 +35,18 @@ INNotebookPresenter class >> open [
 INNotebookPresenter class >> title [
 
 	^ 'Notebook'
+]
+
+{ #category : #adding }
+INNotebookPresenter >> addBindingToCurrentNotebook: anAssociation [
+
+	self currentNotebook model addBinding: anAssociation
+]
+
+{ #category : #adding }
+INNotebookPresenter >> addBindingsToCurrentNotebook: aDictionary [
+
+	self currentNotebook model addBindings: aDictionary
 ]
 
 { #category : #initialization }
