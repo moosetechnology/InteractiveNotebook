@@ -17,7 +17,7 @@ INNotebookCodeCellModel >> printContentIn: aStream withContext: aContext [
 		(AdditionalBinding key: 'stream' value: aStream).
 	aContext bindings add: (AdditionalBinding
 			 key: 'printer'
-			 value: (INReportCollectionPrinter new
+			 value: (INCollectionReportPrinter new
 					  stream: aStream;
 					  yourself)).
 	self class compiler
