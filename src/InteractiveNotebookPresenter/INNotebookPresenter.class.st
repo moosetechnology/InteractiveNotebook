@@ -3,23 +3,27 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'toolbar',
-		'mainLayout',
-		'sep',
 		'tabbedPresenter'
 	],
 	#category : #InteractiveNotebookPresenter
 }
 
+{ #category : #commands }
+INNotebookPresenter class >> buildCommandsGroupWith: aPresenter forRoot: rootCommandGroup [
+
+	rootCommandGroup
+		register: (INLoadCommand forSpecContext: aPresenter);
+		register: (INSaveCommand forSpecContext: aPresenter);
+		register: (INPreviewCommand forSpecContext: aPresenter);
+		register: (INExportToTextCommand forSpecContext: aPresenter);
+		register: (INExportToHtmlCommand forSpecContext: aPresenter);
+		register: (INNewTabCommand forSpecContext: aPresenter)
+]
+
 { #category : #help }
 INNotebookPresenter class >> helpMessage [
 	
 	^ 'Open the interactive notebook'
-]
-
-{ #category : #'world menu' }
-INNotebookPresenter class >> menuItem [
-
-	^ #reporteBuilder
 ]
 
 { #category : #'instance creation' }
@@ -88,6 +92,13 @@ INNotebookPresenter >> closePreview [
 ]
 
 { #category : #initialization }
+INNotebookPresenter >> connectPresenters [
+
+	self whenDisplayDo: [
+		self window whenResizingDo: [ self currentNotebook updateHeight ] ]
+]
+
+{ #category : #initialization }
 INNotebookPresenter >> currentNotebook [
 
 	^ tabbedPresenter selectedPage activePresenter
@@ -126,18 +137,11 @@ INNotebookPresenter >> importMicrodownFile [
 { #category : #initialization }
 INNotebookPresenter >> initializeLayout [
 
-	sep := self newRoassal.
-	mainLayout := SpBoxLayout newLeftToRight
-		              beHomogeneous;
-		              spacing: 2;
-		              add: tabbedPresenter;
-		              yourself.
-	sep canvas color: Color gray translucent.
 	self layout: (SpBoxLayout newTopToBottom
 			 spacing: 1;
 			 add: toolbar expand: false;
-			 add: sep height: 1;
-			 add: mainLayout;
+			 add: self newSeparator height: 1;
+			 add: self mainLayout;
 			 yourself)
 ]
 
@@ -145,9 +149,7 @@ INNotebookPresenter >> initializeLayout [
 INNotebookPresenter >> initializePresenters [
 
 	self initializeToolbar.
-	self whenDisplayDo: [ 
-		self window whenResizingDo: [ self currentNotebook updateHeight ] ].
-	
+
 	tabbedPresenter := self newNotebook.
 	self addNewTab.
 	self initializeLayout
@@ -157,36 +159,7 @@ INNotebookPresenter >> initializePresenters [
 INNotebookPresenter >> initializeToolbar [
 
 	toolbar := self newToolbar
-		           addItem: (self newToolbarButton
-				            label: 'Load...';
-				            icon: (self iconNamed: #smallLoadProject);
-				            action: [ self importMicrodownFile ];
-				            yourself);
-				addItem: (self newToolbarButton
-				            label: 'Save...';
-				            icon: (self iconNamed: #smallExport);
-				            action: [ self exportDocument ];
-				            yourself);
-		           addItem: (self newToolbarButton
-				            label: 'Preview';
-				            icon: (self iconNamed: #smallExport);
-				            action: [ self preview ];
-				            yourself);
-		           addItem: (self newToolbarButton
-				            label: 'Export to text';
-				            icon: (self iconNamed: #smallExport);
-				            action: [ self exportToText ];
-				            yourself);
-		           addItem: (self newToolbarButton
-				            label: 'Export to HTML';
-				            icon: (self iconNamed: #smallExport);
-				            action: [ self exportToHTML ];
-				            yourself);
-		           addItem: (self newToolbarButton
-				            label: 'New Tab';
-				            icon: (self iconNamed: #add);
-				            action: [ self addNewTab ];
-				            yourself);
+		           fillWith: self rootCommandsGroup;
 		           yourself
 ]
 
@@ -195,6 +168,26 @@ INNotebookPresenter >> initializeWindow: aMiWindowPresenter [
 
 	super initializeWindow: aMiWindowPresenter.
 	aMiWindowPresenter initialExtent: 1083.0 @ 697.0
+]
+
+{ #category : #initialization }
+INNotebookPresenter >> mainLayout [
+
+	^ SpBoxLayout newLeftToRight
+		  beHomogeneous;
+		  spacing: 2;
+		  add: tabbedPresenter;
+		  yourself
+]
+
+{ #category : #initialization }
+INNotebookPresenter >> newSeparator [
+
+	| separator |
+
+	separator := self newRoassal.
+	separator canvas color: Color gray translucent.
+	^ separator
 ]
 
 { #category : #initialization }
@@ -219,12 +212,6 @@ Click to show in folder'.
 	UIManager default
 		inform: msg
 		actionOnClick: [ aFile openInOSFileBrowser ]
-]
-
-{ #category : #accessing }
-INNotebookPresenter >> separator [
-
-	^ sep
 ]
 
 { #category : #initialization }

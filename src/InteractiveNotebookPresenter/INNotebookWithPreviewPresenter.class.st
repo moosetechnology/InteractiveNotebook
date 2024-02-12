@@ -16,12 +16,6 @@ INNotebookWithPreviewPresenter class >> helpMessage [
 	^ 'Open the interactive notebook'
 ]
 
-{ #category : #'world menu' }
-INNotebookWithPreviewPresenter class >> menuItem [
-
-	^ #reporteBuilder
-]
-
 { #category : #'instance creation' }
 INNotebookWithPreviewPresenter class >> newModel [
 
@@ -162,11 +156,12 @@ INNotebookWithPreviewPresenter >> initializeLayout [
 { #category : #initialization }
 INNotebookWithPreviewPresenter >> initializePresenters [
 
-	self whenDisplayDo: [ 
+	self whenDisplayDo: [
 		self window whenResizingDo: [ notebook updateHeight ] ].
 
 	notebook := self instantiate: INNotebookEditorPresenter.
 	notebook browser: self.
+
 	notebookPreview := self instantiate: INNotebookPreviewPresenter.
 	notebookPreview browser: self.
 

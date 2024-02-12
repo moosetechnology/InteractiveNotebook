@@ -2,7 +2,6 @@ Class {
 	#name : #INNotebookModel,
 	#superclass : #Object,
 	#instVars : [
-		'textEditedSource',
 		'needToUpdate',
 		'micDocument',
 		'cellList',

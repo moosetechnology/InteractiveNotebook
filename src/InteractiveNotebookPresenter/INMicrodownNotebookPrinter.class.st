@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'microdownBuilder'
 	],
-	#category : #InteractiveNotebookPresenter
+	#category : #'InteractiveNotebookPresenter-Printers'
 }
 
 { #category : #initialization }
