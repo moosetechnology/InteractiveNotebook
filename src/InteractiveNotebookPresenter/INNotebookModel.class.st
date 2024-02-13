@@ -21,14 +21,6 @@ INNotebookModel >> addBinding: anAssociation [
 ]
 
 { #category : #initialization }
-INNotebookModel >> addBindings: aDictionary [
-
-	self context bindings addAll:
-		(aDictionary keysAndValuesDo: [ :key :value |
-			 AdditionalBinding key: key value: value ])
-]
-
-{ #category : #initialization }
 INNotebookModel >> addCell: aCell [
 
 	^ cellList add: aCell
