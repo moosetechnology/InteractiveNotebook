@@ -157,9 +157,9 @@ INNotebookPage >> fillPreview [
 	self updateModelCells.
 
 	preview
-		updateWithStringCollection:
+		updateWithStrings:
 		self model executeAllCellsAsTextCollection
-		andCells: notebook cellList
+		fromCells: notebook cellList
 ]
 
 { #category : #initialization }

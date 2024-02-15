@@ -11,9 +11,8 @@ Class {
 
 { #category : #actions }
 INNotebookCellPreviewPresenter >> beSelected [
-	
-	self parent select: self.
-	
+
+	self parent selectCell: self
 ]
 
 { #category : #accessing }
@@ -72,6 +71,12 @@ INNotebookCellPreviewPresenter >> parent: anObject [
 	parent := anObject
 ]
 
+{ #category : #removing }
+INNotebookCellPreviewPresenter >> remove [
+
+	parent removeCell: self
+]
+
 { #category : #actions }
 INNotebookCellPreviewPresenter >> select [
 
@@ -88,7 +93,7 @@ INNotebookCellPreviewPresenter >> selectAndScrollToMe [
 { #category : #actions }
 INNotebookCellPreviewPresenter >> selectMe [
 	
-	self parent select: self.
+	self parent selectCell: self.
 	cell ifNotNil: [ :c | c selectAndScrollToMe ]
 ]
 

@@ -7,6 +7,12 @@ Class {
 	#category : #InteractiveNotebookPresenter
 }
 
+{ #category : #printing }
+INNotebookAbstractCellModel >> contentAsStringInContext: aCompilationContext [
+
+	self subclassResponsibility
+]
+
 { #category : #initialization }
 INNotebookAbstractCellModel >> initialize [
 
@@ -16,12 +22,6 @@ INNotebookAbstractCellModel >> initialize [
 
 { #category : #helpers }
 INNotebookAbstractCellModel >> presenterClass [
-
-	self subclassResponsibility
-]
-
-{ #category : #printing }
-INNotebookAbstractCellModel >> printContentIn: aStream withContext: aContext [
 
 	self subclassResponsibility
 ]

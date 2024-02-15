@@ -3,12 +3,10 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'needToUpdate',
-		'micDocument',
 		'cellList',
-		'context',
-		'generatedDocument',
-		'additionalBindings',
-		'fileName'
+		'fileName',
+		'printer',
+		'bindings'
 	],
 	#category : #InteractiveNotebookPresenter
 }
@@ -16,32 +14,26 @@ Class {
 { #category : #initialization }
 INNotebookModel >> addBinding: anAssociation [
 
-	self context bindings add:
-		(AdditionalBinding key: anAssociation key value: anAssociation value)
+	bindings add: anAssociation
+]
+
+{ #category : #adding }
+INNotebookModel >> addBindings: aDictionary [
+
+	aDictionary associationsDo: [ :association |
+		self addBinding: association ]
 ]
 
 { #category : #initialization }
 INNotebookModel >> addCell: aCell [
 
-	^ cellList add: aCell
+	cellList add: aCell
 ]
 
 { #category : #initialization }
 INNotebookModel >> addTextCell [
 
-	^ self addCell: INNotebookTextCellModel new
-]
-
-{ #category : #initialization }
-INNotebookModel >> additionalBindings [
-
-	^ additionalBindings
-]
-
-{ #category : #initialization }
-INNotebookModel >> additionalBindingsWithStream: aStream [
-
-	^ self additionalBindings copyWith: { ('stream' -> aStream) }
+	self addCell: INNotebookTextCellModel new
 ]
 
 { #category : #accessing }
@@ -57,28 +49,17 @@ INNotebookModel >> cellList: anOrderedCollection [
 	cellList := anOrderedCollection
 ]
 
-{ #category : #accessing }
-INNotebookModel >> context [
-
-	^ context
-]
-
 { #category : #actions }
 INNotebookModel >> executeAllCellsAsTextCollection [
 
-	| textCollection |
+	^ cellList collect: [ :cell |
+		  String streamContents: [ :p |
+			  | str |
 
-	generatedDocument := String streamContents: [ :p | 
-		              textCollection := cellList collect: [ :cell | 
-			                                | str |
-			                                str := String streamContents: [ :s | 
-				                                       cell
-					                                       printContentIn: s
-					                                       withContext: context ].
-			                                p nextPutAll: str.
-			                                p nextPut: Character cr.
-			                                str ] ].
-	^ textCollection
+			  printer stream: p.
+			  printer print: (cell contentAsStringInContext: self newContext).
+			  str := p contents.
+			  str ] ]
 ]
 
 { #category : #export }
@@ -96,9 +77,11 @@ INNotebookModel >> exportDocumentAt: aFileReference [
 INNotebookModel >> exportToHTMLAt: aFileReference [
 
 	"This will use the microdown HTML visitor to export the document to HTML. So your document should respect Microdown specs."
+
 	aFileReference ifNil: [ ^ self ].
-	aFileReference writeStreamDo: [ :stream | 
-		stream nextPutAll: (MicHTMLVisitor asHTMLString: self generatedDocument) ]
+	aFileReference writeStreamDo: [ :stream |
+		stream nextPutAll:
+			(MicHTMLVisitor asHTMLString: self generateDocument) ]
 ]
 
 { #category : #export }
@@ -108,20 +91,15 @@ INNotebookModel >> exportToTextAt: aFileReference [
 
 	aFileReference ifNil: [ ^ self ].
 	aFileReference ensureDelete.
-	aFileReference ifNotNil: [ 
-		aFileReference writeStreamDo: [ :s | s << generatedDocument ] ]
+	aFileReference ifNotNil: [
+		aFileReference writeStreamDo: [ :s | s << self generateDocument ] ]
 ]
 
-{ #category : #accessing }
-INNotebookModel >> generatedDocument [
+{ #category : #export }
+INNotebookModel >> generateDocument [
 
-	^ generatedDocument
-]
-
-{ #category : #accessing }
-INNotebookModel >> generatedDocument: anObject [
-
-	generatedDocument := anObject.
+	^ String streamContents: [ :s |
+		  cellList do: [ :notebookCell | s << notebookCell previewCell text ] ]
 ]
 
 { #category : #actions }
@@ -138,34 +116,26 @@ INNotebookModel >> initialize [
 	super initialize.
 	needToUpdate := true.
 	cellList := OrderedCollection new.
-	self initializeBindings.
-	self initializeContext
-]
-
-{ #category : #initialization }
-INNotebookModel >> initializeBindings [
-
-	additionalBindings := {
-		                      (AdditionalBinding key: 'stream' value: nil).
-		                      (AdditionalBinding key: 'printer' value: nil) }
-]
-
-{ #category : #initialization }
-INNotebookModel >> initializeContext [
-
-	context := CompilationContext new
-		           bindings: self additionalBindings;
-		           yourself
-]
-
-{ #category : #accessing }
-INNotebookModel >> micDocument [
-
-	^ micDocument
+	printer := INMicrodownNotebookPrinter new.
+	bindings := Dictionary new
 ]
 
 { #category : #accessing }
 INNotebookModel >> name [
 
 	^ fileName ifNil: [ 'new *' ]
+]
+
+{ #category : #accessing }
+INNotebookModel >> newContext [
+
+	^ CompilationContext new
+		  bindings: bindings;
+		  yourself
+]
+
+{ #category : #accessing }
+INNotebookModel >> printer: anINNotebookPrinter [
+
+	printer := anINNotebookPrinter
 ]

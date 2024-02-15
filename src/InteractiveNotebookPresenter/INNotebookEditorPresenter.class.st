@@ -5,7 +5,6 @@ Class {
 		'cellList',
 		'lastCellAdded',
 		'selectedCell',
-		'interactionModel',
 		'headerSep',
 		'cellLayout',
 		'codeCellPlaceholder'
@@ -205,8 +204,16 @@ INNotebookEditorPresenter >> select: aCell [
 { #category : #adding }
 INNotebookEditorPresenter >> selectAndScrollTo: aMiNoteBookCell [
 
-	self select: aMiNoteBookCell.
+	self selectCell: aMiNoteBookCell.
 	self scrollTo: aMiNoteBookCell
+]
+
+{ #category : #removing }
+INNotebookEditorPresenter >> selectCell: aCell [
+
+	selectedCell := aCell.
+	cellList do: [ :c | c unselect ].
+	selectedCell select
 ]
 
 { #category : #adding }
@@ -238,14 +245,15 @@ INNotebookEditorPresenter >> transformToTextCell: aCell [
 { #category : #removing }
 INNotebookEditorPresenter >> updateAll [
 
+	self model cellList ifEmpty: [ ^ self ].
+
 	cellList := LinkedList new.
-	self model cellList do: [ :c | 
-		cellList add: ((self instantiate: c presenterClass)
+	cellList addAll: (self model cellList collect: [ :c |
+			 (self instantiate: c presenterClass)
 				 notebook: self;
 				 text: c text;
-				 yourself) ].
+				 yourself ]).
 
-	cellList ifEmpty: [ ^ self ].
 	selectedCell := cellList last.
 	self relayout
 ]

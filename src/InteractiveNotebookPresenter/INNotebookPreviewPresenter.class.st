@@ -69,6 +69,19 @@ INNotebookPreviewPresenter >> initializePresenters [
 	self initializeLayout
 ]
 
+{ #category : #'instance creation' }
+INNotebookPreviewPresenter >> newPreviewCellFrom: aNotebookCell text: aString [
+
+	| previewCell |
+
+	previewCell := self newPreviewCellWith: aString.
+
+	previewCell cell: aNotebookCell.
+	aNotebookCell previewCell: previewCell.
+
+	^ previewCell
+]
+
 { #category : #actions }
 INNotebookPreviewPresenter >> newPreviewCellWith: aString [
 
@@ -82,11 +95,20 @@ INNotebookPreviewPresenter >> newPreviewCellWith: aString [
 INNotebookPreviewPresenter >> relayout [
 
 	| newLayout |
+
+	previewCells ifEmpty: [ ^ self ].
 	newLayout := SpBoxLayout newTopToBottom.
 	previewCells do: [ :e | newLayout add: e expand: false ].
 
 	scrollLayout child layout: newLayout.
 	previewCells do: [ :e | e announceDisplayed ]
+]
+
+{ #category : #removing }
+INNotebookPreviewPresenter >> removeCell: aPreviewCell [
+
+	previewCells remove: aPreviewCell.
+	self relayout
 ]
 
 { #category : #actions }
@@ -107,8 +129,15 @@ INNotebookPreviewPresenter >> select: aMiNoteBookCellPreview [
 { #category : #actions }
 INNotebookPreviewPresenter >> selectAndScrollTo: aMiNoteBookCellPreview [
 
-	self select: aMiNoteBookCellPreview.
+	self selectCell: aMiNoteBookCellPreview.
 	self scrollTo: aMiNoteBookCellPreview
+]
+
+{ #category : #actions }
+INNotebookPreviewPresenter >> selectCell: aMiNoteBookCellPreview [
+
+	previewCells do: [ :c | c unselected ].
+	aMiNoteBookCellPreview select.
 ]
 
 { #category : #initialization }
@@ -118,25 +147,12 @@ INNotebookPreviewPresenter >> updateHeight [
 ]
 
 { #category : #actions }
-INNotebookPreviewPresenter >> updateWithStringCollection: aCollection [
+INNotebookPreviewPresenter >> updateWithStrings: aCollectionOfStrings fromCells: cells [
 
-	previewCells := aCollection collect: [ :s | 
-		                self newPreviewCellWith: s ].
-	self relayout
-]
+	previewCells := aCollectionOfStrings
+		                with: cells
+		                collect: [ :string :notebookCell |
+			                self newPreviewCellFrom: notebookCell text: string ].
 
-{ #category : #actions }
-INNotebookPreviewPresenter >> updateWithStringCollection: aCollection andCells: cells [
-
-	| col |
-	col := OrderedCollection new.
-	aCollection withIndexDo: [ :e :i | 
-		| cell pCell |
-		cell := cells at: i.
-		pCell := self newPreviewCellWith: (aCollection at: i).
-		pCell cell: cell.
-		cell previewCell: pCell.
-		col add: pCell ].
-	previewCells := col.
 	self relayout
 ]

@@ -3,7 +3,9 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'tabbedPresenter',
-		'addTabButton'
+		'addTabButton',
+		'printer',
+		'bindings'
 	],
 	#category : #InteractiveNotebookPresenter
 }
@@ -35,31 +37,26 @@ INNotebookPresenter class >> title [
 	^ 'Notebook'
 ]
 
-{ #category : #adding }
-INNotebookPresenter >> addBindingToCurrentNotebook: anAssociation [
+{ #category : #configuration }
+INNotebookPresenter >> addBinding: anAssociation [
 
-	tabbedPresenter selectedPage activePresenter model addBinding:
-		anAssociation
+	bindings add: anAssociation.
+	tabbedPresenter pages do: [ :page |
+		page activePresenter ifNotNil: [ :inNotebookPage |
+			inNotebookPage model addBinding: anAssociation ] ]
 ]
 
 { #category : #adding }
 INNotebookPresenter >> addNewTab [
 
-	self addNewTabWithModel: (INNotebookModel new
-			 addTextCell;
-			 yourself)
-]
-
-{ #category : #adding }
-INNotebookPresenter >> addNewTabWithModel: aModel [
-
 	| newTab |
 
 	newTab := self newNotebookPage.
 	newTab
-		title: aModel name;
+		title: 'New*';
 		beCloseable;
-		presenterProvider: [ self instantiate: INNotebookPage on: aModel ].
+		presenterProvider: [
+			self instantiate: INNotebookPage on: self newModel ].
 
 	tabbedPresenter addPage: newTab.
 	tabbedPresenter selectPage: newTab
@@ -71,6 +68,15 @@ INNotebookPresenter >> connectPresenters [
 	self whenDisplayDo: [
 		self window whenResizingDo: [
 			tabbedPresenter selectedPage activePresenter updateHeight ] ]
+]
+
+{ #category : #initialization }
+INNotebookPresenter >> initialize [
+
+	super initialize.
+	printer := MiMooseNotebookPrinter new.
+	bindings := Dictionary new.
+	self addNewTab
 ]
 
 { #category : #initialization }
@@ -102,8 +108,6 @@ INNotebookPresenter >> initializePresenters [
 	tabbedPresenter := self newNotebook.
 	self initializeAddTabButton.
 
-	self addNewTab.
-
 	self initializeLayout
 ]
 
@@ -112,4 +116,23 @@ INNotebookPresenter >> initializeWindow: aMiWindowPresenter [
 
 	super initializeWindow: aMiWindowPresenter.
 	aMiWindowPresenter initialExtent: self class initialExtent
+]
+
+{ #category : #adding }
+INNotebookPresenter >> newModel [
+
+	^ INNotebookModel new
+		  printer: printer;
+		  addBindings: bindings;
+		  addTextCell;
+		  yourself
+]
+
+{ #category : #configuration }
+INNotebookPresenter >> printer: aPrinter [
+
+	printer := aPrinter.
+	tabbedPresenter pages do: [ :page |
+		page activePresenter ifNotNil: [ :inNotebookPage |
+			inNotebookPage model printer: aPrinter ] ]
 ]

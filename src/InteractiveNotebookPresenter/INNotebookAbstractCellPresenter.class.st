@@ -33,7 +33,7 @@ INNotebookAbstractCellPresenter >> beCode [
 { #category : #initialization }
 INNotebookAbstractCellPresenter >> beSelected [
 
-	notebook select: self.
+	notebook selectCell: self.
 	previewCell ifNotNil: [ :c | c beSelected ]
 ]
 
@@ -209,7 +209,8 @@ INNotebookAbstractCellPresenter >> previewCell: anObject [
 { #category : #initialization }
 INNotebookAbstractCellPresenter >> remove [
 
-	notebook removeCell: self
+	notebook removeCell: self.
+	previewCell ifNotNil: [ previewCell remove ]
 ]
 
 { #category : #initialization }
@@ -231,7 +232,7 @@ INNotebookAbstractCellPresenter >> selectAndScrollToMe [
 { #category : #actions }
 INNotebookAbstractCellPresenter >> selectMe [
 
-	notebook select: self.
+	notebook selectCell: self.
 	previewCell ifNotNil: [ :c | c selectAndScrollToMe ]
 ]
 

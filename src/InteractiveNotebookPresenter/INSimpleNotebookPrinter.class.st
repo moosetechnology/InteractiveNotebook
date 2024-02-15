@@ -16,7 +16,7 @@ INSimpleNotebookPrinter >> print: anObject [
 { #category : #printing }
 INSimpleNotebookPrinter >> print: anObject with: aBlock [
 
-	anObject isCollection
+	(anObject isCollection and: [ anObject isString not ])
 		ifTrue: [ self printCollection: anObject with: aBlock ]
 		ifFalse: [ self printObject: anObject with: aBlock ]
 ]
@@ -69,5 +69,5 @@ INSimpleNotebookPrinter >> stream: anObject [
 { #category : #printing }
 INSimpleNotebookPrinter >> stringForObject: anObject [
 
-	^ anObject printString
+	^ anObject ifNil: [ '' ] ifNotNil: [ anObject asString ]
 ]
