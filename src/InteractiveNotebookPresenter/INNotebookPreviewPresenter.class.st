@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'previewCells',
 		'sep',
-		'browser',
 		'topMenu',
 		'closeButton',
 		'mainLayout',
@@ -13,22 +12,10 @@ Class {
 	#category : #InteractiveNotebookPresenter
 }
 
-{ #category : #accessing }
-INNotebookPreviewPresenter >> browser [
-
-	^ browser
-]
-
-{ #category : #accessing }
-INNotebookPreviewPresenter >> browser: anObject [
-
-	browser := anObject
-]
-
 { #category : #initialization }
 INNotebookPreviewPresenter >> close [
 
-	browser closePreview
+	owner closePreview
 ]
 
 { #category : #initialization }

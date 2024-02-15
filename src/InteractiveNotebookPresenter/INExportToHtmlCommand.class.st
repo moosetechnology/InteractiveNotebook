@@ -4,7 +4,7 @@ Class {
 	#category : #'InteractiveNotebookPresenter-Commands'
 }
 
-{ #category : #initialization }
+{ #category : #defaults }
 INExportToHtmlCommand class >> defaultIconName [
 
 	^ #smallExport

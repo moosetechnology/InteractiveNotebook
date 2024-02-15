@@ -462,21 +462,6 @@ INNotebookIcons class >> icons [
 		icons ]
 ]
 
-{ #category : #import }
-INNotebookIcons class >> importIcons: iconCollection fromFolder: aString inClass: aClass category: aCategory [
-	iconCollection
-		do: [:each |
-			| method form |
-			form := PNGReadWriter formFromFileNamed: aString, '/', each , '.png'.
-			method := each , Character cr asString ,
-				('^ self icons
-					at: #',  each , 
-					' ifAbsentPut: ['),		
-				form storeString,
-				']'.
-			aClass compile: method classified: aCategory ]
-]
-
 { #category : #utilities }
 INNotebookIcons class >> resetIcons [
 

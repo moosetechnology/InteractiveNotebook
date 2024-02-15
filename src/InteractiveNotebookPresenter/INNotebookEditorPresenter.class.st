@@ -2,15 +2,12 @@ Class {
 	#name : #INNotebookEditorPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
-		'menu',
 		'cellList',
 		'lastCellAdded',
 		'selectedCell',
 		'interactionModel',
 		'headerSep',
-		'mooseModel',
 		'cellLayout',
-		'browser',
 		'codeCellPlaceholder'
 	],
 	#category : #InteractiveNotebookPresenter
@@ -46,18 +43,6 @@ INNotebookEditorPresenter >> addTextCellBefore: aCell [
 INNotebookEditorPresenter >> allModelCells [
 
 	^ cellList asOrderedCollection collect: [ :cell | cell asModelCell ]
-]
-
-{ #category : #accessing }
-INNotebookEditorPresenter >> browser [
-
-	^ browser
-]
-
-{ #category : #accessing }
-INNotebookEditorPresenter >> browser: anObject [
-
-	browser := anObject
 ]
 
 { #category : #accessing }
@@ -100,9 +85,6 @@ INNotebookEditorPresenter >> initialize [
 
 	codeCellPlaceholder := 'Code'.
 	cellList := LinkedList new.
-	interactionModel := INNotebookCodeScriptingInteractionModel new
-		                    receiver: 1;
-		                    yourself.
 	super initialize
 ]
 
@@ -129,12 +111,6 @@ INNotebookEditorPresenter >> initializePresenters [
 		for: self.
 	self whenDisplayDo: [ self updateHeight ].
 	self initializeLayout
-]
-
-{ #category : #accessing }
-INNotebookEditorPresenter >> interactionModel [
-
-	^ interactionModel
 ]
 
 { #category : #initialization }

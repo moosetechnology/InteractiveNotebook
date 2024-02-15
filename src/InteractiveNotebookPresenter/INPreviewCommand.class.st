@@ -4,7 +4,7 @@ Class {
 	#category : #'InteractiveNotebookPresenter-Commands'
 }
 
-{ #category : #default }
+{ #category : #defaults }
 INPreviewCommand class >> defaultIconName [
 
 	^ #smallExport
@@ -19,5 +19,5 @@ INPreviewCommand class >> defaultName [
 { #category : #executing }
 INPreviewCommand >> execute [
 
-	self context preview
+	self context openPreview
 ]

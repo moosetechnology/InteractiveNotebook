@@ -70,7 +70,7 @@ INNotebookAbstractCellPresenter >> createDescriptionFor: aString [
 		  yourself
 ]
 
-{ #category : #initialization }
+{ #category : #accessing }
 INNotebookAbstractCellPresenter >> iconNamed: anIconName [
 
 	INNotebookIcons icons
@@ -241,7 +241,7 @@ INNotebookAbstractCellPresenter >> selectedColor [
 	^ Color fromHexString: '77A8C8'
 ]
 
-{ #category : #protocol }
+{ #category : #'api - focus' }
 INNotebookAbstractCellPresenter >> takeKeyboardFocus [
 
 	cell takeKeyboardFocus

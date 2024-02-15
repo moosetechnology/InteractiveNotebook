@@ -4,7 +4,7 @@ Class {
 	#category : #'InteractiveNotebookPresenter-Commands'
 }
 
-{ #category : #default }
+{ #category : #defaults }
 INSaveCommand class >> defaultIconName [
 
 	^ #smallExport

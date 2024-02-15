@@ -34,7 +34,6 @@ INNotebookCodeCellPresenter >> initializePresenters [
 		        placeholder: notebook codeCellPlaceholder;
 		        yourself.
 	cell whenTextChangedDo: [ self updateHeight ].
-	self interactionModel: notebook interactionModel.
 
 	icon := self newButton
 		        label: 'Code';
@@ -50,12 +49,6 @@ INNotebookCodeCellPresenter >> initializePresenters [
 		do: [ notebook transformToTextCell: self ]
 		for: self.
 	self initializeLayout
-]
-
-{ #category : #api }
-INNotebookCodeCellPresenter >> interactionModel: anEnvironment [
-
-	cell interactionModel: anEnvironment
 ]
 
 { #category : #accessing }

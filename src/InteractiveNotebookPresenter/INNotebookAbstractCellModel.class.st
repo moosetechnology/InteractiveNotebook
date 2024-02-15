@@ -2,8 +2,7 @@ Class {
 	#name : #INNotebookAbstractCellModel,
 	#superclass : #Object,
 	#instVars : [
-		'text',
-		'model'
+		'text'
 	],
 	#category : #InteractiveNotebookPresenter
 }

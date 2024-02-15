@@ -4,9 +4,9 @@ Class {
 	#instVars : [
 		'previewOpened',
 		'notebook',
-		'notebookPreview',
 		'mainLayout',
-		'toolbar'
+		'toolbar',
+		'preview'
 	],
 	#category : #InteractiveNotebookPresenter
 }
@@ -55,6 +55,14 @@ INNotebookPage >> addTextCell [
 	notebook addTextCell
 ]
 
+{ #category : #initialization }
+INNotebookPage >> announcePreviewHasBeenOpened [
+
+	notebook announceDisplayed.
+	preview announceDisplayed.
+	self announceDisplayed
+]
+
 { #category : #actions }
 INNotebookPage >> chooseTextFile: messageString extensions: stringCollection path: defaultName [
 
@@ -69,7 +77,7 @@ INNotebookPage >> closePreview [
 
 	previewOpened ifFalse: [ ^ self ].
 	previewOpened := false.
-	mainLayout remove: notebookPreview.
+	mainLayout remove: preview.
 	notebook announceDisplayed
 ]
 
@@ -83,6 +91,17 @@ INNotebookPage >> codeCellPlaceholder [
 INNotebookPage >> codeCellPlaceholder: anObject [
 
 	notebook codeCellPlaceholder: anObject
+]
+
+{ #category : #initialization }
+INNotebookPage >> ensurePreviewIsOpened [
+
+	previewOpened ifTrue: [ ^ self ].
+	previewOpened := true.
+
+	mainLayout add: preview.
+
+	self announcePreviewHasBeenOpened
 ]
 
 { #category : #initialization }
@@ -133,6 +152,17 @@ INNotebookPage >> exportToText [
 ]
 
 { #category : #initialization }
+INNotebookPage >> fillPreview [
+
+	self updateModelCells.
+
+	preview
+		updateWithStringCollection:
+		self model executeAllCellsAsTextCollection
+		andCells: notebook cellList
+]
+
+{ #category : #initialization }
 INNotebookPage >> importMicrodownFile [
 
 	| file |
@@ -172,12 +202,10 @@ INNotebookPage >> initializePresenters [
 
 	self whenDisplayDo: [
 		self window whenResizingDo: [ notebook updateHeight ] ].
+
 	self initializeToolbar.
 	notebook := self instantiate: INNotebookEditorPresenter.
-	notebook browser: self.
-
-	notebookPreview := self instantiate: INNotebookPreviewPresenter.
-	notebookPreview browser: self.
+	preview := self instantiate: INNotebookPreviewPresenter.
 
 	self initializeLayout
 ]
@@ -200,24 +228,8 @@ INNotebookPage >> initializeWindow: aMiWindowPresenter [
 { #category : #initialization }
 INNotebookPage >> openPreview [
 
-	previewOpened ifTrue: [ ^ self ].
-	previewOpened := true.
-	mainLayout add: notebookPreview.
-	notebook announceDisplayed.
-	notebookPreview announceDisplayed.
-	self announceDisplayed
-]
-
-{ #category : #initialization }
-INNotebookPage >> preview [
-
-	self openPreview.
-	self updateModelCells.
-
-	notebookPreview
-		updateWithStringCollection:
-		self model executeAllCellsAsTextCollection
-		andCells: notebook cellList
+	self ensurePreviewIsOpened.
+	self fillPreview
 ]
 
 { #category : #actions }
