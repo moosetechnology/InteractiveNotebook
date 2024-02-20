@@ -6,8 +6,14 @@ Class {
 		'cell',
 		'parent'
 	],
-	#category : #InteractiveNotebookPresenter
+	#category : #'InteractiveNotebookPresenter-Cells'
 }
+
+{ #category : #initialization }
+INNotebookCellPreviewPresenter class >> unselectedColor [
+
+	^ Smalltalk ui theme backgroundColor
+]
 
 { #category : #actions }
 INNotebookCellPreviewPresenter >> beSelected [
@@ -41,13 +47,13 @@ INNotebookCellPreviewPresenter >> initializePresenters [
 	textPresenter := self newText
 		                 beNotEditable;
 		                 yourself.
-	self whenDisplayDo: [ 
+	self whenDisplayDo: [
 		self updateHeight.
-		textPresenter withAdapterDo: [ :a | 
-			UIManager default defer: [ 
-				a widget backgroundColor: self unselectedColor ] ] ].
+		textPresenter withAdapterDo: [ :a |
+			UIManager default defer: [
+				a widget backgroundColor: self class unselectedColor ] ] ].
 	self initializeLayout.
-	textPresenter eventHandler whenMouseDownDo: [ :anEvent | 
+	textPresenter eventHandler whenMouseDownDo: [ :anEvent |
 		self selectMe ]
 ]
 
@@ -105,14 +111,9 @@ INNotebookCellPreviewPresenter >> text: aString [
 
 { #category : #actions }
 INNotebookCellPreviewPresenter >> unselected [
-	
-	textPresenter withAdapterDo: [ :a | a widget backgroundColor: self unselectedColor ]
-]
 
-{ #category : #initialization }
-INNotebookCellPreviewPresenter >> unselectedColor [
-
-	^ Smalltalk ui theme backgroundColor
+	textPresenter withAdapterDo: [ :a |
+		a widget backgroundColor: self class unselectedColor ]
 ]
 
 { #category : #initialization }

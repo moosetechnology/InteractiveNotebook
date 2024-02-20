@@ -3,20 +3,58 @@ Class {
 	#superclass : #SpPresenter,
 	#instVars : [
 		'cell',
-		'icon',
 		'notebook',
-		'removeButton',
 		'leftMenuCanvas',
-		'rightMenuCanvas',
-		'deleteButton',
-		'addCellBellowButton',
-		'addCellAboveButton',
-		'moveCellUp',
-		'moveCellDown',
-		'previewCell'
+		'previewCell',
+		'rightMenuCanvas'
 	],
-	#category : #InteractiveNotebookPresenter
+	#category : #'InteractiveNotebookPresenter-Cells'
 }
+
+{ #category : #commands }
+INNotebookAbstractCellPresenter class >> buildCommandsGroupWith: aPresenter forRoot: rootCommandGroup [
+
+	rootCommandGroup
+		register: ((INMoveUpCellCommand forSpecContext: aPresenter)
+				 iconProvider: INNotebookIcons;
+				 yourself);
+		register: ((INMoveDownCellCommand forSpecContext: aPresenter)
+				 iconProvider: INNotebookIcons;
+				 yourself);
+		register: ((INAddCellAfterCommand forSpecContext: aPresenter)
+				 iconProvider: INNotebookIcons;
+				 yourself);
+		register: ((INAddCellBeforeCommand forSpecContext: aPresenter)
+				 iconProvider: INNotebookIcons;
+				 yourself);
+		register: ((INRemoveCellCommand forSpecContext: aPresenter)
+				 iconProvider: INNotebookIcons;
+				 yourself)
+]
+
+{ #category : #accessing }
+INNotebookAbstractCellPresenter class >> selectedColor [
+
+	^ Color fromHexString: '77A8C8'
+]
+
+{ #category : #initialization }
+INNotebookAbstractCellPresenter class >> unselectedColor [
+
+	^ Color transparent
+]
+
+{ #category : #commands }
+INNotebookAbstractCellPresenter >> addTextCellAfter [
+
+	^ notebook addTextCellAfter: self
+]
+
+{ #category : #commands }
+INNotebookAbstractCellPresenter >> addTextCellBefore [
+
+	^ notebook addTextCellBefore: self
+]
 
 { #category : #converting }
 INNotebookAbstractCellPresenter >> asModelCell [
@@ -25,12 +63,6 @@ INNotebookAbstractCellPresenter >> asModelCell [
 ]
 
 { #category : #api }
-INNotebookAbstractCellPresenter >> beCode [
-
-	self subclassResponsibility
-]
-
-{ #category : #initialization }
 INNotebookAbstractCellPresenter >> beSelected [
 
 	notebook selectCell: self.
@@ -38,36 +70,31 @@ INNotebookAbstractCellPresenter >> beSelected [
 ]
 
 { #category : #api }
-INNotebookAbstractCellPresenter >> beText [
-
-	self subclassResponsibility
-]
-
-{ #category : #initialization }
 INNotebookAbstractCellPresenter >> beUnselected [
 
-	leftMenuCanvas canvas color: self unselectedColor.
+	leftMenuCanvas canvas color: self class unselectedColor.
 	leftMenuCanvas canvas signalUpdate.
-	rightMenuCanvas canvas color: self unselectedColor.
+	rightMenuCanvas canvas color: self class unselectedColor.
 	rightMenuCanvas canvas signalUpdate
 ]
 
 { #category : #accessing }
-INNotebookAbstractCellPresenter >> cell [
+INNotebookAbstractCellPresenter >> bindings: aDictionary [
 
-	^ cell
+	"Nothing to do by default"
+
+	
 ]
 
 { #category : #initialization }
-INNotebookAbstractCellPresenter >> createDescriptionFor: aString [
+INNotebookAbstractCellPresenter >> connectPresenters [
 
-	^ aString asTextMorph
-		  backgroundColor: (Color white alpha: 0.6);
-		  borderColor: Color gray;
-		  textColor: Color black;
-		  borderWidth: 1;
-		  margins: 2;
-		  yourself
+	self whenDisplayDo: [
+		self withAdapterDo: [
+			self adapter children second textArea announcer
+				when: MorphGotFocus
+				do: [ self selectMe ] ].
+		self updateHeight ]
 ]
 
 { #category : #accessing }
@@ -77,6 +104,39 @@ INNotebookAbstractCellPresenter >> iconNamed: anIconName [
 		at: anIconName
 		ifPresent: [ :found | ^ found ].
 	^ super iconNamed: anIconName
+]
+
+{ #category : #initialization }
+INNotebookAbstractCellPresenter >> initializeButtons [
+
+	| buttons menu |
+
+	buttons := self rootCommandsGroup entries
+		           collect: [ :command |
+			           RSBitmap new
+				           model: command;
+				           form: (self iconNamed: command iconName);
+				           size: 16;
+				           when: RSMouseClick do: [ command execute ] for: self;
+				           yourself ]
+		           as: RSGroup.
+	buttons @ INCellMenuPopupInteraction.
+
+	RSHorizontalLineLayout new
+		alignMiddle;
+		horizontalGap: 2;
+		on: buttons.
+
+	menu := RSComposite new
+		        addAll: buttons;
+		        isFixed: true;
+		        color: Color transparent;
+		        translateBy: 50 @ 14;
+		        yourself.
+
+	rightMenuCanvas canvas add: menu.
+	menu adjustToChildren.
+	menu padding: 10
 ]
 
 { #category : #initialization }
@@ -90,64 +150,42 @@ INNotebookAbstractCellPresenter >> initializeLayout [
 ]
 
 { #category : #initialization }
+INNotebookAbstractCellPresenter >> initializeLeftButton [
+
+	leftMenuCanvas := self newRoassal.
+	leftMenuCanvas canvas color: self class unselectedColor
+
+	"Add button in subclasses"
+]
+
+{ #category : #initialization }
 INNotebookAbstractCellPresenter >> initializePresenters [
+
+	self initializeLeftButton.
+	self initializeRightButtons
+]
+
+{ #category : #initialization }
+INNotebookAbstractCellPresenter >> initializeRightButtons [
 
 	| buttons menu |
 
-	self whenDisplayDo: [
-		self withAdapterDo: [
-			self adapter children second textArea announcer
-				when: MorphGotFocus
-				do: [ self selectMe ] ].
-		self updateHeight ].
-	removeButton := self newButton
-		                icon: (Smalltalk ui iconNamed: #remove);
-		                action: [ self remove ].
-	leftMenuCanvas := self newRoassal.
-	leftMenuCanvas canvas color: self unselectedColor.
-	rightMenuCanvas := self newRoassal.
-	rightMenuCanvas canvas color: Color transparent.
-	deleteButton := RSBitmap new
-		                form: (self iconNamed: #trash);
-		                model: 'Delete';
-		                size: 16;
-		                yourself.
-	deleteButton when: RSMouseClick do: [ self remove ] for: self.
+	buttons := self rootCommandsGroup entries
+		           collect: [ :command |
+			           RSBitmap new
+				           model: command;
+				           form: (self iconNamed: command iconName);
+				           size: 16;
+				           when: RSMouseClick do: [ command execute ] for: self;
+				           yourself ]
+		           as: RSGroup.
+	buttons @ INCellMenuPopupInteraction.
 
-	addCellBellowButton := RSBitmap new
-		                       form: (self iconNamed: #addBelow);
-		                       model: 'Add after';
-		                       size: 16;
-		                       yourself.
-	addCellAboveButton := RSBitmap new
-		                      form: (self iconNamed: #addAbove);
-		                      model: 'Add before';
-		                      size: 16;
-		                      yourself.
-	moveCellUp := RSBitmap new
-		              form: (self iconNamed: #up);
-		              model: 'Move up cell';
-		              size: 16;
-		              yourself.
-	moveCellDown := RSBitmap new
-		                form: (self iconNamed: #down);
-		                model: 'Move down cell';
-		                size: 16;
-		                yourself.
-	buttons := RSGroup withAll: {
-			           moveCellUp.
-			           moveCellDown.
-			           addCellBellowButton.
-			           addCellAboveButton.
-
-			           deleteButton }.
-	buttons @ (RSMorphicPopupInteraction new
-		 morphBuilder: [ :model | self createDescriptionFor: model ];
-		 yourself).
 	RSHorizontalLineLayout new
 		alignMiddle;
 		horizontalGap: 2;
 		on: buttons.
+
 	menu := RSComposite new
 		        addAll: buttons;
 		        isFixed: true;
@@ -155,37 +193,23 @@ INNotebookAbstractCellPresenter >> initializePresenters [
 		        translateBy: 50 @ 14;
 		        yourself.
 
+	rightMenuCanvas := self newRoassal.
+	rightMenuCanvas canvas color: Color transparent.
 	rightMenuCanvas canvas add: menu.
 	menu adjustToChildren.
-	menu padding: 10.
-	moveCellUp when: RSMouseClick do: [ self moveUp ] for: self.
-	moveCellDown when: RSMouseClick do: [ self moveDown ] for: self.
-	addCellBellowButton
-		when: RSMouseClick
-		do: [ notebook addTextCellAfter: self ]
-		for: self.
-	addCellAboveButton
-		when: RSMouseClick
-		do: [ notebook addTextCellBefore: self ]
-		for: self
+	menu padding: 10
 ]
 
-{ #category : #initialization }
+{ #category : #commands }
 INNotebookAbstractCellPresenter >> moveDown [
 
 	notebook moveDown: self
 ]
 
-{ #category : #initialization }
+{ #category : #commands }
 INNotebookAbstractCellPresenter >> moveUp [
 	
 	notebook moveUp: self
-]
-
-{ #category : #accessing }
-INNotebookAbstractCellPresenter >> notebook [
-
-	^ notebook
 ]
 
 { #category : #accessing }
@@ -206,40 +230,34 @@ INNotebookAbstractCellPresenter >> previewCell: anObject [
 	previewCell := anObject
 ]
 
-{ #category : #initialization }
+{ #category : #commands }
 INNotebookAbstractCellPresenter >> remove [
 
 	notebook removeCell: self.
 	previewCell ifNotNil: [ previewCell remove ]
 ]
 
-{ #category : #initialization }
+{ #category : #api }
 INNotebookAbstractCellPresenter >> select [
 
 	self takeKeyboardFocus.
-	leftMenuCanvas canvas color: self selectedColor.
+	leftMenuCanvas canvas color: self class selectedColor.
 	leftMenuCanvas canvas signalUpdate.
-	rightMenuCanvas canvas color: self selectedColor.
+	rightMenuCanvas canvas color: self class selectedColor.
 	rightMenuCanvas canvas signalUpdate
 ]
 
-{ #category : #actions }
+{ #category : #api }
 INNotebookAbstractCellPresenter >> selectAndScrollToMe [
 
 	notebook selectAndScrollTo: self
 ]
 
-{ #category : #actions }
+{ #category : #api }
 INNotebookAbstractCellPresenter >> selectMe [
 
 	notebook selectCell: self.
 	previewCell ifNotNil: [ :c | c selectAndScrollToMe ]
-]
-
-{ #category : #initialization }
-INNotebookAbstractCellPresenter >> selectedColor [
-
-	^ Color fromHexString: '77A8C8'
 ]
 
 { #category : #'api - focus' }
@@ -248,13 +266,13 @@ INNotebookAbstractCellPresenter >> takeKeyboardFocus [
 	cell takeKeyboardFocus
 ]
 
-{ #category : #initialization }
+{ #category : #accessing }
 INNotebookAbstractCellPresenter >> text [
 
 	^ cell text
 ]
 
-{ #category : #initialization }
+{ #category : #accessing }
 INNotebookAbstractCellPresenter >> text: aText [
 
 	cell text: aText
@@ -267,19 +285,13 @@ INNotebookAbstractCellPresenter >> textAreaWidth [
 	^ self layout adapter children second width
 ]
 
-{ #category : #initialization }
+{ #category : #api }
 INNotebookAbstractCellPresenter >> unselect [
 
 	self beUnselected
 ]
 
-{ #category : #initialization }
-INNotebookAbstractCellPresenter >> unselectedColor [
-
-	^ Color transparent
-]
-
-{ #category : #initialization }
+{ #category : #'events - handling' }
 INNotebookAbstractCellPresenter >> updateHeight [
 
 	UIManager default defer: [ 
@@ -303,7 +315,7 @@ INNotebookAbstractCellPresenter >> updateHeight [
 				self withAdapterDo: [ :c | c widget height: height + 2 ] ] ] ]
 ]
 
-{ #category : #enumerating }
+{ #category : #'events - handling' }
 INNotebookAbstractCellPresenter >> whenTextChangedDo: aBlock [
 
 	cell whenTextChangedDo: aBlock

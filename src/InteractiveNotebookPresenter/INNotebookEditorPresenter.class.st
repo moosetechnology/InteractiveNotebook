@@ -9,7 +9,7 @@ Class {
 		'cellLayout',
 		'codeCellPlaceholder'
 	],
-	#category : #InteractiveNotebookPresenter
+	#category : #'InteractiveNotebookPresenter-Presenters'
 }
 
 { #category : #adding }
@@ -150,7 +150,7 @@ INNotebookEditorPresenter >> moveUp: aCell [
 INNotebookEditorPresenter >> newCodeCell [
 
 	^ (self instantiate: INNotebookCodeCellPresenter on: self)
-		  notebook: self;
+		  bindings: self model bindings;
 		  yourself
 ]
 
@@ -251,6 +251,7 @@ INNotebookEditorPresenter >> updateAll [
 	cellList addAll: (self model cellList collect: [ :c |
 			 (self instantiate: c presenterClass)
 				 notebook: self;
+				 bindings: self model bindings;
 				 text: c text;
 				 yourself ]).
 

@@ -1,7 +1,7 @@
 Class {
 	#name : #INNotebookTextCellModel,
 	#superclass : #INNotebookAbstractCellModel,
-	#category : #InteractiveNotebookPresenter
+	#category : #'InteractiveNotebookPresenter-Cells'
 }
 
 { #category : #printing }

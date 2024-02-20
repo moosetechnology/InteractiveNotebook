@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'text'
 	],
-	#category : #InteractiveNotebookPresenter
+	#category : #'InteractiveNotebookPresenter-Cells'
 }
 
 { #category : #printing }

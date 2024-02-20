@@ -1,7 +1,7 @@
 Class {
 	#name : #INNotebookTextCellPresenter,
 	#superclass : #INNotebookAbstractCellPresenter,
-	#category : #InteractiveNotebookPresenter
+	#category : #'InteractiveNotebookPresenter-Cells'
 }
 
 { #category : #converting }
@@ -25,15 +25,9 @@ INNotebookTextCellPresenter >> beText [
 ]
 
 { #category : #initialization }
-INNotebookTextCellPresenter >> initializePresenters [
+INNotebookTextCellPresenter >> initializeLeftButton [
 
-	super initializePresenters.
-	cell := self newText.
-	cell whenTextChangedDo: [ self updateHeight ].
-	icon := self newButton
-		        label: 'Mic';
-		        action: [ notebook transformToCodeCell: self ];
-		        yourself.
+	super initializeLeftButton.
 	leftMenuCanvas canvas
 		add: (RSLabel new
 				 translateBy: 0 @ -3;
@@ -43,6 +37,16 @@ INNotebookTextCellPresenter >> initializePresenters [
 				 yourself);
 		when: RSMouseClick
 		do: [ notebook transformToCodeCell: self ]
-		for: self.
+		for: self
+]
+
+{ #category : #initialization }
+INNotebookTextCellPresenter >> initializePresenters [
+
+	super initializePresenters.
+
+	cell := self newText.
+	cell whenTextChangedDo: [ self updateHeight ].
+
 	self initializeLayout
 ]

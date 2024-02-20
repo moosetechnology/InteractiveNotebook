@@ -4,7 +4,7 @@ Class {
 	#classInstVars : [
 		'icons'
 	],
-	#category : #InteractiveNotebookPresenter
+	#category : #'InteractiveNotebookPresenter-Utils'
 }
 
 { #category : #utilities }
@@ -268,6 +268,21 @@ INNotebookIcons class >> iconDown [
 				     16r00000000 16r00000000 16r00000000 16r00000000 16r00000000
 				     16r00000000 )
 			  offset: 0 @ 0 ]
+]
+
+{ #category : #accessing }
+INNotebookIcons class >> iconNamed: aSymbol [
+
+	^ self icons at: aSymbol ifAbsent: [
+		  Smalltalk ui icons
+			  iconNamed: aSymbol
+			  ifNone: [ Smalltalk ui icons iconNamed: #blankIcon ] ]
+]
+
+{ #category : #accessing }
+INNotebookIcons class >> iconNamed: aSymbol ifAbsent: aBlock [
+
+	^ self icons at: aSymbol ifAbsent: aBlock
 ]
 
 { #category : #'icon creation' }

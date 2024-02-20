@@ -8,7 +8,7 @@ Class {
 		'toolbar',
 		'preview'
 	],
-	#category : #InteractiveNotebookPresenter
+	#category : #'InteractiveNotebookPresenter-Presenters'
 }
 
 { #category : #commands }

@@ -9,7 +9,7 @@ Class {
 		'mainLayout',
 		'scrollLayout'
 	],
-	#category : #InteractiveNotebookPresenter
+	#category : #'InteractiveNotebookPresenter-Presenters'
 }
 
 { #category : #initialization }

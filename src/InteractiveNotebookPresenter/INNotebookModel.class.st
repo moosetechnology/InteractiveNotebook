@@ -8,7 +8,7 @@ Class {
 		'printer',
 		'bindings'
 	],
-	#category : #InteractiveNotebookPresenter
+	#category : #'InteractiveNotebookPresenter-Model'
 }
 
 { #category : #initialization }
@@ -34,6 +34,12 @@ INNotebookModel >> addCell: aCell [
 INNotebookModel >> addTextCell [
 
 	self addCell: INNotebookTextCellModel new
+]
+
+{ #category : #accessing }
+INNotebookModel >> bindings [
+
+	^ bindings
 ]
 
 { #category : #accessing }

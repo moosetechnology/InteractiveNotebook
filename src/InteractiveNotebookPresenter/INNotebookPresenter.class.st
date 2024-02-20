@@ -7,7 +7,7 @@ Class {
 		'printer',
 		'bindings'
 	],
-	#category : #InteractiveNotebookPresenter
+	#category : #'InteractiveNotebookPresenter-Presenters'
 }
 
 { #category : #help }

@@ -1,7 +1,7 @@
 Class {
 	#name : #INNotebookCodeCellPresenter,
 	#superclass : #INNotebookAbstractCellPresenter,
-	#category : #InteractiveNotebookPresenter
+	#category : #'InteractiveNotebookPresenter-Cells'
 }
 
 { #category : #converting }
@@ -12,33 +12,17 @@ INNotebookCodeCellPresenter >> asModelCell [
 		  yourself
 ]
 
-{ #category : #api }
-INNotebookCodeCellPresenter >> beCode [
+{ #category : #accessing }
+INNotebookCodeCellPresenter >> bindings: aDictionary [
 
-	^ self
-]
-
-{ #category : #api }
-INNotebookCodeCellPresenter >> beText [
-
-	notebook transformToTextCell: self
+	aDictionary associationsDo: [ :binding |
+		cell interactionModel addBinding: binding ]
 ]
 
 { #category : #initialization }
-INNotebookCodeCellPresenter >> initializePresenters [
+INNotebookCodeCellPresenter >> initializeLeftButton [
 
-	super initializePresenters.
-	cell := self newCode
-		        withoutLineNumbers;
-		        beForScripting;
-		        placeholder: notebook codeCellPlaceholder;
-		        yourself.
-	cell whenTextChangedDo: [ self updateHeight ].
-
-	icon := self newButton
-		        label: 'Code';
-		        action: [ notebook transformToTextCell: self ].
-
+	super initializeLeftButton.
 	leftMenuCanvas canvas
 		add: (RSLabel new
 				 text: '[ ]';
@@ -47,18 +31,32 @@ INNotebookCodeCellPresenter >> initializePresenters [
 				 yourself);
 		when: RSMouseClick
 		do: [ notebook transformToTextCell: self ]
-		for: self.
+		for: self
+]
+
+{ #category : #initialization }
+INNotebookCodeCellPresenter >> initializePresenters [
+
+	super initializePresenters.
+
+	cell := self newCode
+		        withoutLineNumbers;
+		        beForScripting;
+		        placeholder: notebook codeCellPlaceholder;
+		        yourself.
+	cell whenTextChangedDo: [ self updateHeight ].
+
 	self initializeLayout
 ]
 
 { #category : #accessing }
 INNotebookCodeCellPresenter >> notebook: aNoteBook [
 
-	notebook := aNoteBook.
+	notebook := aNoteBook
 ]
 
 { #category : #'accessing - model' }
-INNotebookCodeCellPresenter >> setModelBeforeInitialization: aModel [
+INNotebookCodeCellPresenter >> setModelBeforeInitialization: aNotebook [
 
-	self notebook: aModel
+	self notebook: aNotebook
 ]
