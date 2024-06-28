@@ -42,7 +42,7 @@ INNotebookCodeCellPresenter >> initializePresenters [
 	cell := self newCode
 		        withoutLineNumbers;
 		        beForScripting;
-		        placeholder: notebook codeCellPlaceholder;
+		        placeholder: owner codeCellPlaceholder;
 		        yourself.
 	cell whenTextChangedDo: [ self updateHeight ].
 
