@@ -1,16 +1,18 @@
 Class {
-	#name : #INNotebookTextCellModel,
-	#superclass : #INNotebookAbstractCellModel,
-	#category : #'InteractiveNotebookPresenter-Cells'
+	#name : 'INNotebookTextCellModel',
+	#superclass : 'INNotebookAbstractCellModel',
+	#category : 'InteractiveNotebookPresenter-Cells',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Cells'
 }
 
-{ #category : #printing }
+{ #category : 'printing' }
 INNotebookTextCellModel >> contentAsStringInContext: aCompilationContext [
 
 	^ text
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 INNotebookTextCellModel >> presenterClass [
 
 	^ INNotebookTextCellPresenter

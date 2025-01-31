@@ -1,19 +1,21 @@
 Class {
-	#name : #INSimpleNotebookPrinter,
-	#superclass : #Object,
+	#name : 'INSimpleNotebookPrinter',
+	#superclass : 'Object',
 	#instVars : [
 		'stream'
 	],
-	#category : #'InteractiveNotebookPresenter-Printers'
+	#category : 'InteractiveNotebookPresenter-Printers',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Printers'
 }
 
-{ #category : #printing }
+{ #category : 'printing' }
 INSimpleNotebookPrinter >> print: anObject [
 
 	self print: anObject with: [ :e | self stringForObject: e ]
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 INSimpleNotebookPrinter >> print: anObject with: aBlock [
 
 	(anObject isCollection and: [ anObject isString not ])
@@ -21,7 +23,7 @@ INSimpleNotebookPrinter >> print: anObject with: aBlock [
 		ifFalse: [ self printObject: anObject with: aBlock ]
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 INSimpleNotebookPrinter >> printCollection: aCollection [
 
 	self
@@ -29,44 +31,44 @@ INSimpleNotebookPrinter >> printCollection: aCollection [
 		with: [ :e | self stringForObject: e ]
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 INSimpleNotebookPrinter >> printCollection: aCollection with: aBlock [
 
 	aCollection do: [ :e | self printCollectionItem: e with: aBlock ]
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 INSimpleNotebookPrinter >> printCollectionItem: e with: aBlock [
 
 	self printObject: e with: aBlock.
 	^ stream cr
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 INSimpleNotebookPrinter >> printObject: anObject [
 
 	self printObject: anObject with: [ :e | self stringForObject: e ]
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 INSimpleNotebookPrinter >> printObject: anObject with: aBlock [
 
 	stream << (aBlock value: anObject)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INSimpleNotebookPrinter >> stream [
 
 	^ stream
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INSimpleNotebookPrinter >> stream: anObject [
 
 	stream := anObject
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 INSimpleNotebookPrinter >> stringForObject: anObject [
 
 	^ anObject ifNil: [ '' ] ifNotNil: [ anObject asString ]

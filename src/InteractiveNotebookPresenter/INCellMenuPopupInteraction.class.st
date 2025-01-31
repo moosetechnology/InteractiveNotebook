@@ -3,12 +3,14 @@ This popup is used by the cell menu.
 It would be deprecated if we used a real Spec toolbar.
 "
 Class {
-	#name : #INCellMenuPopupInteraction,
-	#superclass : #RSMorphicPopupInteraction,
-	#category : #'InteractiveNotebookPresenter-Utils'
+	#name : 'INCellMenuPopupInteraction',
+	#superclass : 'RSMorphicPopupInteraction',
+	#category : 'InteractiveNotebookPresenter-Utils',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Utils'
 }
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 INCellMenuPopupInteraction >> popupFor: aCommand [
 
 	^ aCommand description asTextMorph

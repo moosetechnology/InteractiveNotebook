@@ -1,39 +1,41 @@
 Class {
-	#name : #INNotebookCellPreviewPresenter,
-	#superclass : #SpPresenter,
+	#name : 'INNotebookCellPreviewPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'textPresenter',
 		'cell',
 		'parent'
 	],
-	#category : #'InteractiveNotebookPresenter-Cells'
+	#category : 'InteractiveNotebookPresenter-Cells',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Cells'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookCellPreviewPresenter class >> unselectedColor [
 
 	^ Smalltalk ui theme backgroundColor
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 INNotebookCellPreviewPresenter >> beSelected [
 
 	self parent selectCell: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookCellPreviewPresenter >> cell [
 
 	^ cell
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookCellPreviewPresenter >> cell: anObject [
 
 	cell := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookCellPreviewPresenter >> initializeLayout [
 
 	self layout: (SpBoxLayout newLeftToRight
@@ -41,7 +43,7 @@ INNotebookCellPreviewPresenter >> initializeLayout [
 			 yourself)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookCellPreviewPresenter >> initializePresenters [
 
 	textPresenter := self newText
@@ -57,7 +59,7 @@ INNotebookCellPreviewPresenter >> initializePresenters [
 		self selectMe ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookCellPreviewPresenter >> morphFor: aPresenter from: aMorph [
 
 	aMorph presenter = aPresenter ifTrue: [ ^ aMorph ].
@@ -65,58 +67,58 @@ INNotebookCellPreviewPresenter >> morphFor: aPresenter from: aMorph [
 	^ self morphFor: aPresenter from: aMorph owner
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookCellPreviewPresenter >> parent [
 
 	^ parent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookCellPreviewPresenter >> parent: anObject [
 
 	parent := anObject
 ]
 
-{ #category : #removing }
+{ #category : 'removing' }
 INNotebookCellPreviewPresenter >> remove [
 
 	parent removeCell: self
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 INNotebookCellPreviewPresenter >> select [
 
 	textPresenter withAdapterDo: [ :a | 
 		a widget backgroundColor: (Color fromHexString: '77A8C8') ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 INNotebookCellPreviewPresenter >> selectAndScrollToMe [
 
 	self parent selectAndScrollTo: self
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 INNotebookCellPreviewPresenter >> selectMe [
 	
 	self parent selectCell: self.
 	cell ifNotNil: [ :c | c selectAndScrollToMe ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookCellPreviewPresenter >> text: aString [
 
 	textPresenter text: aString
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 INNotebookCellPreviewPresenter >> unselected [
 
 	textPresenter withAdapterDo: [ :a |
 		a widget backgroundColor: self class unselectedColor ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookCellPreviewPresenter >> updateHeight [
 
 	UIManager default defer: [ 

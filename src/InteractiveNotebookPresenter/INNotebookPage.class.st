@@ -1,6 +1,6 @@
 Class {
-	#name : #INNotebookPage,
-	#superclass : #SpPresenterWithModel,
+	#name : 'INNotebookPage',
+	#superclass : 'SpPresenterWithModel',
 	#instVars : [
 		'previewOpened',
 		'notebook',
@@ -8,10 +8,12 @@ Class {
 		'toolbar',
 		'preview'
 	],
-	#category : #'InteractiveNotebookPresenter-Presenters'
+	#category : 'InteractiveNotebookPresenter-Presenters',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Presenters'
 }
 
-{ #category : #commands }
+{ #category : 'commands' }
 INNotebookPage class >> buildCommandsGroupWith: aPresenter forRoot: rootCommandGroup [
 
 	rootCommandGroup
@@ -22,19 +24,19 @@ INNotebookPage class >> buildCommandsGroupWith: aPresenter forRoot: rootCommandG
 		register: (INExportToHtmlCommand forSpecContext: aPresenter)
 ]
 
-{ #category : #help }
+{ #category : 'help' }
 INNotebookPage class >> helpMessage [
 	
 	^ 'Open the interactive notebook'
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 INNotebookPage class >> newModel [
 
 	^ INNotebookModel new
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 INNotebookPage class >> open [
 
 	<script>
@@ -43,19 +45,19 @@ INNotebookPage class >> open [
 		  yourself
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 INNotebookPage class >> title [
 
 	^ 'Notebook'
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 INNotebookPage >> addTextCell [
 	
 	notebook addTextCell
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPage >> announcePreviewHasBeenOpened [
 
 	notebook announceDisplayed.
@@ -63,7 +65,7 @@ INNotebookPage >> announcePreviewHasBeenOpened [
 	self announceDisplayed
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 INNotebookPage >> chooseTextFile: messageString extensions: stringCollection path: defaultName [
 
 	^ UIManager default
@@ -72,7 +74,7 @@ INNotebookPage >> chooseTextFile: messageString extensions: stringCollection pat
 		  path: defaultName
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPage >> closePreview [
 
 	previewOpened ifFalse: [ ^ self ].
@@ -81,19 +83,19 @@ INNotebookPage >> closePreview [
 	notebook announceDisplayed
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookPage >> codeCellPlaceholder [
 
 	^ notebook codeCellPlaceholder
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookPage >> codeCellPlaceholder: anObject [
 
 	notebook codeCellPlaceholder: anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPage >> ensurePreviewIsOpened [
 
 	previewOpened ifTrue: [ ^ self ].
@@ -104,7 +106,7 @@ INNotebookPage >> ensurePreviewIsOpened [
 	self announcePreviewHasBeenOpened
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPage >> exportDocument [
 
 	| aFile |
@@ -119,7 +121,7 @@ INNotebookPage >> exportDocument [
 	aFile ifNotNil: [ self model exportDocumentAt: aFile ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 INNotebookPage >> exportToHTML [
 
 	| aFile |
@@ -136,7 +138,7 @@ INNotebookPage >> exportToHTML [
 	self reportExported: aFile
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPage >> exportToText [
 
 	| aFile |
@@ -151,7 +153,7 @@ INNotebookPage >> exportToText [
 	aFile ifNotNil: [ self model exportToTextAt: aFile ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPage >> fillPreview [
 
 	self updateModelCells.
@@ -162,7 +164,7 @@ INNotebookPage >> fillPreview [
 		fromCells: notebook cellList
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPage >> importMicrodownFile [
 
 	| file |
@@ -174,14 +176,14 @@ INNotebookPage >> importMicrodownFile [
 	file ifNotNil: [ self updateWithFile: file ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPage >> initialize [
 
 	super initialize.
 	previewOpened := false
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPage >> initializeLayout [
 
 	mainLayout := SpBoxLayout newLeftToRight
@@ -197,7 +199,7 @@ INNotebookPage >> initializeLayout [
 			 yourself)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPage >> initializePresenters [
 
 	self whenDisplayDo: [
@@ -210,7 +212,7 @@ INNotebookPage >> initializePresenters [
 	self initializeLayout
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPage >> initializeToolbar [
 
 	toolbar := self newToolbar
@@ -218,21 +220,21 @@ INNotebookPage >> initializeToolbar [
 		           yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPage >> initializeWindow: aMiWindowPresenter [
 
 	super initializeWindow: aMiWindowPresenter.
 	aMiWindowPresenter initialExtent: 1083.0 @ 697.0
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPage >> openPreview [
 
 	self ensurePreviewIsOpened.
 	self fillPreview
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 INNotebookPage >> reportExported: aFile [
 
 	| msg |
@@ -244,7 +246,7 @@ Click to show in folder'.
 		actionOnClick: [ aFile openInOSFileBrowser ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPage >> setModelBeforeInitialization: aModel [
 
 	aModel ifNil: [ ^ self ].
@@ -252,19 +254,19 @@ INNotebookPage >> setModelBeforeInitialization: aModel [
 	super setModelBeforeInitialization: aModel
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPage >> updateHeight [
 
 	notebook updateHeight
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPage >> updateModelCells [
 
 	self model cellList: notebook allModelCells.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPage >> updateWithFile: aFileReference [
 
 	self model importCellsFrom: aFileReference.

@@ -1,38 +1,40 @@
 Class {
-	#name : #INNotebookAbstractCellModel,
-	#superclass : #Object,
+	#name : 'INNotebookAbstractCellModel',
+	#superclass : 'Object',
 	#instVars : [
 		'text'
 	],
-	#category : #'InteractiveNotebookPresenter-Cells'
+	#category : 'InteractiveNotebookPresenter-Cells',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Cells'
 }
 
-{ #category : #printing }
+{ #category : 'printing' }
 INNotebookAbstractCellModel >> contentAsStringInContext: aCompilationContext [
 
 	self subclassResponsibility
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookAbstractCellModel >> initialize [
 
 	super initialize.
 	text := String empty
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 INNotebookAbstractCellModel >> presenterClass [
 
 	self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookAbstractCellModel >> text [
 
 	^ text
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookAbstractCellModel >> text: anObject [
 
 	text := anObject

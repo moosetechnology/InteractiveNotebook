@@ -1,22 +1,24 @@
 Class {
-	#name : #INExportToTextCommand,
-	#superclass : #SpToolCommand,
-	#category : #'InteractiveNotebookPresenter-Commands'
+	#name : 'INExportToTextCommand',
+	#superclass : 'SpToolCommand',
+	#category : 'InteractiveNotebookPresenter-Commands',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Commands'
 }
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 INExportToTextCommand class >> defaultIconName [
 
 	^ #smallExport
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 INExportToTextCommand class >> defaultName [
 
 	^ 'Export to Text'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 INExportToTextCommand >> execute [
 
 	self context exportToText

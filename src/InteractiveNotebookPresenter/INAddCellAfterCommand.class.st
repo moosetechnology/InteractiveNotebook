@@ -1,28 +1,30 @@
 Class {
-	#name : #INAddCellAfterCommand,
-	#superclass : #SpToolCommand,
-	#category : #'InteractiveNotebookPresenter-Commands'
+	#name : 'INAddCellAfterCommand',
+	#superclass : 'SpToolCommand',
+	#category : 'InteractiveNotebookPresenter-Commands',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Commands'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 INAddCellAfterCommand class >> defaultDescription [
 
 	^ 'Add after'
 ]
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 INAddCellAfterCommand class >> defaultIconName [
 
 	^ #addBelow
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 INAddCellAfterCommand class >> defaultName [
 
 	^ 'AddCellAfter'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 INAddCellAfterCommand >> execute [
 
 	self context addTextCellAfter

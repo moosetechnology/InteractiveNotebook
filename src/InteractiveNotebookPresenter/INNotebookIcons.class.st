@@ -1,20 +1,22 @@
 Class {
-	#name : #INNotebookIcons,
-	#superclass : #Object,
+	#name : 'INNotebookIcons',
+	#superclass : 'Object',
 	#classInstVars : [
 		'icons'
 	],
-	#category : #'InteractiveNotebookPresenter-Utils'
+	#category : 'InteractiveNotebookPresenter-Utils',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Utils'
 }
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 INNotebookIcons class >> buildCache [
 
 	(Pragma allNamed: #icon in: self class) do: [ :pragma | 
 		pragma method selector value: self ]
 ]
 
-{ #category : #'icon creation' }
+{ #category : 'icon creation' }
 INNotebookIcons class >> iconAddAbove [
 
 	<icon>
@@ -78,7 +80,7 @@ INNotebookIcons class >> iconAddAbove [
 			  offset: 0 @ 0 ]
 ]
 
-{ #category : #'icon creation' }
+{ #category : 'icon creation' }
 INNotebookIcons class >> iconAddBellow [
 
 	<icon>
@@ -142,7 +144,7 @@ INNotebookIcons class >> iconAddBellow [
 			  offset: 0 @ 0 ]
 ]
 
-{ #category : #'icon creation' }
+{ #category : 'icon creation' }
 INNotebookIcons class >> iconAddBelow [
 
 	<icon>
@@ -206,7 +208,7 @@ INNotebookIcons class >> iconAddBelow [
 			  offset: 0 @ 0 ]
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 INNotebookIcons class >> iconDown [
 
 	<icon>
@@ -270,7 +272,7 @@ INNotebookIcons class >> iconDown [
 			  offset: 0 @ 0 ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookIcons class >> iconNamed: aSymbol [
 
 	^ self icons at: aSymbol ifAbsent: [
@@ -279,13 +281,13 @@ INNotebookIcons class >> iconNamed: aSymbol [
 			  ifNone: [ Smalltalk ui icons iconNamed: #blankIcon ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookIcons class >> iconNamed: aSymbol ifAbsent: aBlock [
 
 	^ self icons at: aSymbol ifAbsent: aBlock
 ]
 
-{ #category : #'icon creation' }
+{ #category : 'icon creation' }
 INNotebookIcons class >> iconRemove [
 
 	<icon>
@@ -340,7 +342,7 @@ INNotebookIcons class >> iconRemove [
 			  offset: 0 @ 0 ]
 ]
 
-{ #category : #'icon creation' }
+{ #category : 'icon creation' }
 INNotebookIcons class >> iconTrash [
 
 	<icon>
@@ -404,7 +406,7 @@ INNotebookIcons class >> iconTrash [
 			  offset: 0 @ 0 ]
 ]
 
-{ #category : #'icon creation' }
+{ #category : 'icon creation' }
 INNotebookIcons class >> iconUp [
 
 	<icon>
@@ -468,7 +470,7 @@ INNotebookIcons class >> iconUp [
 			  offset: 0 @ 0 ]
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 INNotebookIcons class >> icons [
 
 	^ icons ifNil: [ 
@@ -477,14 +479,14 @@ INNotebookIcons class >> icons [
 		icons ]
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 INNotebookIcons class >> resetIcons [
 
 	<script>
 	icons := nil
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 INNotebookIcons class >> showIcons [
 
 	<script>

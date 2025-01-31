@@ -1,28 +1,30 @@
 Class {
-	#name : #INAddCellBeforeCommand,
-	#superclass : #SpToolCommand,
-	#category : #'InteractiveNotebookPresenter-Commands'
+	#name : 'INAddCellBeforeCommand',
+	#superclass : 'SpToolCommand',
+	#category : 'InteractiveNotebookPresenter-Commands',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Commands'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 INAddCellBeforeCommand class >> defaultDescription [
 
 	^ 'Add before'
 ]
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 INAddCellBeforeCommand class >> defaultIconName [
 
 	^ #addAbove
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 INAddCellBeforeCommand class >> defaultName [
 
 	^ 'Add before'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 INAddCellBeforeCommand >> execute [
 
 	self context addTextCellBefore

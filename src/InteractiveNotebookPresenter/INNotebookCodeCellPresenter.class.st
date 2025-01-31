@@ -1,10 +1,12 @@
 Class {
-	#name : #INNotebookCodeCellPresenter,
-	#superclass : #INNotebookAbstractCellPresenter,
-	#category : #'InteractiveNotebookPresenter-Cells'
+	#name : 'INNotebookCodeCellPresenter',
+	#superclass : 'INNotebookAbstractCellPresenter',
+	#category : 'InteractiveNotebookPresenter-Cells',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Cells'
 }
 
-{ #category : #converting }
+{ #category : 'converting' }
 INNotebookCodeCellPresenter >> asModelCell [
 
 	^ INNotebookCodeCellModel new
@@ -12,14 +14,14 @@ INNotebookCodeCellPresenter >> asModelCell [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookCodeCellPresenter >> bindings: aDictionary [
 
 	aDictionary associationsDo: [ :binding |
 		cell interactionModel addBinding: binding ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookCodeCellPresenter >> initializeLeftButton [
 
 	super initializeLeftButton.
@@ -34,7 +36,7 @@ INNotebookCodeCellPresenter >> initializeLeftButton [
 		for: self
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookCodeCellPresenter >> initializePresenters [
 
 	super initializePresenters.
@@ -42,6 +44,7 @@ INNotebookCodeCellPresenter >> initializePresenters [
 	cell := self newCode
 		        withoutLineNumbers;
 		        beForScripting;
+		        interactionModel: self owner model interactionModel;
 		        placeholder: owner codeCellPlaceholder;
 		        yourself.
 	cell whenTextChangedDo: [ self updateHeight ].
@@ -49,13 +52,13 @@ INNotebookCodeCellPresenter >> initializePresenters [
 	self initializeLayout
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookCodeCellPresenter >> notebook: aNoteBook [
 
 	notebook := aNoteBook
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 INNotebookCodeCellPresenter >> setModelBeforeInitialization: aNotebook [
 
 	self notebook: aNotebook

@@ -1,28 +1,30 @@
 Class {
-	#name : #INNotebookPresenter,
-	#superclass : #SpPresenter,
+	#name : 'INNotebookPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'tabbedPresenter',
 		'addTabButton',
 		'printer',
 		'bindings'
 	],
-	#category : #'InteractiveNotebookPresenter-Presenters'
+	#category : 'InteractiveNotebookPresenter-Presenters',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Presenters'
 }
 
-{ #category : #help }
+{ #category : 'help' }
 INNotebookPresenter class >> helpMessage [
 	
 	^ 'Open the interactive notebook'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPresenter class >> initialExtent [
 
 	^ 1083.0 @ 697.0
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 INNotebookPresenter class >> open [
 
 	<script>
@@ -31,13 +33,13 @@ INNotebookPresenter class >> open [
 		  yourself
 ]
 
-{ #category : #specs }
+{ #category : 'specs' }
 INNotebookPresenter class >> title [
 
 	^ 'Notebook'
 ]
 
-{ #category : #configuration }
+{ #category : 'configuration' }
 INNotebookPresenter >> addBinding: anAssociation [
 
 	bindings add: anAssociation.
@@ -46,7 +48,7 @@ INNotebookPresenter >> addBinding: anAssociation [
 			inNotebookPage model addBinding: anAssociation ] ]
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 INNotebookPresenter >> addNewTab [
 
 	| newTab |
@@ -62,7 +64,7 @@ INNotebookPresenter >> addNewTab [
 	tabbedPresenter selectPage: newTab
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPresenter >> connectPresenters [
 
 	self whenDisplayDo: [
@@ -70,7 +72,7 @@ INNotebookPresenter >> connectPresenters [
 			tabbedPresenter selectedPage activePresenter updateHeight ] ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPresenter >> initialize [
 
 	super initialize.
@@ -79,7 +81,7 @@ INNotebookPresenter >> initialize [
 	self addNewTab
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPresenter >> initializeAddTabButton [
 
 	addTabButton := self newButton
@@ -90,7 +92,7 @@ INNotebookPresenter >> initializeAddTabButton [
 		                yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPresenter >> initializeLayout [
 
 	self layout: (SpOverlayLayout new
@@ -102,7 +104,7 @@ INNotebookPresenter >> initializeLayout [
 			 yourself)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPresenter >> initializePresenters [
 
 	tabbedPresenter := self newNotebook.
@@ -111,14 +113,14 @@ INNotebookPresenter >> initializePresenters [
 	self initializeLayout
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPresenter >> initializeWindow: aMiWindowPresenter [
 
 	super initializeWindow: aMiWindowPresenter.
 	aMiWindowPresenter initialExtent: self class initialExtent
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 INNotebookPresenter >> newModel [
 
 	^ INNotebookModel new
@@ -128,7 +130,7 @@ INNotebookPresenter >> newModel [
 		  yourself
 ]
 
-{ #category : #configuration }
+{ #category : 'configuration' }
 INNotebookPresenter >> printer: aPrinter [
 
 	printer := aPrinter.

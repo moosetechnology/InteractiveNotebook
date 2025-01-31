@@ -1,10 +1,12 @@
 Class {
-	#name : #INNotebookCodeCellModel,
-	#superclass : #INNotebookAbstractCellModel,
-	#category : #'InteractiveNotebookPresenter-Cells'
+	#name : 'INNotebookCodeCellModel',
+	#superclass : 'INNotebookAbstractCellModel',
+	#category : 'InteractiveNotebookPresenter-Cells',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Cells'
 }
 
-{ #category : #printing }
+{ #category : 'printing' }
 INNotebookCodeCellModel >> contentAsStringInContext: aCompilationContext [
 
 	^ self class compiler
@@ -13,7 +15,7 @@ INNotebookCodeCellModel >> contentAsStringInContext: aCompilationContext [
 		  evaluate
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 INNotebookCodeCellModel >> presenterClass [
 
 	^ INNotebookCodeCellPresenter

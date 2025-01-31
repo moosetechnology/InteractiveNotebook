@@ -1,10 +1,12 @@
 Class {
-	#name : #INNotebookTextCellPresenter,
-	#superclass : #INNotebookAbstractCellPresenter,
-	#category : #'InteractiveNotebookPresenter-Cells'
+	#name : 'INNotebookTextCellPresenter',
+	#superclass : 'INNotebookAbstractCellPresenter',
+	#category : 'InteractiveNotebookPresenter-Cells',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Cells'
 }
 
-{ #category : #converting }
+{ #category : 'converting' }
 INNotebookTextCellPresenter >> asModelCell [
 
 	^ INNotebookTextCellModel new
@@ -12,19 +14,19 @@ INNotebookTextCellPresenter >> asModelCell [
 		  yourself
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 INNotebookTextCellPresenter >> beCode [
 
 	notebook transformToCodeCell: self
 ]
 
-{ #category : #api }
+{ #category : 'api' }
 INNotebookTextCellPresenter >> beText [
 
 	^ self
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookTextCellPresenter >> initializeLeftButton [
 
 	super initializeLeftButton.
@@ -40,7 +42,7 @@ INNotebookTextCellPresenter >> initializeLeftButton [
 		for: self
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookTextCellPresenter >> initializePresenters [
 
 	super initializePresenters.

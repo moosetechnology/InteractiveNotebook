@@ -1,28 +1,30 @@
 Class {
-	#name : #INMoveDownCellCommand,
-	#superclass : #SpToolCommand,
-	#category : #'InteractiveNotebookPresenter-Commands'
+	#name : 'INMoveDownCellCommand',
+	#superclass : 'SpToolCommand',
+	#category : 'InteractiveNotebookPresenter-Commands',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Commands'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 INMoveDownCellCommand class >> defaultDescription [
 
 	^ 'Move cell down'
 ]
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 INMoveDownCellCommand class >> defaultIconName [
 
 	^ #down
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 INMoveDownCellCommand class >> defaultName [
 
 	^ 'Move cell down'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 INMoveDownCellCommand >> execute [
 
 	self context moveDown

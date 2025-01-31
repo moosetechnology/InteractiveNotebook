@@ -1,6 +1,6 @@
 Class {
-	#name : #INNotebookEditorPresenter,
-	#superclass : #SpPresenter,
+	#name : 'INNotebookEditorPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'cellList',
 		'lastCellAdded',
@@ -9,10 +9,12 @@ Class {
 		'cellLayout',
 		'codeCellPlaceholder'
 	],
-	#category : #'InteractiveNotebookPresenter-Presenters'
+	#category : 'InteractiveNotebookPresenter-Presenters',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Presenters'
 }
 
-{ #category : #adding }
+{ #category : 'adding' }
 INNotebookEditorPresenter >> add: aCell [
 
 	self layout add: aCell expand: false.
@@ -20,7 +22,7 @@ INNotebookEditorPresenter >> add: aCell [
 	lastCellAdded takeKeyboardFocus
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookEditorPresenter >> addTextCellAfter: aCell [
 
 	lastCellAdded := self newTextCell.
@@ -29,7 +31,7 @@ INNotebookEditorPresenter >> addTextCellAfter: aCell [
 	self relayout
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookEditorPresenter >> addTextCellBefore: aCell [
 
 	lastCellAdded := self newTextCell.
@@ -38,31 +40,31 @@ INNotebookEditorPresenter >> addTextCellBefore: aCell [
 	self relayout
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookEditorPresenter >> allModelCells [
 
 	^ cellList asOrderedCollection collect: [ :cell | cell asModelCell ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookEditorPresenter >> cellList [
 
 	^ cellList
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookEditorPresenter >> codeCellPlaceholder [
 	
 	^ codeCellPlaceholder
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookEditorPresenter >> codeCellPlaceholder: anObject [
 
 	codeCellPlaceholder := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookEditorPresenter >> defer: aBlock times: n [
 
 	n traceCr.
@@ -73,13 +75,13 @@ INNotebookEditorPresenter >> defer: aBlock times: n [
 				ifFalse: [ self defer: aBlock times: n - 1 ] ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookEditorPresenter >> headerSep [
 
 	^ headerSep
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookEditorPresenter >> initialize [
 
 	codeCellPlaceholder := 'Code'.
@@ -87,7 +89,7 @@ INNotebookEditorPresenter >> initialize [
 	super initialize
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookEditorPresenter >> initializeLayout [
 
 	cellLayout := SpBoxLayout newTopToBottom
@@ -100,7 +102,7 @@ INNotebookEditorPresenter >> initializeLayout [
 				  yourself))
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookEditorPresenter >> initializePresenters [
 
 	(headerSep := self newRoassal) canvas color: Color transparent.
@@ -112,19 +114,19 @@ INNotebookEditorPresenter >> initializePresenters [
 	self initializeLayout
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookEditorPresenter >> layoutSpacing [
 
 	^ 10
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookEditorPresenter >> model [
 
 	^ self owner model
 ]
 
-{ #category : #removing }
+{ #category : 'removing' }
 INNotebookEditorPresenter >> moveDown: aCell [
 
 	| idx |
@@ -135,7 +137,7 @@ INNotebookEditorPresenter >> moveDown: aCell [
 	self relayout
 ]
 
-{ #category : #removing }
+{ #category : 'removing' }
 INNotebookEditorPresenter >> moveUp: aCell [
 
 	| idx |
@@ -146,7 +148,7 @@ INNotebookEditorPresenter >> moveUp: aCell [
 	self relayout
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookEditorPresenter >> newCodeCell [
 
 	^ (self instantiate: INNotebookCodeCellPresenter on: self)
@@ -154,13 +156,13 @@ INNotebookEditorPresenter >> newCodeCell [
 		  yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookEditorPresenter >> newTextCell [
 
 	^ (self instantiate: INNotebookTextCellPresenter) notebook: self
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 INNotebookEditorPresenter >> relayout [
 
 	| newLayout |
@@ -178,14 +180,14 @@ INNotebookEditorPresenter >> relayout [
 		selectedCell ifNotNil: [ self selectAndScrollTo: selectedCell ] ]
 ]
 
-{ #category : #removing }
+{ #category : 'removing' }
 INNotebookEditorPresenter >> removeCell: aCell [
 
 	cellList remove: aCell.
 	self relayout
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 INNotebookEditorPresenter >> scrollTo: aMiNoteBookCell [
 
 	self layout withAdapterDo: [ :a | 
@@ -193,7 +195,7 @@ INNotebookEditorPresenter >> scrollTo: aMiNoteBookCell [
 			a widget scrollToShow: b widget bounds ] ]
 ]
 
-{ #category : #removing }
+{ #category : 'removing' }
 INNotebookEditorPresenter >> select: aCell [
 
 	selectedCell := aCell.
@@ -201,14 +203,14 @@ INNotebookEditorPresenter >> select: aCell [
 	selectedCell select
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 INNotebookEditorPresenter >> selectAndScrollTo: aMiNoteBookCell [
 
 	self selectCell: aMiNoteBookCell.
 	self scrollTo: aMiNoteBookCell
 ]
 
-{ #category : #removing }
+{ #category : 'removing' }
 INNotebookEditorPresenter >> selectCell: aCell [
 
 	selectedCell := aCell.
@@ -216,7 +218,7 @@ INNotebookEditorPresenter >> selectCell: aCell [
 	selectedCell select
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 INNotebookEditorPresenter >> transformToCodeCell: aCell [
 
 	| width |
@@ -229,7 +231,7 @@ INNotebookEditorPresenter >> transformToCodeCell: aCell [
 	self relayout
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 INNotebookEditorPresenter >> transformToTextCell: aCell [
 
 	| width |
@@ -242,7 +244,7 @@ INNotebookEditorPresenter >> transformToTextCell: aCell [
 	self relayout
 ]
 
-{ #category : #removing }
+{ #category : 'removing' }
 INNotebookEditorPresenter >> updateAll [
 
 	self model cellList ifEmpty: [ ^ self ].
@@ -259,13 +261,13 @@ INNotebookEditorPresenter >> updateAll [
 	self relayout
 ]
 
-{ #category : #removing }
+{ #category : 'removing' }
 INNotebookEditorPresenter >> updateHeight [
 
 	cellList do: [ :c | c updateHeight ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookEditorPresenter >> updatePresenter [
 
 	self updateAll

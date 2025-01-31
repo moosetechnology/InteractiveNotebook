@@ -1,22 +1,24 @@
 Class {
-	#name : #INPreviewCommand,
-	#superclass : #SpToolCommand,
-	#category : #'InteractiveNotebookPresenter-Commands'
+	#name : 'INPreviewCommand',
+	#superclass : 'SpToolCommand',
+	#category : 'InteractiveNotebookPresenter-Commands',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Commands'
 }
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 INPreviewCommand class >> defaultIconName [
 
 	^ #smallExport
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 INPreviewCommand class >> defaultName [
 
 	^ 'Preview'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 INPreviewCommand >> execute [
 
 	self context openPreview

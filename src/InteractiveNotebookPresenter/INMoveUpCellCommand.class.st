@@ -1,28 +1,30 @@
 Class {
-	#name : #INMoveUpCellCommand,
-	#superclass : #SpToolCommand,
-	#category : #'InteractiveNotebookPresenter-Commands'
+	#name : 'INMoveUpCellCommand',
+	#superclass : 'SpToolCommand',
+	#category : 'InteractiveNotebookPresenter-Commands',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Commands'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 INMoveUpCellCommand class >> defaultDescription [
 
 	^ 'Move cell up'
 ]
 
-{ #category : #defaults }
+{ #category : 'defaults' }
 INMoveUpCellCommand class >> defaultIconName [
 
 	^ #up
 ]
 
-{ #category : #default }
+{ #category : 'default' }
 INMoveUpCellCommand class >> defaultName [
 
 	^ 'Move cell up'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 INMoveUpCellCommand >> execute [
 
 	self context moveUp

@@ -1,61 +1,64 @@
 Class {
-	#name : #INNotebookModel,
-	#superclass : #Object,
+	#name : 'INNotebookModel',
+	#superclass : 'Object',
 	#instVars : [
 		'needToUpdate',
 		'cellList',
 		'fileName',
 		'printer',
-		'bindings'
+		'bindings',
+		'interactionModel'
 	],
-	#category : #'InteractiveNotebookPresenter-Model'
+	#category : 'InteractiveNotebookPresenter-Model',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Model'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookModel >> addBinding: anAssociation [
 
 	bindings add: anAssociation
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 INNotebookModel >> addBindings: aDictionary [
 
 	aDictionary associationsDo: [ :association |
 		self addBinding: association ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookModel >> addCell: aCell [
 
 	cellList add: aCell
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookModel >> addTextCell [
 
 	self addCell: INNotebookTextCellModel new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookModel >> bindings [
 
 	^ bindings
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookModel >> cellList [
 
 	^ cellList
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookModel >> cellList: anOrderedCollection [
 
 	needToUpdate := true.
 	cellList := anOrderedCollection
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 INNotebookModel >> executeAllCellsAsTextCollection [
 
 	^ cellList collect: [ :cell |
@@ -68,7 +71,7 @@ INNotebookModel >> executeAllCellsAsTextCollection [
 			  str ] ]
 ]
 
-{ #category : #export }
+{ #category : 'export' }
 INNotebookModel >> exportDocumentAt: aFileReference [
 
 	"Export the cell list in a ston file."
@@ -79,7 +82,7 @@ INNotebookModel >> exportDocumentAt: aFileReference [
 		aFileReference writeStreamDo: [ :s | STON put: cellList onStream: s ] ]
 ]
 
-{ #category : #export }
+{ #category : 'export' }
 INNotebookModel >> exportToHTMLAt: aFileReference [
 
 	"This will use the microdown HTML visitor to export the document to HTML. So your document should respect Microdown specs."
@@ -90,7 +93,7 @@ INNotebookModel >> exportToHTMLAt: aFileReference [
 			(MicHTMLVisitor asHTMLString: self generateDocument) ]
 ]
 
-{ #category : #export }
+{ #category : 'export' }
 INNotebookModel >> exportToTextAt: aFileReference [
 
 	"Export the generated document, i.e., the resulting text of all cells execution."
@@ -101,14 +104,14 @@ INNotebookModel >> exportToTextAt: aFileReference [
 		aFileReference writeStreamDo: [ :s | s << self generateDocument ] ]
 ]
 
-{ #category : #export }
+{ #category : 'export' }
 INNotebookModel >> generateDocument [
 
 	^ String streamContents: [ :s |
 		  cellList do: [ :notebookCell | s << notebookCell previewCell text ] ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 INNotebookModel >> importCellsFrom: aFileReference [
 
 	aFileReference ifNil: [ ^ self ].
@@ -116,23 +119,36 @@ INNotebookModel >> importCellsFrom: aFileReference [
 	cellList := STON fromString: aFileReference contents
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookModel >> initialize [
 
 	super initialize.
 	needToUpdate := true.
 	cellList := OrderedCollection new.
 	printer := INMicrodownNotebookPrinter new.
-	bindings := Dictionary new
+	bindings := Dictionary new.
+	interactionModel := SpCodeScriptingInteractionModel new 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
+INNotebookModel >> interactionModel [
+
+	^ interactionModel
+]
+
+{ #category : 'accessing' }
+INNotebookModel >> interactionModel: anObject [
+
+	interactionModel := anObject
+]
+
+{ #category : 'accessing' }
 INNotebookModel >> name [
 
 	^ fileName ifNil: [ 'new *' ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookModel >> newContext [
 
 	^ CompilationContext new
@@ -140,7 +156,7 @@ INNotebookModel >> newContext [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INNotebookModel >> printer: anINNotebookPrinter [
 
 	printer := anINNotebookPrinter

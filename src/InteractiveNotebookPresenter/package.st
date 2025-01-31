@@ -1,1 +1,1 @@
-Package { #name : #InteractiveNotebookPresenter }
+Package { #name : 'InteractiveNotebookPresenter' }

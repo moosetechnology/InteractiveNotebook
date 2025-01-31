@@ -1,6 +1,6 @@
 Class {
-	#name : #INNotebookPreviewPresenter,
-	#superclass : #SpPresenter,
+	#name : 'INNotebookPreviewPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'previewCells',
 		'sep',
@@ -9,23 +9,25 @@ Class {
 		'mainLayout',
 		'scrollLayout'
 	],
-	#category : #'InteractiveNotebookPresenter-Presenters'
+	#category : 'InteractiveNotebookPresenter-Presenters',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Presenters'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPreviewPresenter >> close [
 
 	owner closePreview
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPreviewPresenter >> initialize [
 
 	super initialize.
 	previewCells := OrderedCollection new.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPreviewPresenter >> initializeLayout [
 
 	mainLayout := SpBoxLayout newTopToBottom
@@ -44,7 +46,7 @@ INNotebookPreviewPresenter >> initializeLayout [
 			 yourself)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPreviewPresenter >> initializePresenters [
 
 	sep := self newRoassal.
@@ -69,7 +71,7 @@ INNotebookPreviewPresenter >> initializePresenters [
 	self initializeLayout
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 INNotebookPreviewPresenter >> newPreviewCellFrom: aNotebookCell text: aString [
 
 	| previewCell |
@@ -82,7 +84,7 @@ INNotebookPreviewPresenter >> newPreviewCellFrom: aNotebookCell text: aString [
 	^ previewCell
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 INNotebookPreviewPresenter >> newPreviewCellWith: aString [
 
 	^ (self instantiate: INNotebookCellPreviewPresenter)
@@ -91,7 +93,7 @@ INNotebookPreviewPresenter >> newPreviewCellWith: aString [
 		  yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPreviewPresenter >> relayout [
 
 	| newLayout |
@@ -104,14 +106,14 @@ INNotebookPreviewPresenter >> relayout [
 	previewCells do: [ :e | e announceDisplayed ]
 ]
 
-{ #category : #removing }
+{ #category : 'removing' }
 INNotebookPreviewPresenter >> removeCell: aPreviewCell [
 
 	previewCells remove: aPreviewCell.
 	self relayout
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 INNotebookPreviewPresenter >> scrollTo: aMiNoteBookCellPreview [
 
 	scrollLayout withAdapterDo: [ :a | 
@@ -119,34 +121,34 @@ INNotebookPreviewPresenter >> scrollTo: aMiNoteBookCellPreview [
 			a widget scrollToShow: b widget bounds ] ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 INNotebookPreviewPresenter >> select: aMiNoteBookCellPreview [
 
 	previewCells do: [ :c | c unselected ].
 	aMiNoteBookCellPreview select.
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 INNotebookPreviewPresenter >> selectAndScrollTo: aMiNoteBookCellPreview [
 
 	self selectCell: aMiNoteBookCellPreview.
 	self scrollTo: aMiNoteBookCellPreview
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 INNotebookPreviewPresenter >> selectCell: aMiNoteBookCellPreview [
 
 	previewCells do: [ :c | c unselected ].
 	aMiNoteBookCellPreview select.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INNotebookPreviewPresenter >> updateHeight [
 
 	previewCells do: [ :c | c updateHeight ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 INNotebookPreviewPresenter >> updateWithStrings: aCollectionOfStrings fromCells: cells [
 
 	previewCells := aCollectionOfStrings

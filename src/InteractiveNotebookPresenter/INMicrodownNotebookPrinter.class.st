@@ -1,27 +1,29 @@
 Class {
-	#name : #INMicrodownNotebookPrinter,
-	#superclass : #INSimpleNotebookPrinter,
+	#name : 'INMicrodownNotebookPrinter',
+	#superclass : 'INSimpleNotebookPrinter',
 	#instVars : [
 		'microdownBuilder'
 	],
-	#category : #'InteractiveNotebookPresenter-Printers'
+	#category : 'InteractiveNotebookPresenter-Printers',
+	#package : 'InteractiveNotebookPresenter',
+	#tag : 'Printers'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 INMicrodownNotebookPrinter >> initialize [
 
 	super initialize.
 	microdownBuilder := Microdown builder
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 INMicrodownNotebookPrinter >> printAssociation: anAssoc with: aBlock [
 
 	microdownBuilder raw: (aBlock value: anAssoc key).
 	self printAssociationValue: anAssoc value with: aBlock
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 INMicrodownNotebookPrinter >> printAssociationValue: aValue with: aBlock [
 
 	aValue isCollection
@@ -33,21 +35,21 @@ INMicrodownNotebookPrinter >> printAssociationValue: aValue with: aBlock [
 			self printObject: aValue with: aBlock ]
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 INMicrodownNotebookPrinter >> printCollection: aCollection with: aBlock [
 
 	(self sort: aCollection with: aBlock) do: [ :e |
 		self printCollectionItem: e with: aBlock ]
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 INMicrodownNotebookPrinter >> printCollectionItem: anObject with: aBlock [
 
 	microdownBuilder unorderedListDuring: [
 		microdownBuilder item: [ self printObject: anObject with: aBlock ] ]
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 INMicrodownNotebookPrinter >> printObject: anObject with: aBlock [
 
 	^ anObject isAssociation
@@ -55,7 +57,7 @@ INMicrodownNotebookPrinter >> printObject: anObject with: aBlock [
 		  ifFalse: [ microdownBuilder raw: (aBlock value: anObject) ]
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 INMicrodownNotebookPrinter >> sort: aCollection with: aBlock [
 
 	| valuable |
@@ -68,7 +70,7 @@ INMicrodownNotebookPrinter >> sort: aCollection with: aBlock [
 		  (aBlock value: (valuable value: a)) < (aBlock value: (valuable value: b)) ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 INMicrodownNotebookPrinter >> stream: aStream [
 
 	super stream: aStream.
