@@ -151,7 +151,7 @@ INNotebookModel >> name [
 { #category : 'accessing' }
 INNotebookModel >> newContext [
 
-	^ CompilationContext new
+	^ OCCompilationContext new
 		  bindings: bindings;
 		  yourself
 ]

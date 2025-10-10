@@ -76,7 +76,7 @@ INNotebookPresenter >> connectPresenters [
 INNotebookPresenter >> initialize [
 
 	super initialize.
-	printer := MiMooseNotebookPrinter new.
+	printer := INMicrodownNotebookPrinter new.
 	bindings := Dictionary new.
 	self addNewTab
 ]

@@ -92,12 +92,12 @@ INNotebookAbstractCellPresenter >> bindings: aDictionary [
 INNotebookAbstractCellPresenter >> connectPresenters [
 
 	self whenDisplayDo: [
-		self withAdapterDo: [
-			self adapter children second textArea announcer
-				when: MorphGotFocus
-				do: [ self selectMe ]
-				for: self ].
-		self updateHeight ]
+			self withAdapterDo: [ :currentAdapter |
+					currentAdapter children second textArea announcer
+						when: MorphGotFocus
+						do: [ self selectMe ]
+						for: self ].
+			self updateHeight ]
 ]
 
 { #category : 'accessing' }
